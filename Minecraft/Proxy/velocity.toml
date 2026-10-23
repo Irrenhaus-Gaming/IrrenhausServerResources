@@ -36,7 +36,7 @@ force-key-authentication = true
 	# represents the IP address of the server to connect to.
 	__SECRET_MC_VELOCITY_SERVERS__
 	# In what order we should try servers when a player logs in or is kicked from aserver.
-	# Servers listed by hand come first; the placeholder appends every other registered server. e.g. ["test", "__SECRET_MC_VELOCITY_SERVERS__"]
+	# Servers listed by hand come first; the placeholder appends every other registered server. e.g. ["test", "Secret"]
 	try = ["__SECRET_MC_VELOCITY_SERVERS__"]
 
 [forced-hosts]
