@@ -17,9 +17,9 @@ proxy:
   environment: mc-proxy
   source: Proxy
   platform: velocity
-  java_image: eclipse-temurin:21-jre   # TODO(sftp-probe): confirm
+  java_image: eclipse-temurin:25-jre   # AMP: "TEMURIN 25 (jdk)"; check the proxy instance shows the same
   server_jar: "*.jar"                  # TODO(sftp-probe): narrow to the real jar name
-  accept_eula: false                   # not used: Velocity has no EULA
+  accept_eula: true
   memory: 1G
   boot_timeout_seconds: 300
   settle_seconds: 15
@@ -28,9 +28,9 @@ backend:
   environment_prefix: mc-backend-
   source: Backend
   platform: paper
-  java_image: eclipse-temurin:21-jre   # TODO(sftp-probe): confirm the Java version the AMP instances use
+  java_image: eclipse-temurin:25-jre   # AMP instances run "TEMURIN 25 (jdk)"
   server_jar: "*.jar"                  # TODO(sftp-probe): narrow to the real jar name
-  accept_eula: false                   # TODO(owner): set true to accept the Mojang EULA for test servers
+  accept_eula: true
   memory: 4G
   boot_timeout_seconds: 900
   settle_seconds: 30
