@@ -38,6 +38,11 @@ on:
         type: boolean
         required: false
         default: false
+      full_check:
+        description: "Compare every managed file with the server, not only those changed since the last deploy"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -131,10 +136,12 @@ jobs:
         if: matrix.mode == 'deploy'
         env:
           MC_ADOPT: ${{ github.event_name == 'workflow_dispatch' && inputs.adopt }}
+          MC_FULL_CHECK: ${{ github.event_name == 'workflow_dispatch' && inputs.full_check }}
         run: |
-          adopt=()
-          if [[ "$MC_ADOPT" == "true" ]]; then adopt=(--adopt); fi
-          bash ./mc.sh deploy "${{ matrix.environment }}" "${adopt[@]}"
+          flags=()
+          if [[ "$MC_ADOPT" == "true" ]]; then flags+=(--adopt); fi
+          if [[ "$MC_FULL_CHECK" == "true" ]]; then flags+=(--full); fi
+          bash ./mc.sh deploy "${{ matrix.environment }}" "${flags[@]}"
       - name: Hand the server entry to the proxy job (encrypted)
         if: matrix.collect
         run: bash ./mc.sh collect-server "${{ matrix.environment }}"
@@ -230,10 +237,12 @@ jobs:
       - name: Drift check and upload
         env:
           MC_ADOPT: ${{ github.event_name == 'workflow_dispatch' && inputs.adopt }}
+          MC_FULL_CHECK: ${{ github.event_name == 'workflow_dispatch' && inputs.full_check }}
         run: |
-          adopt=()
-          if [[ "$MC_ADOPT" == "true" ]]; then adopt=(--adopt); fi
-          bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}" "${adopt[@]}"
+          flags=()
+          if [[ "$MC_ADOPT" == "true" ]]; then flags+=(--adopt); fi
+          if [[ "$MC_FULL_CHECK" == "true" ]]; then flags+=(--full); fi
+          bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}" "${flags[@]}"
       - name: Keep boot log
         if: always() && !env.ACT
         uses: actions/upload-artifact@v4
