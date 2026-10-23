@@ -84,9 +84,10 @@ def cmd_probe(args) -> None:
         print("Server jar candidates:" if candidates else "Server jar candidates: (none)")
         for f, s in sorted(candidates.items()):
             print(f"  {f:45s} {stamp(s)}")
-        version = remote.read(boottest.VERSION_FILE)
-        if version is not None:
-            print(f"Running Paper version ({boottest.VERSION_FILE}): {boottest.expected_paper_version(version)}")
+        try:
+            print(f"Running Paper version: {boottest.running_paper_version(remote)}")
+        except McDeployError as exc:
+            print(f"Running Paper version: unknown ({exc})")
         if args.target:
             target = get_target(args.target)
             jar_dir, pattern = posixpath.split(target.server_jar)

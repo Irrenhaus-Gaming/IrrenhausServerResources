@@ -109,13 +109,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Restore this server's jar cache (only changed jars are downloaded again)
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: .cache/jars/${{ matrix.environment }}
           key: mc-jars-${{ matrix.environment }}-${{ github.run_id }}
           restore-keys: mc-jars-${{ matrix.environment }}-
       - name: Boot test with the server's own jars
         run: bash ./mc.sh test "${{ matrix.environment }}" --jars-from remote
+      - name: Save the jar cache (also when the boot test failed)
+        if: always() && hashFiles(format('.cache/jars/{0}/source.json', matrix.environment)) != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/jars/${{ matrix.environment }}
+          key: mc-jars-${{ matrix.environment }}-${{ github.run_id }}
       - name: Drift check and upload
         if: matrix.mode == 'deploy'
         run: bash ./mc.sh deploy "${{ matrix.environment }}"
@@ -198,13 +204,19 @@ jobs:
           merge-multiple: true
           path: .cache/collected
       - name: Restore the proxy's jar cache (only changed jars are downloaded again)
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: .cache/jars/${{ needs.plan.outputs.proxy_environment }}
           key: mc-jars-${{ needs.plan.outputs.proxy_environment }}-${{ github.run_id }}
           restore-keys: mc-jars-${{ needs.plan.outputs.proxy_environment }}-
       - name: Boot test with the server's own jars
         run: bash ./mc.sh test "${{ needs.plan.outputs.proxy_environment }}" --jars-from remote
+      - name: Save the jar cache (also when the boot test failed)
+        if: always() && hashFiles(format('.cache/jars/{0}/source.json', needs.plan.outputs.proxy_environment)) != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/jars/${{ needs.plan.outputs.proxy_environment }}
+          key: mc-jars-${{ needs.plan.outputs.proxy_environment }}-${{ github.run_id }}
       - name: Drift check and upload
         run: bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}"
       - name: Keep boot log

@@ -65,9 +65,22 @@ def test_server_jar_may_live_in_a_subfolder(server, tmp_path):
     assert (tmp_path / "cache" / "jars" / TARGET.name / "server.jar").read_bytes() == b"real"
 
 
-def test_missing_version_file_fails(server):
+def test_version_falls_back_to_the_server_log(server, tmp_path):
     os.remove(server / "version_history.json")
-    with pytest.raises(McDeployError, match="version_history.json is missing"):
+    (server / "logs").mkdir()
+    (server / "logs" / "latest.log").write_text(
+        "[10:50:01 INFO]: Starting minecraft server version 26.3\n"
+        "[10:50:01 INFO]: This server is running Paper version 26.3-214-main@e65c076 (2026) (API)\n"
+        "[10:51:00 INFO]: player Steve joined from 203.0.113.9\n")
+    fetch_jars(TARGET, LocalRemote(server))
+    cache = tmp_path / "cache" / "jars" / TARGET.name
+    assert (cache / "server_version.txt").read_text() == "26.3-214-main@e65c076"
+    assert not (cache / "latest.log").exists()
+
+
+def test_unknown_server_version_fails(server):
+    os.remove(server / "version_history.json")
+    with pytest.raises(McDeployError, match="cannot tell which Paper version"):
         fetch_jars(TARGET, LocalRemote(server))
 
 

@@ -50,7 +50,26 @@ def jar_cache_dir(target: Target) -> Path:
     return CACHE_DIR / "jars" / target.name
 
 
-VERSION_FILE = "version_history.json"  # written by Paper into the server folder: the running version
+VERSION_FILE = "version_history.json"  # written by some Paper setups into the server folder
+SERVER_LOG = "logs/latest.log"          # the running server's console log
+VERSION_CACHE = "server_version.txt"    # what the boot test compares against
+LOG_VERSION_RE = re.compile(rb"(?:This server is running Paper version|Loading Paper) (\S+)")
+
+
+def running_paper_version(remote: RemoteBase) -> str:
+    """The Paper version the live server runs: version_history.json, else its latest.log.
+    Only the version string is extracted; nothing else from the log is kept."""
+    raw = remote.read(VERSION_FILE)
+    if raw is not None:
+        return expected_paper_version(raw)
+    log = remote.read(SERVER_LOG)
+    match = LOG_VERSION_RE.search(log) if log is not None else None
+    if match is None:
+        raise McDeployError(
+            f"cannot tell which Paper version the server runs: no {VERSION_FILE} and no "
+            f"'This server is running Paper version' line in {SERVER_LOG} (start the server once)"
+        )
+    return match.group(1).decode("utf-8", "replace")
 
 
 def fetch_jars(target: Target, remote: RemoteBase) -> None:
@@ -100,12 +119,11 @@ def fetch_jars(target: Target, remote: RemoteBase) -> None:
             downloaded += 1
         manifest[local] = entry
     manifest_path.write_text(json.dumps(manifest, indent=2))
-    version = remote.read(VERSION_FILE) if target.platform == "paper" else None
-    if target.platform == "paper" and version is None:
-        raise McDeployError(f"{target.name}: {VERSION_FILE} is missing on the server, cannot verify the Paper version")
-    (dest / VERSION_FILE).write_bytes(version or b"")
+    version = running_paper_version(remote) if target.platform == "paper" else ""
+    (dest / VERSION_CACHE).write_text(version, encoding="utf-8")
     print(f"{target.name}: server jar {server_rel}, {len(plugin_stats)} plugin jars "
-          f"({downloaded} downloaded, {reused} unchanged from cache)")
+          f"({downloaded} downloaded, {reused} unchanged from cache)"
+          + (f", server runs Paper {version}" if version else ""))
 
 
 def plugin_names(jar: Path, platform: str) -> list[str]:
@@ -370,11 +388,11 @@ def run_boot_test(target: Target, jars_from: str) -> None:
         exit_code = docker("wait", server_name, timeout=240).stdout.strip()
         logs = docker("logs", server_name, check=False)
         raw_log = logs.stdout + logs.stderr
-        version_file = jar_dir / VERSION_FILE
-        expected_version = (expected_paper_version(version_file.read_bytes())
+        version_file = jar_dir / VERSION_CACHE
+        expected_version = (version_file.read_text(encoding="utf-8").strip() or None
                             if target.platform == "paper" and version_file.is_file() else None)
         if target.platform == "paper" and expected_version is None:
-            raise McDeployError(f"{target.name}: no {VERSION_FILE} in the jar cache; run with --jars-from remote")
+            raise McDeployError(f"{target.name}: server version unknown; run with --jars-from remote")
         failures, warnings = analyse_log(raw_log, target, expected, expected_version)
         if exit_code != "0":
             failures.append(f"server exited with code {exit_code} after the stop command")
