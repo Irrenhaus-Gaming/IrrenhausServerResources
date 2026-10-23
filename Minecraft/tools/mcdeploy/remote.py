@@ -40,6 +40,13 @@ class RemoteBase:
         """File name -> (size, mtime) for the files directly in rel_dir."""
         raise NotImplementedError
 
+    def list_dirs(self, rel_dir: str) -> list[str]:
+        raise NotImplementedError
+
+    def open_binary(self, rel: str):
+        """Seekable binary file object (e.g. to read one entry of a remote jar), or None if missing."""
+        raise NotImplementedError
+
     def close(self) -> None:
         pass
 
@@ -107,6 +114,16 @@ class SftpRemote(RemoteBase):
             if exc.errno == errno.ENOENT:
                 return None
             raise McDeployError(f"SFTP read of {rel} failed: {exc}") from None
+
+    def open_binary(self, rel: str):
+        try:
+            return self.sftp.open(self._abs(rel), "rb")
+        except FileNotFoundError:
+            return None
+        except IOError as exc:
+            if exc.errno == errno.ENOENT:
+                return None
+            raise McDeployError(f"SFTP open of {rel} failed: {exc}") from None
 
     def exists(self, rel: str) -> bool:
         try:
@@ -248,3 +265,7 @@ class LocalRemote(RemoteBase):
     def list_dirs(self, rel_dir: str) -> list[str]:
         base = self.root / rel_dir
         return sorted(p.name for p in base.iterdir() if p.is_dir()) if base.is_dir() else []
+
+    def open_binary(self, rel: str):
+        path = self.root / rel
+        return path.open("rb") if path.is_file() else None

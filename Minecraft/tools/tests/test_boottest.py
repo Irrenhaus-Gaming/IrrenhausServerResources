@@ -78,10 +78,35 @@ def test_version_falls_back_to_the_server_log(server, tmp_path):
     assert not (cache / "latest.log").exists()
 
 
-def test_unknown_server_version_fails(server):
+def test_unknown_server_version_lists_what_was_checked(server):
     os.remove(server / "version_history.json")
-    with pytest.raises(McDeployError, match="cannot tell which Paper version"):
+    (server / "logs").mkdir()
+    (server / "logs" / "latest.log").write_bytes(b"nothing useful\n")
+    with pytest.raises(McDeployError) as exc:
         fetch_jars(TARGET, LocalRemote(server))
+    message = str(exc.value)
+    assert "cannot tell which Paper build" in message
+    assert "version_history.json: not found" in message
+    assert "logs/latest.log: 15 bytes, no Paper version line" in message
+    assert "versions/: not found" in message
+
+
+def test_version_from_the_unpacked_server_jar_manifest(server, tmp_path):
+    import zipfile
+    os.remove(server / "version_history.json")
+    (server / "versions" / "26.3").mkdir(parents=True)
+    with zipfile.ZipFile(server / "versions" / "26.3" / "paper-26.3.jar", "w") as zf:
+        zf.writestr("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\nImplementation-Version: 26.3-214-main@e65c076\n")
+        zf.writestr("big.bin", b"x" * 1000)
+    fetch_jars(TARGET, LocalRemote(server))
+    assert (tmp_path / "cache" / "jars" / TARGET.name / "server_version.txt").read_text() == "26.3-214-main@e65c076"
+
+
+def test_build_comparison_uses_the_commit():
+    from mcdeploy.boottest import same_build
+    assert same_build("26.3-214-main@e65c076", "26.3-214-main@e65c076")
+    assert same_build("1.21.4-232@ab12345", "1.21.4-232-ab12345cdef")
+    assert not same_build("26.3-214-main@e65c076", "26.3-rc-3-1-2307f8f")
 
 
 def test_wrong_paper_build_fails_the_boot_test(monkeypatch):

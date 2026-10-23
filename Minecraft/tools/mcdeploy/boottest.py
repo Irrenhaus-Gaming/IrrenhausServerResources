@@ -56,20 +56,72 @@ VERSION_CACHE = "server_version.txt"    # what the boot test compares against
 LOG_VERSION_RE = re.compile(rb"(?:This server is running Paper version|Loading Paper) (\S+)")
 
 
+def _manifest_version(remote: RemoteBase, rel: str) -> str | None:
+    """Paper build from a server jar's MANIFEST.MF, read by random access (not the whole jar)."""
+    fh = remote.open_binary(rel)
+    if fh is None:
+        return None
+    try:
+        with zipfile.ZipFile(fh) as zf:
+            manifest = zf.read("META-INF/MANIFEST.MF").decode("utf-8", "replace")
+    except (KeyError, zipfile.BadZipFile):
+        return None
+    finally:
+        fh.close()
+    fields = dict(re.findall(r"^([\w-]+): *(.+?)\s*$", manifest, re.M))
+    version = fields.get("Implementation-Version")
+    commit = fields.get("Git-Commit")
+    if version and commit and version_commit(version) is None:
+        version = f"{version}@{commit[:7]}"
+    return version or None
+
+
 def running_paper_version(remote: RemoteBase) -> str:
-    """The Paper version the live server runs: version_history.json, else its latest.log.
-    Only the version string is extracted; nothing else from the log is kept."""
+    """The Paper build the live server runs. Sources, in order: version_history.json, the
+    'This server is running Paper version' line of logs/latest.log, and the manifest of the
+    server jar Paper last unpacked into versions/<mc>/. Only the version string is kept."""
+    notes: list[str] = []
     raw = remote.read(VERSION_FILE)
     if raw is not None:
         return expected_paper_version(raw)
+    notes.append(f"{VERSION_FILE}: not found")
     log = remote.read(SERVER_LOG)
     match = LOG_VERSION_RE.search(log) if log is not None else None
-    if match is None:
-        raise McDeployError(
-            f"cannot tell which Paper version the server runs: no {VERSION_FILE} and no "
-            f"'This server is running Paper version' line in {SERVER_LOG} (start the server once)"
-        )
-    return match.group(1).decode("utf-8", "replace")
+    if match is not None:
+        return match.group(1).decode("utf-8", "replace")
+    notes.append(f"{SERVER_LOG}: " + ("not found" if log is None else f"{len(log)} bytes, no Paper version line"))
+    if "versions" in remote.list_dirs(""):
+        jars = []
+        for sub_dir in remote.list_dirs("versions"):
+            for name, (_, mtime) in remote.file_stats(f"versions/{sub_dir}").items():
+                if name.endswith(".jar"):
+                    jars.append((mtime, f"versions/{sub_dir}/{name}"))
+        for _, rel in sorted(jars, reverse=True):  # newest first: the one Paper last started
+            version = _manifest_version(remote, rel)
+            if version:
+                return re.sub(r"\s*\(MC: [^)]*\)\s*$", "", version).strip()
+            notes.append(f"{rel}: no version in its manifest")
+        if not jars:
+            notes.append("versions/: no jars")
+    else:
+        notes.append("versions/: not found")
+    raise McDeployError("cannot tell which Paper build the server runs:\n" + "\n".join(f"  - {n}" for n in notes))
+
+
+COMMIT_RE = re.compile(r"(?:@|-)g?([0-9a-f]{7,40})(?![0-9a-z])")
+
+
+def version_commit(version: str) -> str | None:
+    """Git commit inside a Paper version string ('26.3-214-main@e65c076' -> 'e65c076')."""
+    found = COMMIT_RE.findall(version)
+    return found[-1] if found else None
+
+
+def same_build(expected: str, running: str) -> bool:
+    a, b = version_commit(expected), version_commit(running)
+    if a and b:
+        return a.startswith(b) or b.startswith(a)
+    return expected == running
 
 
 def fetch_jars(target: Target, remote: RemoteBase) -> None:
@@ -234,13 +286,15 @@ def analyse_log(raw: str, target: Target, expected_plugins: list[str],
     text = ANSI_RE.sub("", raw)
     if not DONE_RE.search(text):
         failures.append("server never reported 'Done (...)!'")
-    if expected_version is not None and not any(
-            marker in text for marker in (f"Paper version {expected_version}", f"Loading Paper {expected_version} ")):
+    if expected_version is not None:
         running = re.search(r"(?:Paper version|Loading Paper) (\S+)", text)
-        failures.append(
-            f"the test ran Paper {running.group(1) if running else '(unknown)'} but the server runs "
-            f"{expected_version}: server_jar in targets.yml points at the wrong jar"
-        )
+        if running is None:
+            failures.append("the test log shows no Paper version, cannot compare it with the server")
+        elif not same_build(expected_version, running.group(1)):
+            failures.append(
+                f"the test ran Paper {running.group(1)} but the server runs {expected_version}: "
+                f"server_jar in targets.yml points at the wrong jar"
+            )
     for name in expected_plugins:
         if target.platform == "paper":
             ok = re.search(rf"Enabling {re.escape(name)} v", text)
