@@ -46,7 +46,8 @@ A GitHub job only sees the secrets of its own environment, so the proxy job cann
 
 Consequences:
 - a proxy deploy also waits for approval in every **protected** server environment
-- a name used in `try` / `[forced-hosts]` must exist as an environment; the proxy boot test runs with the real names (dummy addresses) and fails otherwise
+- `try = ["test", "__SECRET_MC_VELOCITY_SERVERS__"]`: servers named by hand come first, the placeholder appends every other server in the order above (names compared case-insensitively)
+- a name written by hand in `try` / `[forced-hosts]` must exist as an environment; the proxy boot test runs with the real names (dummy addresses) and fails otherwise
 - creating or editing a server environment changes nothing until the proxy is redeployed
 
 ## How a change reaches the servers

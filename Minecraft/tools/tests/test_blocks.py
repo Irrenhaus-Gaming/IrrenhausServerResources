@@ -83,3 +83,47 @@ def test_sync_back_reads_server_list_from_server_file():
     server = render_text("velocity.toml", TOML, {"MC_SERVERS": SERVERS}, EXP)
     assert json.loads(entries_from_server("velocity.toml", server, TOML, "MC_SERVERS")) == json.loads(SERVERS)
     assert entries_from_server("other.toml", server, "[servers]\n", "MC_SERVERS") is None
+
+
+TRY_TOML = (
+    "[servers]\n"
+    "\t__SECRET_MC_SERVERS__\n"
+    '\ttry = ["adventure", "__SECRET_MC_SERVERS__"] # fallback order\n'
+)
+
+
+def test_array_element_appends_names_not_listed_by_hand():
+    more = json.dumps({"Lobby": "a:1", "Adventure": "b:2", "NewWorld": "c:3"})
+    out = render_text("velocity.toml", TRY_TOML, {"MC_SERVERS": more}, EXP)
+    assert '\ttry = ["adventure", "Lobby", "NewWorld"] # fallback order\n' in out
+    assert tomllib.loads(out)["servers"]["try"] == ["adventure", "Lobby", "NewWorld"]
+
+
+def test_array_element_keeps_its_position_and_may_be_alone():
+    text = '[servers]\n\t__SECRET_MC_SERVERS__\n\ttry = ["__SECRET_MC_SERVERS__", "Lobby"]\n'
+    assert tomllib.loads(render_text("velocity.toml", text, {"MC_SERVERS": SERVERS}, EXP))["servers"]["try"] == [
+        "Adventure", "Lobby"]
+    text = '[servers]\n\t__SECRET_MC_SERVERS__\n\ttry = ["__SECRET_MC_SERVERS__"]\n'
+    assert tomllib.loads(render_text("velocity.toml", text, {"MC_SERVERS": SERVERS}, EXP))["servers"]["try"] == [
+        "Lobby", "Adventure"]
+
+
+@pytest.mark.parametrize("line", [
+    'try = ["x__SECRET_MC_SERVERS__"]',
+    'try = ["__SECRET_MC_SERVERS__", "__SECRET_MC_SERVERS__"]',
+    'try = ["a", 1, "__SECRET_MC_SERVERS__"]',
+    'try = ["a",\n"__SECRET_MC_SERVERS__"]',
+    'a.b = ["__SECRET_MC_SERVERS__"]',
+])
+def test_array_element_must_be_whole_string_element(line):
+    with pytest.raises(McDeployError, match="whole element"):
+        expand_blocks("velocity.toml", f"[servers]\n{line}\n", {"MC_SERVERS": SERVERS}, EXP)
+
+
+def test_masker_restores_array_line_and_sync_back_ignores_it():
+    from mcdeploy.blocks import entries_from_server
+    values = {"MC_SERVERS": SERVERS}
+    server = render_text("velocity.toml", TRY_TOML, values, EXP)
+    masker = Masker({"MC_SERVERS": "secret"}, values, {}, EXP)
+    assert masker.apply("velocity.toml", server, TRY_TOML) == TRY_TOML
+    assert json.loads(entries_from_server("velocity.toml", server, TRY_TOML, "MC_SERVERS")) == json.loads(SERVERS)

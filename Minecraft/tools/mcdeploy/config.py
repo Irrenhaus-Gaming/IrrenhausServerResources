@@ -148,7 +148,7 @@ class SchemaEntry:
     description: str
     sources: tuple[str, ...]  # config folders under Minecraft/ that use it
     mask: str = "everywhere"  # "keyed": value is a common word, never replaced globally when masking
-    expand: str = ""          # "toml-entries": JSON object expanded into key = "value" lines (see blocks.py)
+    expand: str = ""          # "toml-entries": JSON object expanded into key = "value" lines or array names (see blocks.py)
     scope: str = "environment"  # repository | environment | collected (built from the server environments)
 
 

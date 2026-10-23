@@ -4,6 +4,11 @@ Used for Velocity's [servers] table so servers can be added in GitHub settings w
 changing the schema. The value is a JSON object, e.g. {"Lobby": "10.0.0.5:25565", "Adventure": "10.0.0.6:25565"};
 the line holding only the placeholder becomes one `Name = "address"` line per entry, keeping
 the placeholder line's indentation and the object's order.
+
+Written as a whole element of a one-line string array instead, the placeholder stands for the
+entry NAMES that are not already listed in that array, in the object's order:
+    try = ["test", "__SECRET_MC_VELOCITY_SERVERS__"]  ->  try = ["test", "Lobby", "Adventure"]
+Names are compared case-insensitively (Velocity's server names are).
 """
 from __future__ import annotations
 
@@ -19,6 +24,7 @@ from .placeholders import CONTROL_RE, TOKEN_RE
 EXPANSIONS = {"toml-entries"}
 ENTRY_KEY_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 TABLE_RE = re.compile(r"^\s*\[(?P<array>\[)?\s*(?P<name>[A-Za-z0-9_.-]+)\s*\]")
+ARRAY_LINE_RE = re.compile(r"^(?P<head>\s*(?P<key>[A-Za-z0-9_-]+)\s*=\s*)\[(?P<items>.*)\](?P<tail>\s*(?:#.*)?)$")
 
 
 class _Pairs(list):
@@ -50,10 +56,34 @@ class Expansion:
     table: tuple[str, ...]
     entries: list[tuple[str, str]]
     lines: list[str]  # the generated lines, without line endings
+    array: tuple[str, list[str]] | None = None  # name-list form: (key, rendered array)
 
 
 def _toml_string(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def _expand_name_array(where: str, body: str, token: str, name: str,
+                       entries: list[tuple[str, str]]) -> tuple[str, list[str]]:
+    """`key = ["a", "TOKEN"]` -> (rendered line, rendered array): TOKEN becomes the entry names
+    not listed elsewhere in the array."""
+    m = ARRAY_LINE_RE.match(body)
+    try:
+        items = tomllib.loads(f"v = [{m['items']}]")["v"] if m else None
+    except tomllib.TOMLDecodeError:
+        items = None
+    if not isinstance(items, list) or not all(isinstance(i, str) for i in items) or items.count(token) != 1:
+        raise McDeployError(
+            f"{where}: list placeholder {name} must stand alone on its line, or be one whole element "
+            f'of a one-line string array like try = ["Lobby", "{token}"]'
+        )
+    listed = {i.casefold() for i in items if i != token}
+    names = [key for key, _ in entries if key.casefold() not in listed]
+    array: list[str] = []
+    for item in items:
+        array.extend(names if item == token else [item])
+    line = m["head"] + "[" + ", ".join(_toml_string(i) for i in array) + "]" + m["tail"]
+    return line, (m["key"], array)
 
 
 def expand_blocks(path: str, text: str, values: dict[str, str], expansions: dict[str, str]) -> tuple[str, list[Expansion]]:
@@ -77,15 +107,18 @@ def expand_blocks(path: str, text: str, values: dict[str, str], expansions: dict
             where = f"{path}:{lineno}"
             if detect_format(path) != "toml":
                 raise McDeployError(f"{where}: list placeholder {name} is only supported in TOML files")
-            if body.strip() != m.group(0):
-                raise McDeployError(f"{where}: list placeholder {name} must stand alone on its line")
             if in_array_table:
                 raise McDeployError(f"{where}: list placeholders are not supported inside [[array tables]]")
             if name not in values:
                 raise McDeployError(f"{where}: no value for list placeholder {name}")
             entries = parse_entries(name, values[name])
-            indent = body[: len(body) - len(body.lstrip())]
             ending = line[len(body):] or "\n"
+            if body.strip() != m.group(0):
+                rendered, array = _expand_name_array(where, body, m.group(0), name, entries)
+                out.append(rendered + ending)
+                done.append(Expansion(table, entries, [rendered], array))
+                break
+            indent = body[: len(body) - len(body.lstrip())]
             lines = [f"{indent}{key} = {_toml_string(value)}" for key, value in entries]
             out.extend(l + ending for l in lines)
             done.append(Expansion(table, entries, lines))
@@ -142,6 +175,11 @@ def verify_blocks(path: str, rendered: str, done: list[Expansion]) -> None:
             node = node.get(part) if isinstance(node, dict) else None
         if not isinstance(node, dict):
             raise McDeployError(f"{path}: table [{'.'.join(exp.table)}] missing after expansion")
+        if exp.array:
+            key, array = exp.array
+            if node.get(key) != array:
+                raise McDeployError(f"{path}: {key} in [{'.'.join(exp.table)}] did not survive expansion")
+            continue
         for key, value in exp.entries:
             if node.get(key) != value:
                 raise McDeployError(f"{path}: entry {key} in [{'.'.join(exp.table)}] did not survive expansion")
