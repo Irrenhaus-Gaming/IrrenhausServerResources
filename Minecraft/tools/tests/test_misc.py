@@ -133,3 +133,14 @@ def test_requote_keeps_repo_lines_with_bare_port():
     repo_lines = frozenset(["mysql-port: __SECRET_MC_DB_PORT__"])
     text = "mysql-port: __SECRET_MC_DB_PORT__\npassword: __SECRET_P__\n"
     assert requote(text, "yaml", repo_lines) == 'mysql-port: __SECRET_MC_DB_PORT__\npassword: "__SECRET_P__"\n'
+
+
+def test_env_file_errors_never_show_contents(tmp_path):
+    from mcdeploy.config import parse_env_file
+    f = tmp_path / ".mc-local.env"
+    f.write_text("# c\nMC_SERVER_SFTP_PORT=2224\nAMP_SFTP_PASSWORD: FAKE-SECRET-42\n\n")
+    with pytest.raises(McDeployError) as exc:
+        parse_env_file(f)
+    assert "line 3" in str(exc.value) and "FAKE-SECRET-42" not in str(exc.value)
+    f.write_text("MC_SERVER_SFTP_PORT=2224\r\n\r\nAMP_SFTP_PASSWORD=a=b c\r\n")
+    assert parse_env_file(f) == {"MC_SERVER_SFTP_PORT": "2224", "AMP_SFTP_PASSWORD": "a=b c"}

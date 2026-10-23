@@ -79,6 +79,8 @@ Files that are secrets as a whole (`forwarding.secret`, `floodgate/key.pem`, `vo
 
 ## Local use (Windows, Docker Desktop running)
 
+`mc.cmd` (cmd) and `mc.ps1` (PowerShell) are equivalent; use `mc.cmd` where PowerShell scripts are disabled. Both run the tools image, so the commands are identical.
+
 ```powershell
 .\mc.ps1 lint
 .\mc.ps1 unit-tests

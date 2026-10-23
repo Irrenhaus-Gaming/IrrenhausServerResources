@@ -3,3 +3,4 @@
 Minecraft/** -text
 *.sh text eol=lf
 .githooks/* text eol=lf
+*.cmd text eol=crlf

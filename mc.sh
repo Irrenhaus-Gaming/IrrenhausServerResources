@@ -29,9 +29,7 @@ while IFS= read -r name; do
     MC_*|AMP_*|GITHUB_*|ACT|CI) env_args+=(--env "$name") ;;
   esac
 done < <(compgen -e)
-if [[ -z "${CI:-}" && -f "$repo/.mc-local.env" ]]; then
-  env_args+=(--env-file "$repo/.mc-local.env")
-fi
+# .mc-local.env is read by the tool itself from the mounted repo (never by docker --env-file).
 
 status=0
 if [[ -n "${ACT:-}" ]]; then

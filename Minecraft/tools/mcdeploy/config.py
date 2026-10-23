@@ -22,6 +22,9 @@ OUT_DIR = REPO_ROOT / ".cache" / "out"
 CACHE_DIR = REPO_ROOT / ".cache"
 
 NAME_RE = re.compile(r"^[A-Z0-9]+(?:_[A-Z0-9]+)*$")
+ENV_KEY_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+# One server's secrets for local runs; read by the tool (not docker --env-file, whose errors echo lines).
+LOCAL_ENV_FILE = REPO_ROOT / ".mc-local.env"
 # Keys in test-values.env that configure the test stack itself instead of filling a placeholder.
 TEST_STACK_KEYS = {"TEST_MYSQL_ROOT_PASSWORD", "TEST_MYSQL_DATABASES"}
 PLATFORMS = {"paper", "velocity"}
@@ -200,23 +203,24 @@ def load_schema(layout: Layout | None = None) -> dict[str, SchemaEntry]:
 
 
 def parse_env_file(path: Path) -> dict[str, str]:
-    """Parse KEY=value lines. Values are taken literally (no quotes, no expansion)."""
+    """Parse KEY=value lines. Values are taken literally (no quotes, no expansion).
+    Errors name the line number only: these files hold secrets."""
     if not path.is_file():
         raise McDeployError(f"Required file is missing: {path}")
     values: dict[str, str] = {}
     problems: list[str] = []
-    for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+    for lineno, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), 1):
         if not line.strip() or line.lstrip().startswith("#"):
             continue
-        if "=" not in line:
-            problems.append(f"line {lineno}: expected KEY=value")
-            continue
-        key, value = line.split("=", 1)
+        key, sep, value = line.partition("=")
         key = key.strip()
+        if not sep or not ENV_KEY_RE.match(key):
+            problems.append(f"line {lineno}: expected KEY=value, e.g. MC_SERVER_HOST=... (not KEY: value)")
+            continue
         if key in values:
             problems.append(f"line {lineno}: duplicate key {key}")
         values[key] = value
-    fail_if(problems, f"{path.name} is invalid:")
+    fail_if(problems, f"{path.name} is invalid (contents not shown):")
     return values
 
 
@@ -232,6 +236,9 @@ def deploy_values() -> dict[str, str]:
     and is rejected by require_values. Locally the values come from .mc-local.env.
     """
     values: dict[str, str] = dict(os.environ)
+    if not os.environ.get("CI") and not os.environ.get("GITHUB_ACTIONS") and LOCAL_ENV_FILE.is_file():
+        for key, value in parse_env_file(LOCAL_ENV_FILE).items():
+            values.setdefault(key, value)  # variables set in the shell win over the file
     # "collected" placeholders (the Velocity server list) never come from a GitHub secret of the
     # same name: only from the entries the server environments delivered in this run.
     collected = [n for n, e in load_schema().items() if e.scope == "collected"]

@@ -17,8 +17,7 @@ if ($LASTEXITCODE -ne 0) { throw 'docker build of the tools image failed (is Doc
 
 $envArgs = @()
 Get-ChildItem Env: | Where-Object { $_.Name -match '^(MC_|AMP_)' } | ForEach-Object { $envArgs += @('--env', $_.Name) }
-$localEnv = Join-Path $repo '.mc-local.env'
-if (Test-Path $localEnv) { $envArgs += @('--env-file', $localEnv) }
+# .mc-local.env is read by the tool itself from the mounted repo (never by docker --env-file).
 
 $ttyArgs = @()
 if (-not [Console]::IsInputRedirected -and -not [Console]::IsOutputRedirected) { $ttyArgs = @('--interactive', '--tty') }
