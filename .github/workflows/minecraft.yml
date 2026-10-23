@@ -33,6 +33,11 @@ on:
         description: "Comma-separated environments to deploy, e.g. mc-proxy,mc-backend-Test (empty = all)"
         required: false
         default: ""
+      adopt:
+        description: "One-time takeover of servers never deployed to (no manifest yet): replace their differing default files"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -124,7 +129,12 @@ jobs:
           key: mc-jars-${{ matrix.environment }}-${{ github.run_id }}
       - name: Drift check and upload
         if: matrix.mode == 'deploy'
-        run: bash ./mc.sh deploy "${{ matrix.environment }}"
+        env:
+          MC_ADOPT: ${{ github.event_name == 'workflow_dispatch' && inputs.adopt }}
+        run: |
+          adopt=()
+          if [[ "$MC_ADOPT" == "true" ]]; then adopt=(--adopt); fi
+          bash ./mc.sh deploy "${{ matrix.environment }}" "${adopt[@]}"
       - name: Hand the server entry to the proxy job (encrypted)
         if: matrix.collect
         run: bash ./mc.sh collect-server "${{ matrix.environment }}"
@@ -218,7 +228,12 @@ jobs:
           path: .cache/jars/${{ needs.plan.outputs.proxy_environment }}
           key: mc-jars-${{ needs.plan.outputs.proxy_environment }}-${{ github.run_id }}
       - name: Drift check and upload
-        run: bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}"
+        env:
+          MC_ADOPT: ${{ github.event_name == 'workflow_dispatch' && inputs.adopt }}
+        run: |
+          adopt=()
+          if [[ "$MC_ADOPT" == "true" ]]; then adopt=(--adopt); fi
+          bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}" "${adopt[@]}"
       - name: Keep boot log
         if: always() && !env.ACT
         uses: actions/upload-artifact@v4

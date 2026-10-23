@@ -153,9 +153,19 @@ def masked_diff(rel: str, remote_text: str, repo_text: str, masker: Masker) -> l
     return out
 
 
-def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], masker: Masker) -> tuple[dict, list[str]]:
-    """Compare server files with the last deploy manifest. Returns (manifest, changed files)."""
+def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], masker: Masker,
+                adopt: bool = False) -> tuple[dict, list[str]]:
+    """Compare server files with the last deploy manifest. Returns (manifest, changed files).
+
+    adopt: one-time takeover of a server that was never deployed to (no manifest yet), e.g. a
+    fresh AMP instance full of generated defaults. Differing files are replaced instead of
+    aborting; the masked diff is still printed. Refused once a manifest exists."""
     raw_manifest = remote.read(MANIFEST)
+    if adopt and raw_manifest is not None:
+        raise McDeployError(
+            f"{target.name}: --adopt is only for a server that was never deployed to, but it has a "
+            f"deploy manifest ({MANIFEST}). Resolve the drift with the sync workflow instead."
+        )
     manifest = {"files": {}}
     if raw_manifest is not None:
         try:
@@ -185,11 +195,22 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
             diff_lines += masked_diff(rel, remote_data.decode("utf-8", errors="replace"), repo_text, masker)
         elif remote_hash != new_hash:
             changed.append(rel)
+    if drifted and adopt:
+        OUTPUTS.add_summary(
+            f"### {target.name}: adopting the server, {len(drifted)} existing file(s) are replaced\n"
+            + "\n".join(f"- `{r}`" for r in drifted)
+            + "\n```diff\n" + "\n".join(diff_lines) + "\n```"
+        )
+        print("\n".join(diff_lines))
+        print(f"{target.name}: adopt: replacing {len(drifted)} existing file(s) that differ from the repo")
+        return manifest, changed + drifted
     if drifted:
         OUTPUTS.add_summary(
             f"### {target.name}: deploy aborted, server files changed since the last deploy\n"
             + "\n".join(f"- `{r}`" for r in drifted)
-            + "\n\nPull the server changes into the repo (Minecraft sync workflow or `mc pull`), then redeploy.\n"
+            + "\n\nPull the server changes into the repo (Minecraft sync workflow or `mc pull`), then redeploy."
+            + ("\nNever deployed to before (no manifest): if these are just a fresh server's defaults, run the "
+               "workflow manually with `adopt` checked." if raw_manifest is None else "") + "\n"
             + "```diff\n" + "\n".join(diff_lines) + "\n```"
         )
         print("\n".join(diff_lines))
@@ -207,7 +228,8 @@ def git_commit() -> str:
     return result.stdout.strip()
 
 
-def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, values: dict[str, str] | None = None) -> None:
+def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, values: dict[str, str] | None = None,
+               adopt: bool = False) -> None:
     if is_act() and not dry_run and os.environ.get("MC_ACT_ALLOW_DEPLOY") != "true":
         print("Running under act: forcing --dry-run (set var MC_ACT_ALLOW_DEPLOY=true to really deploy).")
         dry_run = True
@@ -230,7 +252,7 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
             remote.close()
             raise
     try:
-        manifest, changed = check_drift(target, remote, rendered, masker)
+        manifest, changed = check_drift(target, remote, rendered, masker, adopt)
         print(f"{target.name}: {len(rendered)} managed files, {len(changed)} to upload")
         for rel in changed:
             print(f"  upload {rel}")

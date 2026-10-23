@@ -114,3 +114,23 @@ def test_in_github_actions_values_appear_only_in_add_mask_commands(env, monkeypa
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     leaking = [l for l in capsys.readouterr().out.splitlines() if "hunter2!" in l and not l.startswith("::add-mask::")]
     assert leaking == []
+
+
+def test_adopt_replaces_defaults_on_a_never_deployed_server(env):
+    target, remote, server = env
+    (server / FILE).parent.mkdir(parents=True)
+    (server / FILE).write_text("db:\n  password: default\n")
+    with pytest.raises(McDeployError, match="changed on the server"):
+        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, adopt=True)
+    assert (server / FILE).read_text() == rendered_text()
+    assert (server / deploy.MANIFEST).is_file()
+
+
+def test_adopt_is_refused_once_a_manifest_exists(env):
+    target, remote, server = env
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    (server / FILE).write_text("edited on the server\n")
+    with pytest.raises(McDeployError, match="only for a server that was never deployed to"):
+        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, adopt=True)
+    assert (server / FILE).read_text() == "edited on the server\n"

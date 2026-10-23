@@ -131,6 +131,8 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("deploy", help="drift-check and upload a target")
     p.add_argument("target")
     p.add_argument("--dry-run", action="store_true", help="only check drift and list the files that would change")
+    p.add_argument("--adopt", action="store_true",
+                   help="one-time takeover of a server never deployed to (no manifest): replace differing files")
     p = sub.add_parser("drift", help="alias for deploy --dry-run")
     p.add_argument("target")
     p = sub.add_parser("pull", help="copy changed server files into the repo, secrets masked")
@@ -179,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "render":
             cmd_render(args)
         elif args.command == "deploy":
-            deploy.run_deploy(get_target(args.target), args.dry_run)
+            deploy.run_deploy(get_target(args.target), args.dry_run, adopt=args.adopt)
         elif args.command == "drift":
             deploy.run_deploy(get_target(args.target), True)
         elif args.command == "pull":
