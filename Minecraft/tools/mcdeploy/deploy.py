@@ -15,7 +15,7 @@ from .config import (
 from .blocks import expand_blocks, verify_blocks
 from .errors import McDeployError, fail_if
 from .placeholders import TOKEN_RE, find_tokens, mask, render_file, substitute, token_text
-from .remote import RemoteBase, SftpRemote
+from .remote import RemoteBase, SftpRemote, verify_instance
 from .scan import scan_text
 
 MANIFEST = ".irrenhaus-deploy.json"
@@ -223,6 +223,12 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
     rendered = render_target(target, resolved)
     own_remote = remote is None
     remote = remote or SftpRemote(values)
+    if own_remote:
+        try:
+            verify_instance(target, remote, values)
+        except McDeployError:
+            remote.close()
+            raise
     try:
         manifest, changed = check_drift(target, remote, rendered, masker)
         print(f"{target.name}: {len(rendered)} managed files, {len(changed)} to upload")

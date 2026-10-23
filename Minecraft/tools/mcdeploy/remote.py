@@ -222,6 +222,29 @@ class SftpRemote(RemoteBase):
         self.transport.close()
 
 
+def verify_instance(target, remote: RemoteBase, values: dict[str, str]) -> None:
+    """A backend's SFTP folder must belong to the server its environment describes: AMP writes
+    the instance's Minecraft port into server.properties, and it must equal MC_SERVER_MC_PORT.
+    Catches an MC_SERVER_SFTP_PORT that points at another AMP instance before anything happens."""
+    if target.profile != "backend":
+        return
+    from .formats import parse_properties
+
+    expected = require_values(["MC_SERVER_MC_PORT"], values, f"{target.name} (instance check)")["MC_SERVER_MC_PORT"]
+    raw = remote.read("server.properties")
+    if raw is None:
+        raise McDeployError(
+            f"{target.name}: no server.properties in the SFTP folder, so it is not this server's instance "
+            f"(check MC_SERVER_SFTP_PORT). Nothing was changed."
+        )
+    port = parse_properties(raw.decode("utf-8", "replace")).get("server-port", "").strip()
+    if port != expected.strip():
+        raise McDeployError(
+            f"{target.name}: the SFTP folder belongs to a server with a different Minecraft port than "
+            f"MC_SERVER_MC_PORT, so MC_SERVER_SFTP_PORT points at another AMP instance. Nothing was changed."
+        )
+
+
 def fetch_host_key(host: str, port: int) -> paramiko.PKey:
     """Read the server's host key without authenticating (for the initial pinning)."""
     transport = paramiko.Transport((host, port))

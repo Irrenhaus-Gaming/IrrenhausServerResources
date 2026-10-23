@@ -14,7 +14,7 @@ from pathlib import Path
 from . import boottest, ci, convert, deploy, lint, pull, servers
 from .config import OUT_DIR, OUTPUTS, REPO_ROOT, deploy_values, get_target, git_files, load_test_values, require_values
 from .errors import McDeployError
-from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint
+from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint, verify_instance
 
 
 def cmd_gitleaks(args) -> None:
@@ -83,7 +83,7 @@ def cmd_probe(args) -> None:
                         candidates[f"versions/{sub_dir}/{f}"] = s
         print("Server jar candidates:" if candidates else "Server jar candidates: (none)")
         for f, s in sorted(candidates.items()):
-            print(f"  {f:45s} {stamp(s)}")
+            print(f"  {f:45s} {stamp(s)}  {boottest.jar_info(remote, f)[1]}")
         try:
             print(f"Running Paper version: {boottest.running_paper_version(remote)}")
         except McDeployError as exc:
@@ -93,6 +93,11 @@ def cmd_probe(args) -> None:
             jar_dir, pattern = posixpath.split(target.server_jar)
             matches = sorted(f for f in remote.file_stats(jar_dir) if fnmatch.fnmatch(f, pattern))
             print(f"server_jar '{target.server_jar}' matches: {matches}")
+            try:
+                verify_instance(target, remote, values)
+                print("Instance check: server.properties matches MC_SERVER_MC_PORT (this is the right instance)")
+            except McDeployError as exc:
+                print(f"Instance check FAILED: {exc}")
         if args.write_test:
             probe = ".mcdeploy-probe"
             remote.write_atomic({probe: b"first\n"})
@@ -167,6 +172,7 @@ def main(argv: list[str] | None = None) -> int:
             target = get_target(args.target)
             remote = SftpRemote(deploy_values())
             try:
+                verify_instance(target, remote, deploy_values())
                 boottest.fetch_jars(target, remote)
             finally:
                 remote.close()

@@ -9,7 +9,7 @@ from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files, 
 from .deploy import Masker, load_expansions, load_mask_scopes, render_text, target_placeholders
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
-from .remote import SftpRemote
+from .remote import SftpRemote, verify_instance
 from .scan import filter_allowed, load_scan_allowlist, scan_text
 
 # A plugin rewriting its config may drop the quotes around a value; put them back around tokens.
@@ -43,6 +43,11 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
     listed: list[str] = []
     paths = managed_files(target, include_untracked=False) + [p.strip("/") for p in extra_paths]
     remote = SftpRemote(values)
+    try:
+        verify_instance(target, remote, values)
+    except McDeployError:
+        remote.close()
+        raise
     problems: list[str] = []
     updates: dict[str, bytes] = {}
     try:

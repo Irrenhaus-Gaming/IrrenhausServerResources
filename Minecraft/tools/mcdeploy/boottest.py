@@ -27,7 +27,7 @@ from .config import (
 )
 from .deploy import render_target, target_placeholders
 from .errors import McDeployError, fail_if
-from .remote import RemoteBase, SftpRemote
+from .remote import RemoteBase, SftpRemote, verify_instance
 from .config import deploy_values
 
 MYSQL_IMAGE = "mysql:8.4.13"
@@ -56,30 +56,42 @@ VERSION_CACHE = "server_version.txt"    # what the boot test compares against
 LOG_VERSION_RE = re.compile(rb"(?:This server is running Paper version|Loading Paper) (\S+)")
 
 
-def _manifest_version(remote: RemoteBase, rel: str) -> str | None:
-    """Paper build from a server jar's MANIFEST.MF, read by random access (not the whole jar)."""
+MANIFEST_FIELDS = ("Main-Class", "Implementation-Title", "Implementation-Version", "Brand-Name",
+                   "Build-Number", "Git-Branch", "Git-Commit")
+
+
+def jar_info(remote: RemoteBase, rel: str) -> tuple[str | None, str]:
+    """(Paper build or None, human description) of a jar, read by random access: only its
+    manifest and Paper's bundle index are read, never the whole jar."""
     fh = remote.open_binary(rel)
     if fh is None:
-        return None
+        return None, "missing"
     try:
         with zipfile.ZipFile(fh) as zf:
-            manifest = zf.read("META-INF/MANIFEST.MF").decode("utf-8", "replace")
-    except (KeyError, zipfile.BadZipFile):
-        return None
+            names = set(zf.namelist())
+            manifest = zf.read("META-INF/MANIFEST.MF").decode("utf-8", "replace") if "META-INF/MANIFEST.MF" in names else ""
+            bundle = zf.read("META-INF/versions.list").decode("utf-8", "replace") if "META-INF/versions.list" in names else ""
+    except zipfile.BadZipFile:
+        return None, "not a valid jar"
     finally:
         fh.close()
     fields = dict(re.findall(r"^([\w-]+): *(.+?)\s*$", manifest, re.M))
+    parts = [f"{k}={fields[k]}" for k in MANIFEST_FIELDS if k in fields]
+    bundled = [line.split("\t")[1] for line in bundle.splitlines() if line.count("\t") >= 2]
+    if bundled:
+        parts.append(f"bundles={','.join(bundled)}")
     version = fields.get("Implementation-Version")
     commit = fields.get("Git-Commit")
     if version and commit and version_commit(version) is None:
         version = f"{version}@{commit[:7]}"
-    return version or None
+    return version or None, "; ".join(parts) or "manifest has no identifying fields"
 
 
 def running_paper_version(remote: RemoteBase) -> str:
     """The Paper build the live server runs. Sources, in order: version_history.json, the
     'This server is running Paper version' line of logs/latest.log, and the manifest of the
-    server jar Paper last unpacked into versions/<mc>/. Only the version string is kept."""
+    jars Paper unpacked into versions/<mc>/. Only version strings are kept. When nothing
+    works, the error describes every candidate jar so the right source can be found."""
     notes: list[str] = []
     raw = remote.read(VERSION_FILE)
     if raw is not None:
@@ -90,21 +102,21 @@ def running_paper_version(remote: RemoteBase) -> str:
     if match is not None:
         return match.group(1).decode("utf-8", "replace")
     notes.append(f"{SERVER_LOG}: " + ("not found" if log is None else f"{len(log)} bytes, no Paper version line"))
+    candidates: list[tuple[int, str]] = []
     if "versions" in remote.list_dirs(""):
-        jars = []
         for sub_dir in remote.list_dirs("versions"):
             for name, (_, mtime) in remote.file_stats(f"versions/{sub_dir}").items():
                 if name.endswith(".jar"):
-                    jars.append((mtime, f"versions/{sub_dir}/{name}"))
-        for _, rel in sorted(jars, reverse=True):  # newest first: the one Paper last started
-            version = _manifest_version(remote, rel)
-            if version:
-                return re.sub(r"\s*\(MC: [^)]*\)\s*$", "", version).strip()
-            notes.append(f"{rel}: no version in its manifest")
-        if not jars:
-            notes.append("versions/: no jars")
+                    candidates.append((mtime, f"versions/{sub_dir}/{name}"))
     else:
         notes.append("versions/: not found")
+    for _, rel in sorted(candidates, reverse=True):  # newest first: the one Paper last started
+        version, description = jar_info(remote, rel)
+        if version:
+            return re.sub(r"\s*\(MC: [^)]*\)\s*$", "", version).strip()
+        notes.append(f"{rel}: {description}")
+    for name in sorted(f for f in remote.file_stats("") if f.endswith(".jar")):
+        notes.append(f"{name} (instance root): {jar_info(remote, name)[1]}")
     raise McDeployError("cannot tell which Paper build the server runs:\n" + "\n".join(f"  - {n}" for n in notes))
 
 
@@ -381,6 +393,7 @@ def run_boot_test(target: Target, jars_from: str) -> None:
     if jars_from == "remote":
         remote = SftpRemote(deploy_values())
         try:
+            verify_instance(target, remote, deploy_values())
             fetch_jars(target, remote)
         finally:
             remote.close()

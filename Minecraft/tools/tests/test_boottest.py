@@ -89,6 +89,7 @@ def test_unknown_server_version_lists_what_was_checked(server):
     assert "version_history.json: not found" in message
     assert "logs/latest.log: 15 bytes, no Paper version line" in message
     assert "versions/: not found" in message
+    assert "paper.jar (instance root): not a valid jar" in message
 
 
 def test_version_from_the_unpacked_server_jar_manifest(server, tmp_path):
@@ -128,3 +129,30 @@ def test_stack_trace_lines_with_own_headers_form_one_entry():
            "[10:00:01 INFO]: next\n")
     entries = parse_log(log)
     assert len(entries) == 2 and entries[0].text.count("\n") == 2
+
+
+def test_jar_info_describes_manifest_and_bundle(tmp_path):
+    import zipfile
+    from mcdeploy.boottest import jar_info
+    with zipfile.ZipFile(tmp_path / "server-26.3.jar", "w") as zf:
+        zf.writestr("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\r\nMain-Class: io.papermc.paperclip.Main\r\n")
+        zf.writestr("META-INF/versions.list", "abc123\tpaper-26.3\tpaper-26.3.jar\n")
+    version, description = jar_info(LocalRemote(tmp_path), "server-26.3.jar")
+    assert version is None
+    assert description == "Main-Class=io.papermc.paperclip.Main; bundles=paper-26.3"
+
+
+@pytest.mark.parametrize("props, ok", [
+    ("level-name=IrrenhausTest\nserver-port=25566\n", True),
+    ("level-name=world\nserver-port=25568\n", False),
+    (None, False),
+])
+def test_instance_check_compares_server_port(tmp_path, props, ok):
+    from mcdeploy.remote import verify_instance
+    if props is not None:
+        (tmp_path / "server.properties").write_text(props)
+    if ok:
+        verify_instance(TARGET, LocalRemote(tmp_path), {"MC_SERVER_MC_PORT": "25566"})
+    else:
+        with pytest.raises(McDeployError, match="another AMP instance|not this server's instance"):
+            verify_instance(TARGET, LocalRemote(tmp_path), {"MC_SERVER_MC_PORT": "25566"})

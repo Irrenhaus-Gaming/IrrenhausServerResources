@@ -49,6 +49,7 @@ jobs:
       MC_DB_USERNAME: ${{ secrets.MC_DB_USERNAME }}
       MC_DISCORD_BOT_TOKEN: ${{ secrets.MC_DISCORD_BOT_TOKEN }}
       MC_SERVER_HOST: ${{ secrets.MC_SERVER_HOST }}
+      MC_SERVER_MC_PORT: ${{ secrets.MC_SERVER_MC_PORT }}
       MC_SERVER_SFTP_PORT: ${{ secrets.MC_SERVER_SFTP_PORT }}
       MC_VELOCITY_FORWARDING_SECRET: ${{ secrets.MC_VELOCITY_FORWARDING_SECRET }}
     steps:

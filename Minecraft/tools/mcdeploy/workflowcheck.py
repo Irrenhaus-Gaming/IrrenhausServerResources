@@ -36,7 +36,7 @@ def expected_jobs() -> dict[tuple[str, str], dict[str, str]]:
         (main, "backend"): {**backend, **sftp, **collect},
         (main, "collect"): collect,
         (main, "proxy"): {**proxy, **sftp, "MC_COLLECT_KEY": "secrets"},
-        (sync, "sync"): {**backend, **proxy, **sftp},
+        (sync, "sync"): {**backend, **proxy, **sftp, "MC_SERVER_MC_PORT": "secrets"},  # instance check
     }
 
 
