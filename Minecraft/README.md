@@ -62,6 +62,10 @@ Consequences:
 
 If a deploy aborts because of drift, run **Actions → Minecraft sync from server** for that environment. It opens a PR with the server's changes, secrets masked. Merge it (or edit it), and the next deploy goes through.
 
+## Secrets in the workflows
+
+Each job receives only the secrets it needs, listed one by one in its `env` (`NAME: ${{ secrets.NAME }}`); nothing hands out all secrets at once. `mc lint` derives the required list from the schema and the tooling and fails on a missing, extra or renamed entry, or on a secret used anywhere else in a job. A new placeholder therefore also needs its line in the jobs that lint names.
+
 ## Placeholders
 
 Write a secret into a config as `"__SECRET_<NAME>__"` (keep the quotes). A whole port number may stay unquoted so it is still a number. `__VAR_<NAME>__` is for values stored as GitHub *variables* (none today); the prefix must match where the value lives. Then:

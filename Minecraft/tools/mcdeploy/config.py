@@ -1,7 +1,6 @@
 """Loading of the repo-side configuration: targets, placeholder schema, test values, managed files."""
 from __future__ import annotations
 
-import json
 import os
 import re
 import subprocess
@@ -226,22 +225,13 @@ def load_test_values() -> dict[str, str]:
 
 
 def deploy_values() -> dict[str, str]:
-    """Secret and variable values for a real deploy.
+    """Secret and variable values for a real deploy, read from the environment.
 
-    In GitHub Actions the workflow passes toJSON(secrets) / toJSON(vars) so the schema, not the
-    workflow file, decides which names are needed. Locally they come from the environment.
+    In GitHub Actions each job's `env` passes exactly the secrets it needs, one by one (lint
+    checks that list against the schema). A secret that is not set arrives as an empty string
+    and is rejected by require_values. Locally the values come from .mc-local.env.
     """
-    values: dict[str, str] = {}
-    for env_name in ("MC_VARS_JSON", "MC_SECRETS_JSON"):
-        blob = os.environ.get(env_name)
-        if blob:
-            try:
-                parsed = json.loads(blob)
-            except json.JSONDecodeError as exc:
-                raise McDeployError(f"{env_name} is not valid JSON: {exc.msg}") from None
-            values.update({k: v for k, v in parsed.items() if isinstance(v, str)})
-    for key, value in os.environ.items():
-        values.setdefault(key, value)
+    values: dict[str, str] = dict(os.environ)
     # "collected" placeholders (the Velocity server list) never come from a GitHub secret of the
     # same name: only from the entries the server environments delivered in this run.
     collected = [n for n, e in load_schema().items() if e.scope == "collected"]

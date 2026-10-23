@@ -10,6 +10,7 @@ from .config import (
     source_files,
 )
 from .blocks import expand_blocks
+from .workflowcheck import check_workflows
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
 from .placeholders import find_tokens
@@ -133,6 +134,8 @@ def run_lint() -> None:
             for m in pattern.finditer(text):
                 line = text.count("\n", 0, m.start()) + 1
                 problems.append(f"{rel}:{line}: {label} would hide failures; not allowed")
+
+    problems += check_workflows()
 
     fail_if(problems, f"Lint failed ({len(problems)} problem(s)):")
     OUTPUTS.add_summary(

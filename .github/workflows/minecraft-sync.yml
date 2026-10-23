@@ -39,8 +39,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.environment.outputs.name }}
     env:
-      MC_SECRETS_JSON: ${{ toJSON(secrets) }}
-      MC_VARS_JSON: ${{ toJSON(vars) }}
+      # Only the secrets this job needs, one by one (mc lint keeps this list equal to the schema).
+      AMP_SFTP_HOST_KEY: ${{ secrets.AMP_SFTP_HOST_KEY }}
+      AMP_SFTP_PASSWORD: ${{ secrets.AMP_SFTP_PASSWORD }}
+      AMP_SFTP_USER: ${{ secrets.AMP_SFTP_USER }}
+      MC_DB_HOST: ${{ secrets.MC_DB_HOST }}
+      MC_DB_PASSWORD: ${{ secrets.MC_DB_PASSWORD }}
+      MC_DB_PORT: ${{ secrets.MC_DB_PORT }}
+      MC_DB_USERNAME: ${{ secrets.MC_DB_USERNAME }}
+      MC_DISCORD_BOT_TOKEN: ${{ secrets.MC_DISCORD_BOT_TOKEN }}
+      MC_SERVER_HOST: ${{ secrets.MC_SERVER_HOST }}
+      MC_SERVER_SFTP_PORT: ${{ secrets.MC_SERVER_SFTP_PORT }}
+      MC_VELOCITY_FORWARDING_SECRET: ${{ secrets.MC_VELOCITY_FORWARDING_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - name: Pull and mask server changes
