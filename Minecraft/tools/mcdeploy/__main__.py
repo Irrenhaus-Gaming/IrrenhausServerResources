@@ -16,7 +16,8 @@ from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint
 
 
 def cmd_gitleaks(args) -> None:
-    common = ["--config", str(REPO_ROOT / ".gitleaks.toml"), "--redact", "--no-banner", "--exit-code", "1"]
+    # --verbose prints each finding (rule, file, commit, line); --redact keeps the value hidden.
+    common = ["--config", str(REPO_ROOT / ".gitleaks.toml"), "--redact", "--verbose", "--no-banner", "--exit-code", "1"]
     if args.history or args.staged:
         mode = ["git", "--log-opts=--all"] if args.history else ["git", "--pre-commit", "--staged"]
         result = subprocess.run(["gitleaks", *mode, *common, "."], cwd=REPO_ROOT, check=False)
