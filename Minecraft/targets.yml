@@ -29,7 +29,7 @@ backend:
   source: Backend
   platform: paper
   java_image: eclipse-temurin:25-jre   # AMP instances run "TEMURIN 25 (jdk)"
-  server_jar: "*.jar"                  # TODO(sftp-probe): narrow to the real jar name
+  server_jar: "paperclip.jar"
   accept_eula: true
   memory: 4G
   boot_timeout_seconds: 900

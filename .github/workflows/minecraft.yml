@@ -108,6 +108,12 @@ jobs:
       MC_VELOCITY_FORWARDING_SECRET: ${{ secrets.MC_VELOCITY_FORWARDING_SECRET }}
     steps:
       - uses: actions/checkout@v4
+      - name: Restore this server's jar cache (only changed jars are downloaded again)
+        uses: actions/cache@v4
+        with:
+          path: .cache/jars/${{ matrix.environment }}
+          key: mc-jars-${{ matrix.environment }}-${{ github.run_id }}
+          restore-keys: mc-jars-${{ matrix.environment }}-
       - name: Boot test with the server's own jars
         run: bash ./mc.sh test "${{ matrix.environment }}" --jars-from remote
       - name: Drift check and upload
@@ -191,6 +197,12 @@ jobs:
           pattern: server-entry-*
           merge-multiple: true
           path: .cache/collected
+      - name: Restore the proxy's jar cache (only changed jars are downloaded again)
+        uses: actions/cache@v4
+        with:
+          path: .cache/jars/${{ needs.plan.outputs.proxy_environment }}
+          key: mc-jars-${{ needs.plan.outputs.proxy_environment }}-${{ github.run_id }}
+          restore-keys: mc-jars-${{ needs.plan.outputs.proxy_environment }}-
       - name: Boot test with the server's own jars
         run: bash ./mc.sh test "${{ needs.plan.outputs.proxy_environment }}" --jars-from remote
       - name: Drift check and upload

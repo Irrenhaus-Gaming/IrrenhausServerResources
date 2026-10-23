@@ -3,9 +3,11 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import posixpath
 import shutil
 import subprocess
 import tempfile
+import time
 import sys
 from pathlib import Path
 
@@ -71,9 +73,24 @@ def cmd_probe(args) -> None:
         print("Files:      ", ", ".join(remote.list_files("")) or "(none)")
         plugins = remote.list_files("plugins")
         print(f"plugins/: {len(plugins)} files, {sum(f.endswith('.jar') for f in plugins)} jars")
+        # Where is the server jar AMP really starts? Show every candidate with size and date.
+        stamp = lambda s: f"{s[0] / 1e6:6.1f} MB  {time.strftime('%Y-%m-%d %H:%M', time.gmtime(s[1]))}"
+        candidates = {f: s for f, s in remote.file_stats("").items() if f.endswith(".jar")}
+        if "versions" in remote.list_dirs(""):
+            for sub_dir in remote.list_dirs("versions"):
+                for f, s in remote.file_stats(f"versions/{sub_dir}").items():
+                    if f.endswith(".jar"):
+                        candidates[f"versions/{sub_dir}/{f}"] = s
+        print("Server jar candidates:" if candidates else "Server jar candidates: (none)")
+        for f, s in sorted(candidates.items()):
+            print(f"  {f:45s} {stamp(s)}")
+        version = remote.read(boottest.VERSION_FILE)
+        if version is not None:
+            print(f"Running Paper version ({boottest.VERSION_FILE}): {boottest.expected_paper_version(version)}")
         if args.target:
             target = get_target(args.target)
-            matches = [f for f in remote.list_files("") if fnmatch.fnmatch(f, target.server_jar)]
+            jar_dir, pattern = posixpath.split(target.server_jar)
+            matches = sorted(f for f in remote.file_stats(jar_dir) if fnmatch.fnmatch(f, pattern))
             print(f"server_jar '{target.server_jar}' matches: {matches}")
         if args.write_test:
             probe = ".mcdeploy-probe"

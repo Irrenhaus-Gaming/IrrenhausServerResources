@@ -9,6 +9,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import os
+import posixpath
 import re
 import secrets
 import shutil
@@ -37,6 +38,8 @@ ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 HEADER_RE = re.compile(r"^\[(?P<time>\d{2}:\d{2}:\d{2})\s+(?P<level>[A-Z]+)\]:?\s?(?P<msg>.*)$")
 DONE_RE = re.compile(r"\bDone \(\d+[.,]\d+s\)!")
 ERROR_LEVELS = {"ERROR", "SEVERE", "FATAL"}
+# Paper logs every stack-trace line with its own "[time WARN]:" header; these belong to the entry above.
+CONTINUATION_RE = re.compile(r"^\s+at |^\s*\.\.\. \d+ more|^Caused by: |^\s+Suppressed: ")
 STACK_RE = re.compile(r"^\s+at [\w$.<>]+\(|^Caused by: |^[\w$.]+(?:Exception|Error)(?::|$)", re.M)
 STOP_COMMAND = {"paper": "stop", "velocity": "shutdown"}
 
@@ -47,30 +50,62 @@ def jar_cache_dir(target: Target) -> Path:
     return CACHE_DIR / "jars" / target.name
 
 
+VERSION_FILE = "version_history.json"  # written by Paper into the server folder: the running version
+
+
 def fetch_jars(target: Target, remote: RemoteBase) -> None:
-    """Mirror the server jar and plugins/*.jar from the target into the local cache."""
-    root_files = remote.list_files("")
-    server_jars = [f for f in root_files if fnmatch.fnmatch(f, target.server_jar)]
+    """Mirror the server jar and plugins/*.jar from the target into the local cache.
+
+    Jars whose name, size and modification time are unchanged since the last fetch are reused
+    (the workflow keeps .cache/jars between runs), so normally only updated jars are downloaded."""
+    jar_dir, pattern = posixpath.split(target.server_jar)
+    root_stats = remote.file_stats(jar_dir)
+    server_jars = sorted(f for f in root_stats if fnmatch.fnmatch(f, pattern))
     if len(server_jars) != 1:
         raise McDeployError(
-            f"{target.name}: server_jar pattern '{target.server_jar}' must match exactly one file in the "
-            f"instance root, matched {server_jars or 'nothing'}"
+            f"{target.name}: server_jar '{target.server_jar}' must match exactly one file, matched "
+            f"{server_jars or 'nothing'} (run `mc sftp-probe --target {target.name}` to see the candidates)"
         )
-    plugin_jars = [f for f in remote.list_files("plugins") if f.endswith(".jar")]
-    if not plugin_jars:
+    server_rel = posixpath.join(jar_dir, server_jars[0])
+    plugin_stats = {f: s for f, s in remote.file_stats("plugins").items() if f.endswith(".jar")}
+    if not plugin_stats:
         raise McDeployError(f"{target.name}: no plugin jars found in plugins/ on the server")
+
+    wanted = {"server.jar": (server_rel, root_stats[server_jars[0]]),
+              **{f"plugins/{j}": (f"plugins/{j}", s) for j, s in plugin_stats.items()}}
     dest = jar_cache_dir(target)
-    if dest.exists():
-        shutil.rmtree(dest)
-    (dest / "plugins").mkdir(parents=True)
-    wanted = {"server.jar": server_jars[0], **{f"plugins/{j}": f"plugins/{j}" for j in plugin_jars}}
-    for local, rel in wanted.items():
-        data = remote.read(rel)
-        if data is None:
-            raise McDeployError(f"{target.name}: {rel} disappeared while downloading")
-        (dest / local).write_bytes(data)
-    (dest / "source.json").write_text(json.dumps({"server_jar": server_jars[0], "plugins": plugin_jars}, indent=2))
-    print(f"{target.name}: fetched {server_jars[0]} and {len(plugin_jars)} plugin jars")
+    manifest_path = dest / "source.json"
+    try:
+        old = json.loads(manifest_path.read_text()) if manifest_path.is_file() else {}
+    except ValueError:
+        old = {}
+    (dest / "plugins").mkdir(parents=True, exist_ok=True)
+    for stale in (dest / "plugins").glob("*.jar"):
+        if f"plugins/{stale.name}" not in wanted:
+            stale.unlink()
+    downloaded = reused = 0
+    manifest: dict[str, list] = {}
+    for local, (rel, (size, mtime)) in wanted.items():
+        path = dest / local
+        entry = [rel, size, mtime]
+        if old.get(local) == entry and path.is_file() and path.stat().st_size == size:
+            reused += 1
+        else:
+            data = remote.read(rel)
+            if data is None:
+                raise McDeployError(f"{target.name}: {rel} disappeared while downloading")
+            if len(data) != size:
+                raise McDeployError(f"{target.name}: {rel} changed while downloading; run again")
+            path.write_bytes(data)
+            downloaded += 1
+        manifest[local] = entry
+    manifest_path.write_text(json.dumps(manifest, indent=2))
+    version = remote.read(VERSION_FILE) if target.platform == "paper" else None
+    if target.platform == "paper" and version is None:
+        raise McDeployError(f"{target.name}: {VERSION_FILE} is missing on the server, cannot verify the Paper version")
+    (dest / VERSION_FILE).write_bytes(version or b"")
+    print(f"{target.name}: server jar {server_rel}, {len(plugin_stats)} plugin jars "
+          f"({downloaded} downloaded, {reused} unchanged from cache)")
 
 
 def plugin_names(jar: Path, platform: str) -> list[str]:
@@ -108,7 +143,9 @@ def parse_log(raw: str) -> list[LogEntry]:
     entries: list[LogEntry] = []
     for line in ANSI_RE.sub("", raw).splitlines():
         m = HEADER_RE.match(line)
-        if m:
+        if m and entries and CONTINUATION_RE.match(m.group("msg")):
+            entries[-1].text += "\n" + m.group("msg")
+        elif m:
             entries.append(LogEntry(m.group("level"), m.group("msg")))
         elif entries:
             entries[-1].text += "\n" + line
@@ -154,7 +191,17 @@ def load_log_allowlist(profile: str) -> list[AllowRule]:
     return rules
 
 
-def analyse_log(raw: str, target: Target, expected_plugins: list[str]) -> tuple[list[str], list[str]]:
+def expected_paper_version(version_file: bytes) -> str:
+    """The running version from Paper's version_history.json, e.g. '26.3-214-main@e65c076'."""
+    try:
+        current = json.loads(version_file)["currentVersion"]
+    except (ValueError, KeyError, TypeError):
+        raise McDeployError(f"{VERSION_FILE} from the server has no readable currentVersion") from None
+    return re.sub(r"\s*\(MC: [^)]*\)\s*$", "", current).strip()
+
+
+def analyse_log(raw: str, target: Target, expected_plugins: list[str],
+                expected_version: str | None = None) -> tuple[list[str], list[str]]:
     """Return (failures, warnings) for a finished server log."""
     entries = parse_log(raw)
     rules = load_log_allowlist(target.profile)
@@ -169,6 +216,13 @@ def analyse_log(raw: str, target: Target, expected_plugins: list[str]) -> tuple[
     text = ANSI_RE.sub("", raw)
     if not DONE_RE.search(text):
         failures.append("server never reported 'Done (...)!'")
+    if expected_version is not None and not any(
+            marker in text for marker in (f"Paper version {expected_version}", f"Loading Paper {expected_version} ")):
+        running = re.search(r"(?:Paper version|Loading Paper) (\S+)", text)
+        failures.append(
+            f"the test ran Paper {running.group(1) if running else '(unknown)'} but the server runs "
+            f"{expected_version}: server_jar in targets.yml points at the wrong jar"
+        )
     for name in expected_plugins:
         if target.platform == "paper":
             ok = re.search(rf"Enabling {re.escape(name)} v", text)
@@ -316,7 +370,12 @@ def run_boot_test(target: Target, jars_from: str) -> None:
         exit_code = docker("wait", server_name, timeout=240).stdout.strip()
         logs = docker("logs", server_name, check=False)
         raw_log = logs.stdout + logs.stderr
-        failures, warnings = analyse_log(raw_log, target, expected)
+        version_file = jar_dir / VERSION_FILE
+        expected_version = (expected_paper_version(version_file.read_bytes())
+                            if target.platform == "paper" and version_file.is_file() else None)
+        if target.platform == "paper" and expected_version is None:
+            raise McDeployError(f"{target.name}: no {VERSION_FILE} in the jar cache; run with --jars-from remote")
+        failures, warnings = analyse_log(raw_log, target, expected, expected_version)
         if exit_code != "0":
             failures.append(f"server exited with code {exit_code} after the stop command")
     finally:

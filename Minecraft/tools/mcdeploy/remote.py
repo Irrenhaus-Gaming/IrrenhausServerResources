@@ -36,6 +36,10 @@ class RemoteBase:
     def list_files(self, rel_dir: str) -> list[str]:
         raise NotImplementedError
 
+    def file_stats(self, rel_dir: str) -> dict[str, tuple[int, int]]:
+        """File name -> (size, mtime) for the files directly in rel_dir."""
+        raise NotImplementedError
+
     def close(self) -> None:
         pass
 
@@ -94,6 +98,8 @@ class SftpRemote(RemoteBase):
     def read(self, rel: str) -> bytes | None:
         try:
             with self.sftp.open(self._abs(rel), "rb") as fh:
+                # Read-ahead: without it paramiko waits for every 32 KiB block (45 min for ~100 MB of jars).
+                fh.prefetch(fh.stat().st_size)
                 return fh.read()
         except FileNotFoundError:
             return None
@@ -181,6 +187,13 @@ class SftpRemote(RemoteBase):
             raise McDeployError(f"SFTP listing of {rel_dir or '/'} failed: {exc}") from None
         return sorted(e.filename for e in entries if not stat.S_ISDIR(e.st_mode or 0))
 
+    def file_stats(self, rel_dir: str) -> dict[str, tuple[int, int]]:
+        try:
+            entries = self.sftp.listdir_attr(self._abs(rel_dir))
+        except IOError as exc:
+            raise McDeployError(f"SFTP listing of {rel_dir or '/'} failed: {exc}") from None
+        return {e.filename: (e.st_size or 0, int(e.st_mtime or 0)) for e in entries if not stat.S_ISDIR(e.st_mode or 0)}
+
     def list_dirs(self, rel_dir: str) -> list[str]:
         try:
             entries = self.sftp.listdir_attr(self._abs(rel_dir))
@@ -225,3 +238,13 @@ class LocalRemote(RemoteBase):
     def list_files(self, rel_dir: str) -> list[str]:
         base = self.root / rel_dir
         return sorted(p.name for p in base.iterdir() if p.is_file()) if base.is_dir() else []
+
+    def file_stats(self, rel_dir: str) -> dict[str, tuple[int, int]]:
+        base = self.root / rel_dir
+        if not base.is_dir():
+            return {}
+        return {p.name: (p.stat().st_size, int(p.stat().st_mtime)) for p in base.iterdir() if p.is_file()}
+
+    def list_dirs(self, rel_dir: str) -> list[str]:
+        base = self.root / rel_dir
+        return sorted(p.name for p in base.iterdir() if p.is_dir()) if base.is_dir() else []
