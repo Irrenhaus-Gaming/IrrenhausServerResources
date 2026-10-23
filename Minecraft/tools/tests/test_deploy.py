@@ -26,6 +26,9 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(deploy, "target_placeholders", lambda target: {"DB_PW": "secret"})
     monkeypatch.setattr(deploy, "load_mask_scopes", lambda: {})
     monkeypatch.setattr(deploy, "load_expansions", lambda: {})
+    # Outside GitHub Actions no ::add-mask:: lines are printed; the CI case has its own test.
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.delenv("ACT", raising=False)
     target = Target(
         name="mc-backend-Test", profile="backend", server_name="Test", source="Backend", platform="paper",
         java_image="x", server_jar="*.jar", accept_eula=True, memory="1G", boot_timeout_seconds=1, settle_seconds=0,
@@ -101,3 +104,13 @@ def test_act_forces_dry_run(env, monkeypatch):
     deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     assert not any(server.iterdir())
 
+
+def test_in_github_actions_values_appear_only_in_add_mask_commands(env, monkeypatch, capsys):
+    target, remote, server = env
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    (server / FILE).write_text(rendered_text() + "extra: true\n")
+    with pytest.raises(McDeployError):
+        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    leaking = [l for l in capsys.readouterr().out.splitlines() if "hunter2!" in l and not l.startswith("::add-mask::")]
+    assert leaking == []
