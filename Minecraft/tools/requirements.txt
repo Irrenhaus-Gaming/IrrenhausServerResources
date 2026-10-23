@@ -1,0 +1,6 @@
+paramiko==3.5.1
+ruamel.yaml==0.18.10
+pyhocon==0.3.61
+pathspec==0.12.1
+cryptography==44.0.2
+pytest==8.3.5

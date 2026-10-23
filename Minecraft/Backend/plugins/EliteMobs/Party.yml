@@ -1,0 +1,145 @@
+# Enables session-scoped player parties.
+# Party membership is never saved and ends when players log out or leave.
+enabled: true
+# Maximum same-world distance in blocks for party loot voting and shared quest objective credit.
+# This prevents remote or AFK party members from receiving progression.
+sharedProgressRange: 128.0
+# How long a party invitation remains valid.
+inviteTimeoutSeconds: 60
+# How long party members have to accept an instanced dungeon ready check.
+dungeonReadyCheckTimeoutSeconds: 30
+# Hard maximum lifetime for one party need/greed vote session.
+# New party drops still refresh the normal 60-second voting window, but can never extend a session past this limit.
+lootVoteMaximumLifetimeSeconds: 120
+# Shows the combined party status and tracked quest sidebar while players are in a party.
+# Disabling this keeps parties active and falls back to the normal EliteMobs quest scoreboard.
+sidebarEnabled: true
+# How often the party sidebar alternates between its invite and leave command hints.
+sidebarRotationSeconds: 10
+# Shows a short party invitation hint when a player right-clicks another player.
+# This has no effect when the party system itself is disabled.
+playerInteractionHintsEnabled: true
+# Minimum time before a player can receive another right-click party hint.
+playerInteractionHintCooldownSeconds: 300
+prefix: '&8[<g:#A04468:#E07A9A>Party</g>&8] &7'
+unknownPlayerName: Unknown
+disabledMessage: $prefixThe party system is disabled on this server.
+alreadyInPartyMessage: $prefixYou are already in a party.
+notInPartyMessage: $prefixYou are not in a party.
+partyCreatedMessage: $prefix&aParty created! &7Invite players with &f/em party invite
+  <player>&7.
+partyFullMessage: $prefixThat party already has five players.
+playerUnavailableMessage: $prefixThat player is not online.
+playerAlreadyInPartyMessage: $prefixThat player is already in a party.
+selfInviteMessage: $prefixYou cannot invite yourself.
+inviteSentMessage: $prefixInvitation sent to &f$player&7.
+inviteAlreadyPendingMessage: $prefix&f$player &7already has a pending party invitation.
+playerCannotUsePartiesMessage: $prefix&f$player &7does not have permission to use
+  parties.
+inviteReceivedMessage: '$prefix&f$player &7invited you to join their party. '
+inviteAcceptButton: <g:#2E7D4F:#69C56F>[ACCEPT]</g>
+inviteAcceptHover: '&7Click to join the party'
+noPendingInviteMessage: $prefixYou do not have a pending party invitation.
+inviteExpiredMessage: $prefixThat party invitation expired.
+joinedPartyMessage: $prefix&aYou joined the party!
+memberJoinedMessage: $prefix&f$player &ajoined the party.
+leftPartyMessage: $prefixYou left the party.
+memberLeftMessage: $prefix&f$player &cleft the party.
+leaderChangedMessage: $prefix&f$player &7is now the party leader.
+dungeonPartyTooLargeMessage: $prefixParty entry needs &f$count &7open spots, but this
+  dungeon only has &f$max &7available.
+dungeonPartyUnavailableMessage: $prefixParty entry stopped because &f$player &7is
+  no longer available.
+dungeonPartyInInstanceMessage: $prefixParty entry stopped because &f$player &7is already
+  in another instance.
+dungeonPartyNoPermissionMessage: $prefixParty entry stopped because &f$player &7does
+  not have permission for this dungeon.
+dungeonPartyChangedMessage: $prefixThe party changed while the dungeon was being prepared.
+  Please try again.
+dungeonPartyJoinFailedMessage: $prefixThe party could not enter together, so nobody
+  was moved.
+dungeonReadyCheckPendingMessage: $prefixYour party already has a dungeon ready check
+  in progress.
+dungeonReadyCheckStartedMessage: $prefix&f$player &7wants to enter &f$dungeon&7. Waiting
+  for the party (&f$ready&7/&f$total&7).
+dungeonReadyCheckPromptMessage: '$prefixReady to enter &f$dungeon&7? '
+dungeonReadyCheckReadyButton: <g:#2E7D4F:#69C56F>[READY]</g>
+dungeonReadyCheckReadyHover: '&7Click to confirm dungeon entry'
+dungeonReadyCheckDeclineButton: ' <g:#7A1F2B:#C2414A>[DECLINE]</g>'
+dungeonReadyCheckDeclineHover: '&7Click to cancel this party entry'
+dungeonReadyCheckCancelPromptMessage: '$prefixStarted the wrong dungeon? '
+dungeonReadyCheckCancelButton: <g:#7A1F2B:#C2414A>[CANCEL]</g>
+dungeonReadyCheckNoPendingMessage: $prefixThat dungeon ready check is no longer active.
+dungeonReadyCheckAlreadyReadyMessage: $prefixYou are already ready for this dungeon.
+dungeonReadyCheckPlayerReadyMessage: $prefix&f$player &ais ready &7(&f$ready&7/&f$total&7).
+dungeonReadyCheckCompleteMessage: $prefix&aEveryone is ready! &7Preparing &f$dungeon&7...
+dungeonReadyCheckDeclinedMessage: $prefix&f$player &cdeclined &7the ready check for
+  &f$dungeon&7.
+dungeonReadyCheckExpiredMessage: $prefixThe ready check for &f$dungeon &7expired.
+dungeonReadyCheckUnknownDungeonName: this dungeon
+dungeonReadyCheckLevelFormat: $dungeon - level $level
+sidebarTitle: <g:#A04468:#E07A9A>♥ Elite Party</g>
+sidebarLeaderLine: '&6★ &f$player$health$lives'
+sidebarMemberLine: '&a● &f$player$health$lives'
+sidebarQuestLine: '&bQuest: &f$quest'
+sidebarHealthGlyph: ❤
+sidebarHealthHealthyColor: '&a'
+sidebarHealthWoundedColor: '&e'
+sidebarHealthCriticalColor: '&c'
+sidebarHealthMissingColor: '&8'
+sidebarDownedDisplay: ' &c☠'
+sidebarLivesDisplay: ' &b◆&f$lives'
+sidebarInviteAction: '&b✉ &f/em party invite <player>'
+sidebarLeaveAction: '&c✘ &f/em party leave'
+playerInteractionHintMessage: '$prefixWant to team up with &f$player&7? '
+playerInteractionHintInviteButton: <g:#2E7D4F:#69C56F>[INVITE]</g>
+playerInteractionHintInviteHover: '&7Invite &f$player &7to your party'
+playerInteractionHintDisableButton: '&8[Don''t show again]'
+playerInteractionHintDisableHover: '&7Permanently hide right-click party hints'
+playerInteractionHintDisabledMessage: $prefixRight-click party hints have been disabled
+  for you.
+inventoryControlsTitle: <g:#A04468:#E07A9A>♥ Elite Party</g>
+inventoryInvitePlayersTitle: <g:#A04468:#E07A9A>✉ Invite a Player</g>
+inventoryInteractionTitle: <g:#A04468:#E07A9A>♥ Party with</g> &f$player
+inventoryInvitationTitle: <g:#A04468:#E07A9A>✉ Party Invitation</g>
+inventoryReadyCheckTitle: <g:#6D3AA8:#A855F7>★ Dungeon Ready Check</g>
+inventoryInviteName: <g:#267A78:#58B8A9>✉ Invite a Player</g>
+inventoryInviteLore: '&7Choose an online player to invite.'
+inventoryLeaveName: <g:#7A1F2B:#C2414A>✘ Leave Party</g>
+inventoryLeaveLore: '&7Leave your current party.'
+inventoryCreateName: <g:#2E7D4F:#69C56F>+ Create a Party</g>
+inventoryCreateLore: '&7Create a party for up to five players.'
+inventoryBackName: '&eBack to /em'
+inventoryBackToPartyName: '&eBack to Party Controls'
+inventoryPreviousName: '&ePrevious Page'
+inventoryNextName: '&eNext Page'
+inventoryInvitePlayerName: <g:#267A78:#58B8A9>✉ Invite</g> &f$player
+inventorySelectInviteLore: '&7Click to invite.'
+inventoryNoInvitePlayersName: '&7No Players Available'
+inventoryNoInvitePlayersLore: '&8Nobody online can currently be invited.'
+inventoryInteractionInviteName: <g:#267A78:#58B8A9>✉ Invite</g> &f$player
+inventoryInteractionInviteLore: '&7Invite this player to your party.'
+inventoryNeverShowName: '&8Never Show This Again'
+inventoryNeverShowLore: '&7Permanently hide right-click party hints.'
+inventoryAcceptInviteName: <g:#2E7D4F:#69C56F>Accept Invite</g> &f— $player
+inventoryAcceptInviteLore: '&7Join their EliteMobs party.'
+inventoryDeclineName: <g:#7A1F2B:#C2414A>Decline</g>
+inventoryDeclineLore: '&7Ignore this invitation.'
+inventoryReadyDungeonName: <g:#6D3AA8:#A855F7>★ Dungeon</g> &f$dungeon
+inventoryReadyWaitingLore: '&7Waiting for your party.'
+inventoryReadyConfirmLore: '&7Confirm that you are ready to enter.'
+inventoryReadyName: <g:#2E7D4F:#69C56F>Ready</g>
+inventoryReadyLore: '&7Enter when everyone is ready.'
+inventoryCancelReadyName: <g:#7A1F2B:#C2414A>Cancel Ready Check</g>
+inventoryCancelReadyLore: '&7Cancel this party dungeon entry.'
+inventoryNoPermissionMessage: '&cYou do not have permission to use EliteMobs parties.'
+commandCreateDescription: Creates a session-scoped EliteMobs party.
+commandInviteDescription: Invites an online player to your EliteMobs party.
+commandMenuDescription: Opens compatible EliteMobs party controls.
+commandAcceptDescription: Accepts your pending EliteMobs party invitation.
+commandLeaveDescription: Leaves your current EliteMobs party.
+commandReadyDescription: Accepts an active party dungeon ready check.
+commandDeclineDescription: Declines an active party dungeon ready check.
+commandHideInteractionHintDescription: Permanently hides right-click party invitation
+  hints.
+readyCheckTokenHint: ready check token

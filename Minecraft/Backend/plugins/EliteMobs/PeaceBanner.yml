@@ -1,0 +1,29 @@
+# Whether the Peace Banner feature is enabled.
+enabled: true
+# Whether the Peace Banner can be crafted by players.
+craftable: true
+# The radius (in chunks) around a placed Peace Banner where elite mobs are suppressed.
+chunkRadius: 4
+# Whether placed Peace Banners also suppress EliteMobs events (action events, timed events).
+suppressEvents: true
+# The crafting recipe shape. Each string is one row of the crafting grid.
+recipeShape:
+- BBB
+- BWB
+- BBB
+# Maps recipe characters to materials. Use ANY_BANNER to accept all 16 banner colors.
+recipeIngredients:
+  W: ANY_BANNER
+  B: BONE
+# The display name of the Peace Banner item.
+itemName: '&aPeace Banner'
+# The lore lines shown on the Peace Banner item.
+itemLore:
+- '&7Place to create a peaceful zone'
+- '&7Prevents elite mob spawning'
+- '&7within a &f4 chunk &7radius'
+# Message sent to the player when they place a Peace Banner.
+placedMessage: '&aPeace Banner placed! Elite mobs will not spawn within a &f$radius
+  chunk &aradius.'
+# Message sent to the player when they break a Peace Banner.
+removedMessage: '&cPeace Banner removed. Elite mobs can now spawn in this area again.'

@@ -1,0 +1,150 @@
+# Title shown in the /em initialize menu
+menuTitle: <g:#228B22:#32CD32>EliteMobs</g>
+# Subtitle shown in the /em initialize menu
+menuSubtitle: <g:#CD7F32:#FFD700>Events</g>&7, <g:#2E8B57:#3CB371>Dungeons</g>&7,
+  <g:#4A7A9A:#6A9ABA>Arenas</g> &7& <g:#7B2FBE:#A855F7>More</g>&7!
+# Separator line used in chat messages
+separatorLine: <g:#8B0000:#CC4400:#DAA520>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</g>
+# Display name for the info button
+infoButtonName: '&fWelcome to <g:#228B22:#32CD32>EliteMobs</g>&f, by <g:#CC4400:#DAA520>MagmaGuy</g>&f!'
+# First lore line for the info button
+infoButtonLore1: '&7Click to get setup links and resources.'
+# Second lore line for the info button
+infoButtonLore2: '&7Choose a preset below to configure your server.'
+# Third lore line for the info button
+infoButtonLore3: '&6We recommend the &aRecommended preset&6!'
+# Setup guide link sent when info button is clicked
+infoButtonClickSetupLink: '&7Setup guide: '
+# Content browse message sent when info button is clicked
+infoButtonClickContentBrowse: '&7Browse content: '
+# Text between the /em setup command and the content link
+infoButtonClickContentBrowseSuffix: ' &8or '
+# Discord link sent when info button is clicked
+infoButtonClickDiscord: '&7Discord: '
+# Display name for the recommended preset button
+recommendedPresetName: <g:#228B22:#32CD32>Recommended Preset</g> &7- Full Install
+# First lore line for the recommended preset
+recommendedPresetLore1: '&7Enables all EliteMobs features.'
+# Second lore line for the recommended preset
+recommendedPresetLore2: '&7Custom items, MMORPG progression'
+# Third lore line for the recommended preset
+recommendedPresetLore3: '&7& naturally spawning elites.'
+# Fourth lore line for the recommended preset
+recommendedPresetLore4: '&7Works with &fBetterStructures&7.'
+# Fifth lore line for the recommended preset
+recommendedPresetLore5: '&aClick to select!'
+# Confirmation message sent after selecting recommended preset
+recommendedPresetClickConfirm: <g:#228B22:#32CD32>Recommended installation</g> &7activated!
+# Account token prompt sent after selecting recommended preset
+recommendedPresetClickNightbreakLogin: '<g:#B8860B:#DAA520>Step 1:</g> &7Connect this
+  server: '
+# In-game content management message sent after selecting recommended preset
+recommendedPresetClickDownloadAll: '<g:#B8860B:#DAA520>Step 2:</g> &7Install & manage
+  content in-game with '
+# Text after the /em setup command in the recommended preset
+recommendedPresetClickDownloadAllSuffix: '&7!'
+# Browse content link sent after selecting recommended preset
+recommendedPresetClickSetupGuide: '&7Browse all content: '
+# Manual install note sent after selecting recommended preset
+recommendedPresetClickDiscord: '&8Or install manually (less convenient): '
+# Discord link sent after selecting recommended preset
+recommendedPresetClickWiki: '&7Need help? '
+# Display name for the content-only preset button
+contentOnlyPresetName: <g:#DAA520:#F0C040>Content-Only Preset</g>
+# First lore line for the content-only preset
+contentOnlyPresetLore1: <g:#8B0000:#CC0000>Disables natural elite spawns.</g>
+# Second lore line for the content-only preset
+contentOnlyPresetLore2: '&7Keeps installed content and'
+# Third lore line for the content-only preset
+contentOnlyPresetLore3: '&7the MMORPG progression system.'
+# Fourth lore line for the content-only preset
+contentOnlyPresetLore4: '&7Works with &fBetterStructures&7.'
+# Fifth lore line for the content-only preset
+contentOnlyPresetLore5: '&eClick to select!'
+# Confirmation message sent after selecting content-only preset
+contentOnlyPresetClickConfirm: <g:#DAA520:#F0C040>Content-only installation</g> &7activated!
+# Account token prompt sent after selecting content-only preset
+contentOnlyPresetClickNightbreakLogin: '<g:#B8860B:#DAA520>Step 1:</g> &7Connect this
+  server: '
+# In-game content management message sent after selecting content-only preset
+contentOnlyPresetClickDownloadAll: '<g:#B8860B:#DAA520>Step 2:</g> &7Install & manage
+  content in-game with '
+# Text after the /em setup command in the content-only preset
+contentOnlyPresetClickDownloadAllSuffix: '&7!'
+# Browse content link sent after selecting content-only preset
+contentOnlyPresetClickSetupGuide: '&7Browse all content: '
+# Manual install note sent after selecting content-only preset
+contentOnlyPresetClickDiscord: '&8Or install manually (less convenient): '
+# Discord link sent after selecting content-only preset
+contentOnlyPresetClickWiki: '&7Need help? '
+# Display name for the nothing preset button
+nothingPresetName: <g:#8B0000:#CC0000>No Progression Preset</g> &8- Not Recommended
+# First lore line for the nothing preset
+nothingPresetLore1: '&cDisables elite spawns, loot drops,'
+# Second lore line for the nothing preset
+nothingPresetLore2: '&cthe skill system, and leveling.'
+# Third lore line for the nothing preset
+nothingPresetLore3: '&4&lNot recommended! &cMost features disabled.'
+# Fourth lore line for the nothing preset
+nothingPresetLore4: '&7Works with &fBetterStructures&7.'
+# Fifth lore line for the nothing preset
+nothingPresetLore5: '&7Click to select.'
+# Sixth lore line for the nothing preset
+nothingPresetLore6: ''
+# Confirmation message sent after selecting nothing preset
+nothingPresetClickConfirm: <g:#8B0000:#CC0000>No progression</g> &7mode activated.
+# Warning message sent after selecting nothing preset
+nothingPresetClickWarning: '&c&lWarning: &7Elite spawns, loot, skills, and leveling
+  are all &cdisabled&7. Most EliteMobs features will not work.'
+# BetterStructures note sent after selecting nothing preset
+nothingPresetClickBetterStructures: '&7Content from &fBetterStructures &7will still
+  function normally.'
+# Setup guide link sent after selecting nothing preset
+nothingPresetClickSetupGuide: '&7Need help? '
+# Header for the first-time login message
+loginHeader: '&fWelcome to <g:#228B22:#32CD32>EliteMobs</g>&f, by <g:#CC4400:#DAA520>MagmaGuy</g>&f!'
+# Welcome message for the first-time login
+loginWelcome: <g:#2E8B57:#3CB371>Dungeons</g>&7, <g:#CD7F32:#FFD700>events</g>&7,
+  <g:#4A7A9A:#6A9ABA>arenas</g> &7& <g:#7B2FBE:#A855F7>more</g>&7!
+# Help hint for the first-time login
+loginHelpHint: '&7Setup required! Run '
+# Text after the /em initialize command in the help hint
+loginHelpHintSuffix: ' &7to get started.'
+# Discord link for the first-time login
+loginDiscord: '&7Need help? Reach out on '
+# Dismiss instruction for the first-time login
+loginDismiss: '&8This message will stop appearing after setup.'
+# Prefix label before the language selector in the first-time login message
+loginLanguagePrefix: '&7Language: '
+# Display text for the clickable Discord link
+discordLinkDisplay: '&9&nDiscord'
+# Hover tooltip for the Discord link
+discordLinkHover: '&7Click to join the Discord!'
+# Display text for the clickable account token link
+accountLinkDisplay: '&9&nnightbreak.io/account'
+# Hover tooltip for the account token link
+accountLinkHover: '&7Click to open the account token page'
+# Display text for the clickable content browse link
+contentLinkDisplay: '&9&nnightbreak.io/elitemobs'
+# Hover tooltip for the content browse link
+contentLinkHover: '&7Click to browse EliteMobs content'
+# Display text for the clickable wiki link
+wikiLinkDisplay: '&8&nwiki.nightbreak.io'
+# Hover tooltip for the wiki link
+wikiLinkHover: '&7Click to open the setup wiki'
+# Display text for the clickable /em initialize command
+emInitializeDisplay: '&a&n/em initialize'
+# Hover tooltip for the /em initialize command
+emInitializeHover: '&7Click to run /em initialize'
+# Display text for the clickable /em setup command
+emSetupDisplay: '&a&n/em setup'
+# Hover tooltip for the /em setup command
+emSetupHover: '&7Click to run /em setup'
+# Display text for the clickable /em command
+emCommandDisplay: '&a&n/em'
+# Hover tooltip for the /em command
+emCommandHover: '&7Click to open the EliteMobs menu'
+# Display text for the clickable /em loot command
+emLootDisplay: '&a&n/em loot'
+# Hover tooltip for the /em loot command
+emLootHover: '&7Click to vote on loot'

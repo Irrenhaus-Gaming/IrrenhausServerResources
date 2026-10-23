@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Blocks commits that would publish secrets or break the Minecraft config checks.
+# Installed with: ./mc.sh install-hooks   (or .\mc.ps1 install-hooks)
+set -euo pipefail
+repo="$(git rev-parse --show-toplevel)"
+bash "$repo/mc.sh" gitleaks --staged
+if git diff --cached --name-only | grep -qE '^(Minecraft/|mc\.sh|\.github/workflows/minecraft)'; then
+  bash "$repo/mc.sh" lint
+fi

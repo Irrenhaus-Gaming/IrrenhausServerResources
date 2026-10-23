@@ -1,0 +1,32 @@
+formatVersion: 1
+actors:
+  e9a8aeff-0654-3c75-9d6c-a6fcdd3dda22:
+    identity: npc|combat_instructor.yml|em_adventurers_guild|0x1.2bp8|0x1.6cp6|0x1.aep7
+    currentNode: 18
+    targetNode: 19
+    direction: 1
+    fraction: 0.9508000091245955
+    virtualSpeed: 0.25
+    routeKey: 1444fa8a
+    safe:
+      world: em_adventurers_guild
+      x: 294.4987528724088
+      y: 91.0
+      z: 214.72793936249025
+      yaw: 180.15326
+      pitch: 0.0
+  9536231b-a6aa-38cd-b7c7-416804d77a8b:
+    identity: npc|guild_patrol.yml|em_adventurers_guild|0x1.1e87ef9db22d1p8|0x1.7p6|0x1.1c5999999999ap8
+    currentNode: 0
+    targetNode: 1
+    direction: 1
+    fraction: 0.0
+    virtualSpeed: 0.25
+    routeKey: 5bec91a8
+    safe:
+      world: em_adventurers_guild
+      x: 286.8688318984433
+      y: 92.0
+      z: 284.1311681015567
+      yaw: 0.0
+      pitch: 0.0

@@ -1,0 +1,54 @@
+dropProcedurallyGeneratedItems: true
+customEnchantmentsChance: 0.5
+validWeapons:
+  STAVES: true
+  WANDS: true
+validMaterials:
+  DIAMOND_HELMET: true
+  DIAMOND_CHESTPLATE: true
+  DIAMOND_LEGGINGS: true
+  DIAMOND_BOOTS: true
+  DIAMOND_SWORD: true
+  DIAMOND_AXE: true
+  DIAMOND_HOE: true
+  IRON_HELMET: true
+  IRON_CHESTPLATE: true
+  IRON_LEGGINGS: true
+  IRON_BOOTS: true
+  IRON_SWORD: true
+  IRON_AXE: true
+  IRON_HOE: true
+  GOLDEN_HELMET: true
+  GOLDEN_CHESTPLATE: true
+  GOLDEN_LEGGINGS: true
+  GOLDEN_BOOTS: true
+  GOLDEN_SWORD: true
+  GOLDEN_AXE: true
+  GOLDEN_HOE: true
+  CHAINMAIL_HELMET: true
+  CHAINMAIL_CHESTPLATE: true
+  CHAINMAIL_LEGGINGS: true
+  CHAINMAIL_BOOTS: true
+  LEATHER_HELMET: true
+  LEATHER_CHESTPLATE: true
+  LEATHER_LEGGINGS: true
+  LEATHER_BOOTS: true
+  STONE_SWORD: true
+  STONE_AXE: true
+  STONE_HOE: true
+  WOODEN_SWORD: true
+  WOODEN_AXE: true
+  WOODEN_HOE: true
+  SHIELD: true
+  TURTLE_HELMET: true
+  TRIDENT: true
+  BOW: true
+  CROSSBOW: true
+  MACE: true
+  DIAMOND_SPEAR: true
+  IRON_SPEAR: true
+  GOLDEN_SPEAR: true
+  STONE_SPEAR: true
+  WOODEN_SPEAR: true
+  COPPER_SPEAR: true
+  NETHERITE_SPEAR: true

@@ -1,0 +1,280 @@
+MyAnimation1:
+  change-interval: 100
+  texts:
+    - '&d-&3--------------'
+    - '&3-&d-&3-------------'
+    - '&3--&d-&3------------'
+    - '&3---&d-&3-----------'
+    - '&3----&d-&3----------'
+    - '&3-----&d-&3---------'
+    - '&3------&d-&3--------'
+    - '&3-------&d-&3-------'
+    - '&3--------&d-&3------'
+    - '&3---------&d-&3-----'
+    - '&3----------&d-&3----'
+    - '&3-----------&d-&3---'
+    - '&3------------&d-&3--'
+    - '&3-------------&d-&3-'
+    - '&3--------------&d-'
+    - '&3-------------&d-&3-'
+    - '&3------------&d-&3--'
+    - '&3-----------&d-&3---'
+    - '&3----------&d-&3----'
+    - '&3---------&d-&3-----'
+    - '&3--------&d-&3------'
+    - '&3-------&d-&3-------'
+    - '&3------&d-&3--------'
+    - '&3-----&d-&3---------'
+    - '&3----&d-&3----------'
+    - '&3---&d-&3-----------'
+    - '&3--&d-&3------------'
+    - '&3-&d-&3-------------'
+    - '&d-&3--------------'
+
+ServerName:
+  change-interval: 300
+  texts:
+  - '&c&lIrrenhaus'
+  - '&c&n&lIrrenhaus'
+  - '&b&lIrrenhaus'
+  - '&b&l&nIrrenhaus'
+  - '&e&lIrrenhaus'
+  - '&e&n&lIrrenhaus'
+
+web:
+  change-interval: 200
+  texts:
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&6d&eiscord.irrenhaus-gaming.de'
+  - '&ed&6i&escord.irrenhaus-gaming.de'
+  - '&edi&6s&ecord.irrenhaus-gaming.de'
+  - '&edis&6c&eord.irrenhaus-gaming.de'
+  - '&edisc&6o&erd.irrenhaus-gaming.de'
+  - '&edisco&6r&ed.irrenhaus-gaming.de'
+  - '&ediscor&6d&e.irrenhaus-gaming.de'
+  - '&ediscord&6.&eirrenhaus-gaming.de'
+  - '&ediscord.&6i&errenhaus-gaming.de'
+  - '&ediscord.i&6r&erenhaus-gaming.de'
+  - '&ediscord.ir&6r&eenhaus-gaming.de'
+  - '&ediscord.irr&6e&enhaus-gaming.de'
+  - '&ediscord.irre&6n&ehaus-gaming.de'
+  - '&ediscord.irren&6h&eaus-gaming.de'
+  - '&ediscord.irrenh&6a&eus-gaming.de'
+  - '&ediscord.irrenha&6u&es-gaming.de'
+  - '&ediscord.irrenhau&6s&e-gaming.de'
+  - '&ediscord.irrenhaus&6-&egaming.de'
+  - '&ediscord.irrenhaus-&6g&eaming.de'
+  - '&ediscord.irrenhaus-g&6a&eming.de'
+  - '&ediscord.irrenhaus-ga&6m&eing.de'
+  - '&ediscord.irrenhaus-gam&6i&eng.de'
+  - '&ediscord.irrenhaus-gami&6n&eg.de'
+  - '&ediscord.irrenhaus-gamin&6g&e.de'
+  - '&ediscord.irrenhaus-gaming&6.&ede'
+  - '&ediscord.irrenhaus-gaming.&6d&ee'
+  - '&ediscord.irrenhaus-gaming.d&6e'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+  - '&ediscord.irrenhaus-gaming.de'
+
+vote:
+  change-interval: 1000
+  texts:
+  - '&airrenhaus-gaming.de/wiki/.../voting/'
+  - '&a&nirrenhaus-gaming.de/wiki/.../voting/'
+  - '&5irrenhaus-gaming.de/wiki/.../voting/'
+  - '&5&nirrenhaus-gaming.de/wiki/.../voting/'
+
+Welcome:
+  change-interval: 400
+  texts:
+  - '&7&lW'
+  - '&7&lW'
+  - '&7&lWi'
+  - '&7&lWil'
+  - '&7&lWill'
+  - '&7&lWillk'
+  - '&7&lWillko'
+  - '&7&lWillkom'
+  - '&7&lWillkomm'
+  - '&7&lWillkomme'
+  - '&7&lWillkommen'
+  - '&7&lWillkommen'
+  - '&7&lWillkommen'
+  - '&7&lWillkommen'
+  - '&7&lWillkomme'
+  - '&7&lWillkomm'
+  - '&7&lWillkom'
+  - '&7&lWillko'
+  - '&7&lWillk'
+  - '&7&lWill'
+  - '&7&lWil'
+  - '&7&lWi'
+  - '&7&lW'
+  - '&7&lW'
+
+time:
+  change-interval: 3000
+  texts:
+    - '&7Zeit &b%time%'
+    - '&7Datum &b%date%'
+
+barcolors:
+  change-interval: 1000
+  texts:
+    - RED
+    - BLUE
+    - GREEN
+    - YELLOW
+    
+bossbar-progress:
+  change-interval: 300
+  texts:
+  - "100"
+  - "99"
+  - "98"
+  - "97"
+  - "96"
+  - "95"
+  - "94"
+  - "93"
+  - "92"
+  - "91"
+  - "90"
+  - "89"
+  - "88"
+  - "87"
+  - "86"
+  - "85"
+  - "84"
+  - "83"
+  - "82"
+  - "81"
+  - "80"
+  - "79"
+  - "78"
+  - "77"
+  - "76"
+  - "75"
+  - "74"
+  - "73"
+  - "72"
+  - "71"
+  - "70"
+  - "69"
+  - "68"
+  - "67"
+  - "66"
+  - "65"
+  - "64"
+  - "63"
+  - "62"
+  - "61"
+  - "60"
+  - "59"
+  - "58"
+  - "57"
+  - "56"
+  - "55"
+  - "54"
+  - "53"
+  - "52"
+  - "51"
+  - "50"
+  - "49"
+  - "48"
+  - "47"
+  - "46"
+  - "45"
+  - "44"
+  - "43"
+  - "42"
+  - "41"
+  - "40"
+  - "39"
+  - "38"
+  - "37"
+  - "36"
+  - "35"
+  - "34"
+  - "33"
+  - "32"
+  - "31"
+  - "30"
+  - "29"
+  - "28"
+  - "27"
+  - "26"
+  - "25"
+  - "24"
+  - "23"
+  - "22"
+  - "21"
+  - "20"
+  - "19"
+  - "18"
+  - "17"
+  - "16"
+  - "15"
+  - "14"
+  - "13"
+  - "12"
+  - "11"
+  - "10"
+  - "9"
+  - "8"
+  - "7"
+  - "6"
+  - "5"
+  - "4"
+  - "3"
+  - "2"
+  - "1"
+  - "0"
+  
+bossbar-toggle:
+  change-interval: 30000
+  texts:
+  - "ON"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  - "OFF"
+  
+QuestWechsel:
+  change-interval: 10000
+  texts:
+    - "1"
+    - "2"

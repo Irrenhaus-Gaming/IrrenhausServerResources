@@ -1,0 +1,49 @@
+# Enables or disables the skill leveling system.
+# When enabled, players will earn XP for different weapon types and armor.
+skillSystemEnabled: true
+# Multiplier for elitemobs.perks.xp.customboost.<skill> and .all.
+# Overrides fixed XP perks. Must be finite and non-negative; 1.25 gives +25%.
+# Applies only to eligible combat weapon/armor skill XP, before the public award event.
+customXpPerkMultiplier: 1.0
+# Whether Armor skill grants bonus max health (+1 heart per level above 1).
+# Set to false to disable this mechanic.
+armorSkillHealthBonusEnabled: true
+# Whether EliteMobs should scale the player's client-side health display back to the vanilla 10 hearts while keeping the real Armor skill max health.
+# This is purely visual: players keep their full EliteMobs HP and combat calculations are unchanged.
+scalePlayerHealthDisplayToVanilla: false
+# Only applies when armorSkillHealthBonusEnabled is false.
+# If true, players are forced to vanilla 20 max health on join/updates.
+# If false, existing max health values are left untouched.
+forceDefaultHealthWhenArmorSkillHealthBonusDisabled: false
+# Sets worlds where the EliteMobs skill system is inactive for players.
+# Players in these worlds do not receive EliteMobs skill bonuses, armor skill bonus health, skill XP, skill XP bars or combat level displays.
+# Use this for event worlds where every player should have the same attributes.
+# World names are exact and case-insensitive. Leave this empty to allow skills in every world.
+# Example:
+# - event_world
+skillWorldExclusions: []
+# Hides only the class label above players in these worlds.
+# Player names, combat health displays, skills and XP are unchanged.
+# Players without a selected class keep their normal combat level display.
+# World names are exact and case-insensitive; surrounding spaces are ignored.
+# Leave empty to show class labels in every world. showCombatLevelDisplay still controls all these displays.
+classLabelWorldExclusions: []
+# Title of the skills menu.
+skillsMenuTitle: '&5&lYour Skills'
+# Whether to show the class or combat level display above players.
+# Combat level is the average of the two highest weapon skills and armor.
+# The display follows player visibility and scoreboard team name-tag visibility exposed by Spigot.
+# Packet-only name-tag changes cannot be detected; disable this setting if another plugin hides names that way.
+showCombatLevelDisplay: true
+# Whether to show an animated XP progress bar when gaining skill XP.
+# The bar shows level progress and plays effects on level up.
+showXPBar: true
+# Format for the skill XP bar title.
+# Use $skillName for the skill name, $level for the level, $xpText for the XP gained text.
+skillBarTitleFormat: '&6$skillName &7Lv.$level$xpText'
+# Format for the skill level up boss bar title.
+# Use $skillName for the skill name, $level for the new level.
+skillLevelUpTitleFormat: '&e&l✦ $skillName LEVEL UP! &7→ &eLv.$level &e&l✦'
+# Format for displaying the combat level.
+# Use $level for the combat level number.
+combatLevelFormat: '&6&lCombat Lv. $level'

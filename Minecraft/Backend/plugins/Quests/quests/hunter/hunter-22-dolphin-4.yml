@@ -1,0 +1,52 @@
+############################
+# 
+# ITSME.TO - A configuration for quests
+# discord.gg/itsme-to
+#
+############################
+
+tasks:
+  kill:
+    type: "mobkillingcertain"
+    amount: 64
+    mob: DOLPHIN
+display:
+  name: "&cJagdquest • Delfin #4"
+  lore-normal:
+  - "%itsmyconfig_dark-color_console%Besiege die angegebenen Kreaturen"
+  - "%itsmyconfig_dark-color_console%um deine Belohnung zu erhalten."
+  - ""
+  - "%itsmyconfig_darkest-color_console%Information:"
+  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Töte 64 Delfin"
+  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{kill:progress}%itsmyconfig_dark-color_console%/64 Delfin"
+  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_eco-format_console_{itsmyconfig_price-modifier_1250}%"
+  - ""
+  type: "DOLPHIN_SPAWN_EGG"
+  itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+# Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
+startstring:
+- "$<p:text-color> • Schließe diese Quest ab, um <p:eco-format:'<p:price-modifier:1250>'> zu erhalten."
+rewards:
+- "eco give {player} %itsmyconfig_price-modifier_1250%"
+# Here you can list messages which will be sent to the player (if they are online) upon completion.
+rewardstring:
+- "$<p:text-color> • <p:eco-format:'<p:price-modifier:1250>'> wurde deinem In-Game-Guthaben hinzugefügt."
+
+# These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
+# They are useful for putting information about the players tracked quest on a scoreboard
+# You may want to keep the names of them the same for ALL quests for this use-case
+
+
+options:
+  category: "hunter"
+  requires:
+  - "hunter-22-dolphin-3"
+  repeatable: false
+  cooldown:
+    enabled: true
+    time: 82600
+  sort-order: 223
+placeholders:
+  description: "Töte 64 Delfin"
+  progress: '{kill:progress}'
+  max: '64'

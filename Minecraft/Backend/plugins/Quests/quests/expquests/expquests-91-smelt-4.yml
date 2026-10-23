@@ -1,0 +1,50 @@
+############################
+# 
+# ITSME.TO - A configuration for quests
+# discord.gg/itsme-to
+#
+############################
+
+tasks:
+  smelting:
+    type: "smelting"
+    amount: 1024
+display:
+  name: "&aEXP-Quest • Schmelzen #4"
+  lore-normal:
+  - "%itsmyconfig_dark-color_console%Schmelze die angegebene Anzahl an"
+  - "%itsmyconfig_dark-color_console%Gegenständen, um deine Belohnung zu bekommen."
+  - ""
+  - "%itsmyconfig_darkest-color_console%Information:"
+  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Schmelze 1024 Gegenstände"
+  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{smelting:progress}%itsmyconfig_dark-color_console%/1024 Gegenstände"
+  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_exp-format_console_1260%."
+  - ""
+  type: "FURNACE"
+  itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+# Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
+startstring:
+- "$<p:text-color> • Schließe diese Quest ab, um <p:exp-format:1260> zu erhalten."
+rewards:
+- "xp give {player} 1260"
+rewardstring:
+- "$<p:text-color> • <p:exp-format:1260> wurden deinem In-Game-Guthaben hinzugefügt."
+
+# These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
+# They are useful for putting information about the players tracked quest on a scoreboard
+# You may want to keep the names of them the same for ALL quests for this use-case
+
+
+options:
+  category: "expquests"
+  requires:
+  - "expquests-91-smelt-3"
+  repeatable: false
+  cooldown:
+    enabled: true
+    time: 82600
+  sort-order: 913
+placeholders:
+  description: "Schmelze 1024 Gegenstände"
+  progress: '{smelting:progress}'
+  max: '1024'

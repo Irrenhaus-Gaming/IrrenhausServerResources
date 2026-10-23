@@ -1,0 +1,53 @@
+############################
+# 
+# ITSME.TO - A configuration for quests
+# discord.gg/itsme-to
+#
+############################
+
+tasks:
+  break:
+    type: "blockbreakcertain"
+    amount: 150
+    block: "GLOW_LICHEN"
+    reverse-if-placed: true
+display:
+  name: "&dLandwirtschaftsquest • Leuchtflechte #3"
+  lore-normal:
+  - "%itsmyconfig_dark-color_console%Baue eine bestimmte Anzahl von"
+  - "%itsmyconfig_dark-color_console%Blöcken ab, um deine Belohnung zu bekommen."
+  - ""
+  - "%itsmyconfig_darkest-color_console%Information:"
+  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Baue 150 Leuchtflechte ab"
+  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{break:progress}%itsmyconfig_dark-color_console%/150 Leuchtflechte"
+  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_eco-format_console_{itsmyconfig_price-modifier_750}%"
+  - ""
+  type: "GLOW_LICHEN"
+  itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+# Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
+startstring:
+- "$<p:text-color> • Schließe diese Quest ab, um <p:eco-format:'<p:price-modifier:750>'> zu erhalten."
+rewards:
+- "eco give {player} %itsmyconfig_price-modifier_750%"
+# Here you can list messages which will be sent to the player (if they are online) upon completion.
+rewardstring:
+- "$<p:text-color> • <p:eco-format:'<p:price-modifier:750>'> wurde deinem In-Game-Guthaben hinzugefügt."
+
+# These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
+# They are useful for putting information about the players tracked quest on a scoreboard
+# You may want to keep the names of them the same for ALL quests for this use-case
+
+
+options:
+  category: "farming"
+  requires:
+  - "farming-71-glow-lichen-2"
+  repeatable: false
+  cooldown:
+    enabled: true
+    time: 82600
+  sort-order: 712
+placeholders:
+  description: "Baue 150 Leuchtflechte ab"
+  progress: '{break:progress}'
+  max: '150'

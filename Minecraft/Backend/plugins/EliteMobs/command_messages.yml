@@ -1,0 +1,684 @@
+# Sets the message sent when a player tries to pay a negative amount
+payNiceTryMessage: '&4[EliteMobs]Nice try.'
+# Sets the message sent when a player tries to pay an offline player
+# $player - the target player name
+payPlayerNotOnlineMessage: '&8[EliteMobs] &4Player $player is not online and can therefore
+  not get a payment.'
+# Shown when an online player's economy data is still loading
+# $player - the target player name
+currencyDataNotReadyMessage: '&8[EliteMobs] &c$player''s economy data is still loading.
+  Try again shortly.'
+# Sets the message sent when a player name is not valid for currency commands
+# $player - the target player name
+currencyPlayerNotValidMessage: '&8[EliteMobs] &4Player $player is not valid!'
+# Sets the message sent when currency is added to a player
+# $amount - the amount added
+# $player - the target player name
+currencyAddedMessage: '&8[EliteMobs] &2You have added $amount to $player'
+# Sets the message showing a player's new balance after currency change
+# $amount - the new balance
+currencyNowHasMessage: '&8[EliteMobs] &2They now have $amount'
+# Sets the message sent when currency is added to all online players
+# $amount - the amount added
+currencyAddedAllMessage: '&8[EliteMobs] &2You have added $amount to all online players.'
+# Sets the message sent when currency is subtracted from a player
+# $amount - the amount subtracted
+# $player - the target player name
+currencySubtractedMessage: '&8[EliteMobs] &2You have subtracted $amount from $player'
+# Sets the message sent when a player's currency is set
+# $player - the target player name
+# $currencyName - the currency name
+# $amount - the amount set
+currencySetMessage: You set $player's $currencyName to $amount
+# Sets the message sent when checking a player's currency
+# $player - the target player name
+# $amount - the balance
+# $currencyName - the currency name
+currencyCheckMessage: '&8[EliteMobs]&f $player &2has $amount $currencyName'
+# Sets the message sent when a dungeon name is not valid
+dungeonNotValidMessage: '[EliteMobs] That dungeon isn''t valid!'
+# Sets the message sent when a dungeon is not installed
+dungeonNotInstalledMessage: '[EliteMobs] That dungeon isn''t installed, ask an admin
+  to install it!'
+# Sets the message sent when a player is already in an instance
+alreadyInInstanceMessage: '[EliteMobs] You''re already in an instance! You will not
+  be able to switch to another instance before you do /em quit'
+# Sets the message sent when a dungeon teleport location is not set
+dungeonTeleportNotSetMessage: '[EliteMobs] Can''t teleport you to the dungeon because
+  the teleport location isn''t set! If you are an admin, check the DungeonPackager
+  config for this content and manually set the teleport location.'
+# Sets the message sent when a player name is not valid for the dungeon lockout reset command
+dungeonLockoutPlayerNotValidMessage: '[EliteMobs] Error - player name not valid! The
+  player must be online.'
+# Sets the message sent when a player's dungeon boss lockouts are reset
+# $player - the target player name
+# $amount - the number of lockouts cleared
+dungeonLockoutResetSuccessMessage: '[EliteMobs] Cleared $amount dungeon boss lockout(s)
+  for player $player'
+# Sets the message sent when /em unbind force unbinds the held item
+unbindForceSuccessMessage: Unbound the held item.
+# Sets the message sent when /em unbind force finds the held item is not soulbound
+unbindForceNotSoulboundMessage: The held item is not soulbound.
+# Sets the message sent when /em unbind force all sweeps the inventory
+# $amount - the number of items unbound
+unbindForceAllMessage: Unbound $amount soulbound item(s) in your inventory.
+# Sets the message sent when a player name is not valid for quest commands
+questPlayerNotValidMessage: '[EliteMobs] Error - player name not valid!'
+# Sets the message sent when quests are successfully reset
+# $player - the target player name
+questResetSuccessMessage: '[EliteMobs] Successfully reset quests for player $player'
+# Sets the message sent when a quest filename is not valid
+# $quest - the quest filename
+questNameNotValidMessage: '[EliteMobs] Error - quest filename $quest is not valid!'
+# Sets the message sent when a quest is successfully completed for a player
+# $quest - the quest name
+# $player - the target player name
+questCompletedSuccessMessage: '[EliteMobs] Successfully quest $quest for player $player'
+# Sets the message sent when a player has no active quests
+noActiveQuestsMessage: You have no active quests.
+# Sets the message sent when a quest is not found
+questNotFoundMessage: Quest not found.
+# Sets the message sent when no safe spawn location is found
+noSafeSpawnMessage: '[EliteMobs] No safe spawn location found! Make sure the area
+  is passable!'
+# Sets the message sent when a custom boss is not a valid regional boss
+# $boss - the boss filename
+bossNotValidRegionalMessage: '&8[EliteMobs] &4Failed to add spawn location! Custom
+  Boss $boss is not valid regional boss!'
+# Sets the message sent when setting a leash radius fails
+leashRadiusFailedMessage: '&8[EliteMobs] &4Failed set the leash radius! Was the boss
+  a valid regional boss?'
+# Sets the message sent when an entity type cannot be an Elite
+# $type - the entity type
+invalidEntityTypeMessage: '&8[EliteMobs] &4Entity type $type can''t be an Elite!'
+# Sets the message sent when a boss filename is not valid
+# $filename - the filename
+filenameNotValidMessage: Filename $filename is not valid! Make sure you are writing
+  the name of a configuration file in the custombosses folder!
+# Sets the message sent when a world argument is not valid
+worldNotValidMessage: '[EliteMobs] World argument was not valid!'
+# Sets the message sent when a power name is not valid
+# $power - the power name
+invalidPowerMessage: '[EliteMobs] Power $power is not a valid power! Valid powers:'
+# Sets the message sent when elites are killed
+# $count - the number killed
+killedElitesMessage: '&8[EliteMobs] &4Killed $count Elite Mobs.'
+# Sets the message sent when elites of a specific type are killed
+# $count - the number killed
+# $type - the entity type
+killedEliteTypeMessage: '&8[EliteMobs] &4Killed $count Elite $type.'
+# Sets the message sent when an entity type is not valid for EliteMobs
+invalidEliteTypeMessage: '&8[EliteMobs] &cNot a valid entity type for EliteMobs!'
+# Sets the message sent when a player stops removing elites
+removeElitesOffMessage: '&8[EliteMobs] &aYou are no longer removing elites!'
+# Sets the message sent when a player starts removing elites
+removeElitesOnMessage: '&8[EliteMobs] &cYou are now removing elites when you punch
+  them! Run &a/em remove &cagain to stop removing elites!'
+# Sets the message sent when a removed entity was not an EliteMobs entity
+removedNotEliteMobsMessage: '&8[EliteMobs] The entity you just removed was not an
+  EliteMobs entity. EliteMobs will still attempt to remove it though.'
+# Sets the message sent when a removed entity was likely hijacked by another plugin
+removedHijackedMessage: '&8[EliteMobs] If the entity is supposed to be an EliteMobs
+  entity, it is highly likely some other plugin hijacked the entity and changed it
+  in a way that made EliteMobs unable to recognize it anymore.'
+# Sets the message sent when a treasure chest is removed
+removedTreasureChestMessage: '[EliteMobs] Removed treasure chest!'
+# Sets the message sent when a regional boss spawn location is removed
+# $boss - the boss filename
+removedSpawnLocationMessage: '&8[EliteMobs] &cRemoved a spawn location for boss $boss'
+# Sets the message sent when an NPC filename is invalid
+invalidNpcFilenameMessage: '[EliteMobs] Invalid NPC filename.'
+# Sets the message sent when an item is successfully given to a player
+# $player - the target player name
+# $item - the item name
+gaveItemMessage: '[EliteMobs] Successfully gave $player item $item'
+# Sets the message sent when an item filename is not valid
+# $filename - the filename
+invalidItemFilenameMessage: '&8[EliteMobs] &cFile name $filename is not a valid custom
+  item file name!'
+# Sets the message sent when trying to give an item to an invalid player
+invalidPlayerForItemMessage: '&8[EliteMobs] &cTried to give item to invalid player!'
+# Sets the message sent when an event is queued
+# $event - the event name
+eventQueuedMessage: '&8[EliteMobs] Queued event $event for the next valid time it
+  can spawn. &cThis might take a while depending on the start conditions of the event.'
+# Sets the message sent when an event name is not valid
+# $event - the event name
+invalidEventMessage: '&8[EliteMobs] &4Event $event is not valid! Make sure the event
+  file exists, is enabled and has eventType set to TIMED.'
+# Sets the message sent when an event is cancelled by another plugin
+# $event - the event name
+eventCancelledMessage: '&8[EliteMobs] &4Event $event was cancelled by another plugin!'
+# Sets the message sent when an event has no spawnType set
+# $event - the event name
+eventNoSpawnTypeMessage: '&8[EliteMobs] &4Event $event has no spawnType set! Add a
+  valid custom spawn filename to the event config.'
+# Sets the message sent when an event's spawnType is not valid
+# $event - the event name
+# $spawnType - the invalid spawn type
+eventInvalidSpawnTypeMessage: '&8[EliteMobs] &4Event $event failed to start because
+  its spawnType ''$spawnType'' is not a valid custom spawn file! Make sure the file
+  exists in the customspawns folder and is enabled.'
+# Sets the message sent when none of an event's boss filenames are valid
+# $event - the event name
+eventNoValidBossesMessage: '&8[EliteMobs] &4Event $event failed to start because none
+  of its boss filenames are valid! Check that the bossFilenames in the event config
+  point to existing custom boss files.'
+# Sets the message sent when a minidungeon name is not valid
+# $name - the minidungeon name
+invalidMinidungeonMessage: '&8[EliteMobs] &4Minidungeons name $name isn''t valid!'
+# Sets the message sent when a minidungeon is not installed
+minidungeonNotInstalledMessage: '&8[EliteMobs] &4Minidungeon isn''t installed! Can''t
+  get the relative location for uninstalled Minidungeons!'
+# Sets the message sent when an anchor point is not valid
+invalidAnchorPointMessage: '&8[EliteMobs] &4Something went wrong and made the anchor
+  point not valid!'
+# Sets the message sent when packaging is done
+packageDoneMessage: '&8[EliteMobs] &2Done! You can find your package in &9~/plugins/EliteMobs/exports
+  &2. &6If you are making a dungeon, make sure to create your own dungeonpackages
+  file!'
+# Sets the reminder message about adding world and schematic files
+packageDontForgetMessage: '&8[EliteMobs] &6Don''t forget to add your world and schematic
+  files to the package if needed!'
+# Sets the message sent when zipping a package fails
+packageZipFailedMessage: '&4[EliteMobs] Failed to zip package!'
+# Sets the message sent when a package is zipped successfully
+packageZippedMessage: '&8[EliteMobs] &6Zipped files for your convenience. Don''t forget
+  any additional files like the dungeonpackager or world/schematics files before distributing!'
+# Sets the message sent when a dungeon name is needed
+packageNeedsDungeonNameMessage: '[EliteMobs] This commands needs a valid dungeon name!'
+# Sets the message sent when a valid number is needed
+packageNeedsNumberMessage: This command needs a valid natural number! (1, 2, 3, 4...)
+# Sets the message sent when a subdirectory is not found
+# $subdirectory - the subdirectory name
+packageNoSubdirectoryMessage: '[EliteMobs] Could not find any $subdirectory for this
+  dungeon. This might be normal depending on your setup.'
+# Sets the message sent when a directory fails to be created
+# $path - the directory path
+packageFailedDirectoryMessage: '[EliteMobs] Failed to create directory $path'
+# Sets the message sent when a player is missing a permission
+missingPermissionMessage: 'Missing permission: elitemobs.adventurersguild.command
+  / elitemobs.adventurersguild.teleport'
+# Sets the message showing regional boss stats
+# $total - total regional bosses
+# $loaded - currently loaded bosses
+regionalBossStatsMessage: '&7[EM] &2There are &c$total &2Regional Bosses installed,
+  of which &c$loaded &2are currently loaded.'
+# Sets the message sent when a language is not found
+languageNotFoundMessage: '&cLanguage not found. Valid options:'
+# Sets the prefix for each language listed
+languageListPrefix: '  - '
+# Sets the message sent when language is set to English
+languageSetEnglishMessage: '&2Language set to English! Using plugin defaults.'
+# Sets the message sent when generating custom.csv template
+languageGeneratingCustomMessage: '&eGenerating custom.csv template...'
+# Sets the message sent when custom.csv generation fails
+languageGenerateFailedMessage: '&cFailed to generate custom.csv. Language not changed.'
+# Sets the message sent when custom.csv is generated successfully
+languageGenerateSuccessMessage: '&2Generated custom.csv! Edit it to customize text
+  or add translations.'
+# Sets the message sent when language is set to custom
+languageSetCustomMessage: '&2Language set to custom! &eEdit plugins/EliteMobs/translations/custom.csv
+  to customize text. New keys will be added automatically as the plugin runs.'
+# Sets the message sent when downloading a language file
+# $language - the language name
+languageDownloadingMessage: '&eDownloading $language.csv...'
+# Sets the message sent when a language download fails
+# $language - the language name
+languageDownloadFailedMessage: '&cFailed to download $language.csv. Language not changed.'
+# Sets the message sent when a language file is downloaded successfully
+# $language - the language name
+languageDownloadSuccessMessage: '&2Downloaded $language.csv successfully.'
+# Sets the message sent when language is set to a community language
+# $language - the language name
+languageSetMessage: '&2Language set to $language! &eTranslations are community-managed.
+  Use at your own discretion.'
+# Sets the message sent when a player is not found for skill commands
+# $player - the player name
+skillPlayerNotFoundMessage: '&cPlayer not found: $player'
+# Sets the header message for skill check
+# $player - the player name
+skillCheckHeaderMessage: '&6=== $player''s Skills ==='
+# Sets the format for each skill entry in skill check
+# $skill - the skill name
+# $level - the skill level
+# $xpProgress - current XP progress
+# $xpNeeded - XP needed for next level
+# $progress - percentage progress
+skillCheckEntryFormat: '&7$skill: &aLevel $level &7($xpProgress/$xpNeeded XP, $progress%)'
+# Sets the message sent when an invalid skill type is specified
+# $type - the invalid type
+skillInvalidTypeMessage: '&cInvalid skill type: $type'
+# Sets the message listing valid skill types
+# $types - the valid types
+skillValidTypesMessage: '&7Valid types: $types'
+# Sets the message sent when a skill level is below minimum
+skillLevelMinMessage: '&cLevel must be at least 1!'
+# Sets the warning message for levels above soft cap
+# $level - the level
+skillLevelWarningMessage: '&eWarning: Level $level is above the soft cap of 100.'
+# Sets the message sent when a skill is set successfully
+# $player - the player name
+# $skill - the skill name
+# $level - the level
+# $xp - the XP amount
+skillSetSuccessMessage: '&aSet $player''s $skill skill to level $level ($xp XP)'
+# Sets the message sent when all skills are set successfully
+# $player - the player name
+# $level - the level
+# $xp - the XP amount
+skillSetAllSuccessMessage: '&aSet all of $player''s skills to level $level ($xp XP)'
+# Sets the message sent when a non-player tries to run a skill test
+skillTestOnlyPlayerMessage: '&cThis command can only be run by a player!'
+# Sets the message sent when a skill test is already running
+skillTestAlreadyRunningMessage: '&cA test is already running! Use &e/em skill test
+  cancel &cto stop it.'
+# Sets the message sent when a skill test starts
+skillTestStartMessage: '&a[Test] Starting skill system test...'
+# Sets the first info message for skill test
+skillTestInfoMessage1: '&7This will temporarily modify your skill levels and selections.'
+# Sets the second info message for skill test
+skillTestInfoMessage2: '&7Your original state will be restored after the test.'
+# Sets the message sent when there is no active test to cancel
+skillTestCancelNoTestMessage: '&cNo active test to cancel.'
+# Sets the message sent when a skill test is cancelled successfully
+skillTestCancelSuccessMessage: '&aTest cancelled and player state restored.'
+# Sets the message sent when debug mode is enabled
+debugEnabledMessage: '&aDebug mode &2enabled&a. Combat damage calculations will be
+  logged to console.'
+# Sets the message sent when debug mode is disabled
+debugDisabledMessage: '&cDebug mode &4disabled&c.'
+# Sets the message showing the Discord link
+discordMessage: '&6Discord room for support & downloads: &9'
+# Sets the message sent when a Discord message is sent
+discordMessageSentMessage: '&aAttempted to send a message to Discord!'
+# Sets the message shown when elite scrolls are not enabled (long config explanation)
+eliteScrollConfigMessage: Elite Scrolls are not currently enabled on this server!
+  They should only be used if the server uses an item system other than EliteMobs'
+  built in item system. To enable elite scrolls, an admin has to set them to true
+  in the ~/plugins/EliteMobs/ItemSettings.yml and set useEliteItemScrolls to true.
+# Sets the short message when elite scrolls are not enabled
+scrollsNotEnabledMessage: Elite Scrolls are not currently enabled on this server!
+  Ask the admin to enable them in the EliteMobs DefaultConfig.yml
+# Sets the message sent when scroll level/amount is not a valid integer
+scrollInvalidNumberMessage: Level and amount must be valid integers.
+# Sets the message sent when scroll level is zero or negative
+scrollLevelZeroMessage: Scroll level must be greater than zero.
+# Sets the message sent when scroll amount is zero or negative
+scrollAmountZeroMessage: Amount must be greater than zero.
+# Sets the message sent when scrolls are given to a player
+# $amount - the number of scrolls
+# $level - the scroll level
+# $player - the player name
+scrollGaveMessage: Gave $amount level $level Elite Scroll(s) to $player.
+# Sets the header message for the help command
+helpHeaderMessage: 'Commands:'
+# Sets the message sent when an invalid wormhole option is specified
+wormholeInvalidOptionMessage: Not a valid wormhole option! Pick 1 or 2 to set either
+  end of the wormhole.
+# Sets the message sent when setting a wormhole location fails
+wormholeSetFailedMessage: Failed to set location for this wormhole.
+# Sets the message sent when toggling dungeon protection bypass
+# $status - the bypass status
+protectionBypassMessage: Bypassing dungeon protections is now $status
+# Sets the message sent when setup messages are disabled
+setupDoneDisableMessage: '&aEliteMobs will no longer send messages on login. You can
+  do [/em setup done] again to revert this.'
+# Sets the message sent when setup messages are re-enabled
+setupDoneEnableMessage: '&aEliteMobs will once again send messages on login. You can
+  do [/em setup done] again to revert this.'
+# Sets the message sent when a setup package is not valid
+setupNotValidPackageMessage: Not a valid em package!
+# Sets the message sent when content is installed successfully
+setupInstalledMessage: Successfully installed content!
+# Sets the message sent when content is uninstalled successfully
+setupUninstalledMessage: Successfully uninstalled content!
+# Sets the message sent when a shop player is not found
+shopPlayerNotFoundMessage: Failed to get player with that username!
+# Sets the message sent when a player is not queued for instanced content
+notQueuedForInstanceMessage: You are not queued for instanced content!
+# Sets the message sent when the plugin starts reloading
+reloadStartMessage: Plugin reloading...
+# Sets the message sent when the plugin is reloaded
+reloadSuccessMessage: Plugin reloaded!
+# Sets the message sent when test gear is given
+# $level - the tier level
+getTierGaveGearMessage: '&aGave level $level test gear and set all skills to level
+  $level.'
+# Sets the message about the iron sword for balanced testing
+getTierIronSwordMessage: '&7Use the &fIron Sword &7for balanced damage testing.'
+# Sets the message about the cheat sword
+getTierCheatSwordMessage: '&7The &cCHEAT SWORD &7has Sharpness 100 - use it only to
+  skip fights!'
+# Sets the message sent when starting large selection for transitive blocks
+transitiveBlockStartMessage: '[EliteMobs] Now registering large selection for transitive
+  blocks! Left click to set corner 1, right click to set corner 2! Run the same command
+  again to stop registering blocks and run /em cancelblocks to cancel!'
+# Sets the message sent when the boss file is not valid
+transitiveBlockInvalidBossMessage: Boss file isn't valid! Try again with a valid filename
+  for your custom boss.
+# Sets the message sent when the boss file is not for a regional boss
+transitiveBlockNotRegionalMessage: '&cBoss file isn''t for a regional boss! This feature
+  only works for regional bosses.'
+# Sets the message sent to ignore the regional boss warning for phase bosses
+transitiveBlockIgnoreWarningMessage: '&aIgnore this warning if you are setting blocks
+  for a phase boss whose first phase is a regional boss!'
+# Sets the message sent when the transitive block type is not valid
+transitiveBlockInvalidTypeMessage: Not a valid transitive block type, use ON_SPAWN
+  or ON_REMOVE !
+# Sets the message sent when corner 1 is set
+transitiveBlockCorner1Message: Set corner 1!
+# Sets the message sent when corner 2 is set
+transitiveBlockCorner2Message: Set corner 2!
+# Sets the message sent when a block area is missing a corner
+transitiveBlockMissingCornersMessage: Select both corners before saving. Your selection
+  is still active.
+# Sets the message sent when selected blocks are outside the regional boss world
+transitiveBlockWorldMismatchMessage: Select blocks in the regional boss's world. Your
+  selection is still active.
+# Sets the message sent showing block selection count
+# $count - the number of blocks selected
+# $limit - the recommended block limit
+transitiveBlockSelectionCountMessage: '[EliteMobs] Current selection has $count blocks
+  selected. For performance reasons, it is recommended you don''t go over $limit blocks!'
+# Sets the message sent when a block is registered
+# $type - the block type
+transitiveBlockRegisteredMessage: Registered $type block!
+# Sets the message sent when an air block is registered
+transitiveBlockRegisteredAirMessage: Registered air block!
+# Sets the message sent when a block is unregistered
+transitiveBlockUnregisteredMessage: Unregistered block!
+# Sets the message sent when too many blocks are registered at once
+# $limit - the recommended block limit
+transitiveBlockTooManyMessage: '[EliteMobs] You registered more than $limit blocks
+  at once. For performance reasons, it is recommended you keep the selections low.
+  Avoid things like selecting a lot of unnecessary air blocks!'
+# Sets the message sent when transitive blocks require a regional boss to be placed
+transitiveBlockRequiresRegionalMessage: '&c[EliteMobs] Transitive blocks require one
+  Regional Boss from the configuration files to be placed in order to add transitive
+  blocks relative to the spawn coordinates of that boss.'
+# Sets the message sent when block registration is cancelled
+transitiveBlockCancellingMessage: '&c[EliteMobs] Cancelling block registration!'
+# Sets the message sent when multiple regional bosses are found
+transitiveBlockMultipleBossesMessage: '&c[EliteMobs] Transitive blocks require having
+  ONLY one Regional Boss from the configuration files to be placed in order to add
+  transitive blocks relative to the spawn coordinates of that boss. If there is more
+  than one boss, the plugin can''t determine which boss specifically should be getting
+  the transitive blocks'
+# Sets the hint message about needing one config file per boss
+transitiveBlockMultipleBossesHintMessage: '&c[EliteMobs] If want multiple bosses to
+  have transitive blocks, you will need one configuration file per boss that has them!'
+# Sets the message sent when block registration starts
+# $type - the transitive block type
+transitiveBlockNowRegisteringMessage: '&a[EliteMobs] Now registering $type blocks!
+  &2Punch blocks to register air at that location, or right click blocks to register
+  the block you right clicked!'
+# Sets the message about running the same command to stop
+transitiveBlockRunSameCommandMessage: '&6[EliteMobs] Run the same command to stop
+  registering blocks and save!'
+# Sets the message about running the cancel command
+transitiveBlockCancelCommandMessage: '&6[EliteMobs] Or run the command /em cancelblocks
+  to cancel the registration!'
+# Sets the message sent when block registration is successfully cancelled
+transitiveBlockCancelledMessage: '&c[EliteMobs] Block registration successfully cancelled!'
+# Sets the message sent when saving transitive blocks
+# $type - the transitive block type
+transitiveBlockNowSavingMessage: '&a[EliteMobs] Now saving $type blocks!'
+# Sets the message sent when blocks are registered between corners
+# $count - the number of blocks registered
+transitiveBlockRegisteredCornerMessage: Successfully registered $count blocks between
+  your corners!
+# Sets the message sent when locations are registered correctly
+transitiveBlockLocationsRegisteredMessage: Locations registered correctly!
+# Sets the message sent when locations fail to commit
+transitiveBlockLocationsFailedMessage: Failed to commit locations!
+# Sets the header message for loot stats
+lootStatsHeader: '[EliteMobs] Item Stats:'
+# Sets the label for item attack speed
+lootStatsAttackSpeed: 'Item attack speed: '
+# Sets the label for item damage
+lootStatsDamage: 'Item damage: '
+# Sets the label for item EDPS
+lootStatsEdps: 'Item EDPS: '
+# Sets the label for item level
+lootStatsLevel: 'Item level: '
+# Sets the label for item bonus EDPS
+lootStatsBonusEdps: 'Item bonus EDPS: '
+# Sets the message sent when a player is not found for sim loot
+# $player - the player name
+simLootPlayerNotFound: '[EliteMobs] Failed to get a player named "$player"!'
+# Sets the message sent when sim loot finishes running multiple times
+# $player - the player name
+# $times - the number of times run
+# $level - the level
+simLootFinishedMultiple: '[EliteMobs] Finished running simulation command for player
+  $player $times times at level $level .'
+# Sets the message sent when sim loot finishes running once
+# $player - the player name
+# $level - the level
+simLootFinishedSingle: '[EliteMobs] Finished running simulation command for player
+  $player at level $level .'
+# Sets the message sent when an item could not be sent to the player
+# $player - the player name
+simLootCouldNotSend: '&c[EliteMobs] Could not send item to player $player - player
+  with this name was not found!'
+# Sets the label for tracked boss count
+trackedBossCountMessage: 'Tracked boss count: '
+# Sets the label for tracked NPC count
+trackedNpcCountMessage: 'Tracked NPC count: '
+# Sets the separator line for the stats command.
+statsSeparator: <g:#8B0000:#CC4400:#DAA520>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</g>
+# Sets the version header for the stats command.
+# $version is the placeholder for the plugin version.
+statsVersionHeader: '&7[EM] &a&lEliteMobs v. $version stats:'
+# Sets the entity count message for the stats command.
+# $total is the placeholder for total elite entities.
+# $aggressive is the placeholder for elite mobs count.
+statsEntityCountMessage: '&7[EM] &2There are currently &l&6$total &f&2EliteMobs entities
+  in the world.'
+# Sets the breakdown prefix for the stats command.
+statsBreakdownPrefix: '&2Breakdown: &a'
+# Sets the highest threat message for the stats command.
+# $player is the placeholder for the player name.
+# $threat is the placeholder for the threat tier.
+statsHighestThreatMessage: '&7[EM] &2Highest online threat tier: &a$player &2at total
+  threat tier &a$threat'
+# Sets the average threat message for the stats command.
+# $average is the placeholder for the average threat tier.
+statsAverageThreatMessage: '&7[EM] &2Average threat tier: &a$average'
+# Sets the message sent when a feature is coming soon
+npcFeatureComingSoonMessage: '[EliteMobs] This feature is coming soon!'
+# Sets the message sent when a player tries to rename an NPC
+npcCannotRenameMessage: '[EliteMobs] You can''t rename NPCs using name tags!'
+# Sets the message sent when a player interacts with a deprecated NPC (enhancer/refiner/smelter)
+npcFeatureReplacedMessage: '&8[EliteMobs] &cThis feature has been replaced! This NPC
+  should be removed by an admin as soon as possible.'
+# Sets the instructions sent to admins on how to remove a deprecated NPC
+npcRemoveInstructions: '&2To remove this NPC, use the command &6/em remove &2and hit
+  the NPC!'
+# Sets the separator line for loot votes
+lootVoteSeparator: <g:#8B0000:#CC4400:#DAA520>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</g>
+# Sets the loot vote message prefix, before the clickable /em loot command.
+# $count - the number of items to vote on, used in the suffix.
+lootVoteMessage: '&8[EliteMobs] &6Shared loot awaiting a roll. Click '
+# Sets the loot vote message suffix, after the clickable /em loot command.
+# $count - the number of items to vote on
+lootVoteMessageSuffix: ' &6to vote on $count items!'
+# Sets the warning message when connection to update servers fails
+versionCheckConnectionWarning: '&8[EliteMobs] &eWarning: Could not connect to update
+  servers. Version checking is currently unavailable. Check your internet connection
+  or try again later.'
+# Sets the message prefix when the plugin is outdated.
+# Followed by a clickable nightbreak.io/elitemobs link.
+versionOutdatedMessage: '&cYour version of EliteMobs is outdated. &aYou can download
+  the latest version from '
+# Sets the message sent when the resource pack has been updated
+resourcePackUpdatedMessage: '&8[EliteMobs] &cThe EliteMobs resource pack has updated!
+  This means that the current resource pack will not fully work until you restart
+  your server. You only need to restart once!'
+# Sets the message header for content updates available
+# $count - the number of updates available
+contentUpdatesAvailable: '&e$count content update(s) available:'
+# Sets the format for each content update entry
+# $name - the name of the content
+contentUpdateEntry: '&e- $name'
+# Sets the message header for outdated dungeons on player login
+dungeonsOutdatedMessage: '&cThe following dungeons are outdated:'
+# Message telling admins to use /em setup to view and update content.
+# Followed by a clickable /em setup command and content link.
+versionUseSetupMessage: '&7Use '
+# Hover text on outdated content entries with a download link.
+versionClickDownloadHover: '&9Click to go to download link!'
+# Suffix shown after an outdated content name when no download link is available.
+versionNoDownloadLink: ' &7(no download link available)'
+# Message telling admins where to download updates.
+versionDownloadAtMessage: '&8[EliteMobs]&f You can download the update at '
+# Message telling admins that updating is easy.
+versionUpdateEasyMessage: '&2Updating is quick & easy! '
+# Clickable 'Click here' label linking to the wiki.
+versionClickHereLabel: '&9&nClick here'
+# Message fragment about install info and support.
+versionInstallInfoMessage: ' &2for info on how to install updates and '
+# Clickable 'here' label linking to Discord support.
+versionHereLabel: '&9&nhere'
+# Message fragment about the support room.
+versionSupportRoomMessage: ' &2for the support room.'
+# Clickable message to auto-update all content.
+versionAutoUpdateMessage: '&a[Click here to update all content automatically]'
+# Hover text for the auto-update button.
+versionAutoUpdateHover: '&eRuns /em updatecontent'
+# Prefix for each outdated content entry in the list.
+versionOutdatedEntryPrefix: '&c- '
+# Hover text for the content link.
+versionNightbreakHover: Click for the content page
+# Hover text for the wiki link.
+versionWikiHover: Click for wiki link
+# Hover text for the Discord support link.
+versionDiscordHover: Discord support link
+# Sets the OP-only message prefix about download links for wormhole content.
+# Followed by clickable /em setup and Discord links.
+wormholeOpDownloadMessage: '&8[OP] &7This content is not installed. Use '
+# Sets the OP-only message shown when a wormhole destination is not set up yet.
+# $filename - the wormhole config filename
+# $number - the wormhole entry number (1 or 2)
+wormholeOpSetupMessage: '&8[EliteMobs - OP-only message] &fTo set up this portal,
+  stand at the desired destination and run: &a/em place wormhole $filename $number'
+# Sets the OP-only message recommending where to place the Adventurer's Guild wormhole.
+wormholeAgSpawnRecommendation: '&8[EliteMobs - OP-only message] &fThe official recommendation
+  is to place this at your server''s spawn so players can access the Adventurer''s
+  Guild through this portal!'
+# Sets the message sent when no account token is registered for download all
+downloadAllNoTokenMessage: '&c[EliteMobs] No account token registered. Use /nightbreaklogin
+  <token> first.'
+# Sets the message sent when all available packages are already downloaded
+downloadAllNothingMessage: '&a[EliteMobs] No new content to download! All available
+  packages are already downloaded.'
+# Sets the message sent when no accessible content is found
+downloadAllNoAccessMessage: '&c[EliteMobs] No accessible content found. Connect this
+  server and ensure you have access.'
+# Sets the message sent when downloadable packages are found
+# $count - the number of packages
+downloadAllFoundMessage: '&e[EliteMobs] Found $count packages to download. Starting...'
+# Sets the message showing download progress
+# $current - current package number
+# $total - total packages
+# $name - package name
+downloadAllProgressMessage: '&7[EliteMobs] ($current/$total) Downloading: $name...'
+# Sets the message sent when a package is downloaded with more remaining
+# $name - package name
+# $remaining - number remaining
+downloadAllDownloadedMoreMessage: '&a[EliteMobs] Downloaded $name! &7Please hold on,
+  $remaining more to go...'
+# Sets the message sent when a package is downloaded (last one)
+# $name - package name
+downloadAllDownloadedMessage: '&a[EliteMobs] Downloaded $name!'
+# Sets the message sent when a package download fails
+# $name - package name
+downloadAllFailedMessage: '&c[EliteMobs] Failed to download: $name'
+# Sets the message sent when all downloads are complete
+# $completed - number of successful downloads
+# $failed - number of failed downloads
+downloadAllCompleteMessage: '&a[EliteMobs] Download complete! Downloaded: $completed,
+  Failed: $failed'
+# Sets the message sent when reloading to apply downloads
+downloadAllReloadingMessage: '&a[EliteMobs] Reloading to apply downloads...'
+# Sets the message sent when a bulk download is already in progress
+downloadAllAlreadyRunningMessage: '&c[EliteMobs] A bulk download is already in progress!
+  Please wait for it to finish.'
+# Sets the message listing which packages failed to download
+# $names - comma-separated list of failed package names
+downloadAllFailedListMessage: '&c[EliteMobs] Failed packages: $names'
+# Clickable message to download all available content from the setup menu
+downloadAllSetupClickMessage: '&a[Click to download all available content]'
+# Hover text for the download all button in setup menu
+downloadAllSetupClickHover: '&eRuns /em downloadall'
+# Sets the message sent when no account token is registered
+updateNoTokenMessage: '&c[EliteMobs] No account token registered. Use /nightbreaklogin
+  <token> first.'
+# Sets the message sent when all content is up to date
+updateAllUpToDateMessage: '&a[EliteMobs] All content is up to date!'
+# Sets the message sent when outdated packages are found
+# $count - the number of outdated packages
+updateFoundOutdatedMessage: '&e[EliteMobs] Found $count outdated packages. Starting
+  updates...'
+# Sets the message sent when updates are complete
+# $completed - number of successful downloads
+# $failed - number of failed downloads
+updateCompleteMessage: '&a[EliteMobs] Update complete! Downloaded: $completed, Failed:
+  $failed'
+# Sets the message sent when reloading to apply updates
+updateReloadingMessage: '&a[EliteMobs] Reloading to apply updates...'
+# Sets the message showing download progress
+# $current - current package number
+# $total - total packages
+# $name - package name
+updateProgressMessage: '&7[EliteMobs] ($current/$total) Downloading: $name...'
+# Sets the message sent when a package is downloaded with more remaining
+# $name - package name
+# $remaining - number remaining
+updateDownloadedMoreMessage: '&a[EliteMobs] Downloaded $name! &7Please hold on, $remaining
+  more to go...'
+# Sets the message sent when a package is downloaded (last one)
+# $name - package name
+updateDownloadedMessage: '&a[EliteMobs] Downloaded $name!'
+# Sets the message sent when a package download fails
+# $name - package name
+updateFailedMessage: '&c[EliteMobs] Failed to download: $name'
+# Sets the message shown when a player is farming natural elites too quickly.
+# $time is the placeholder for the time until reset.
+farmingWarningMessage: '&c[EliteMobs] &7You''ve been farming natural elites too quickly!
+  No drops or XP will be awarded. Spread out your farming area or wait for the timeout
+  to reset. Time until reset: &e$time &7seconds.'
+# Sets the message shown when a player's natural elite kill limit has been reset.
+farmingResetMessage: '&a[EliteMobs] &7Your natural elite kill limit has been reset!'
+# Sets the message shown when a player is temporarily capped from earning rewards.
+# $time is the placeholder for the time until reset.
+farmingCapMessage: '&c[EliteMobs] &7You''re temporarily capped from earning rewards
+  from natural elites in this area. Time until reset: &e$time &7seconds.'
+# Sets the message shown when a player selects need for a loot item.
+# $player is the placeholder for the player's display name.
+# $item is the placeholder for the item's display name.
+lootNeedMessage: $player &chas selected need for $item!
+# Sets the message shown when a player selects greed for a loot item.
+# $player is the placeholder for the player's display name.
+# $item is the placeholder for the item's display name.
+lootGreedMessage: $player &2has selected greed for $item!
+# Sets the message shown when a player wins a shared loot item.
+# $player is the placeholder for the winning player's display name.
+# $item is the placeholder for the item's display name.
+lootWinnerMessage: $player &awon $item!
+# Sets the message sent when a quest ID is invalid.
+questInvalidIdMessage: '&c[EliteMobs] Invalid quest ID!'
+# Sets the message shown when quest bypass is enabled.
+questBypassOnMessage: Now bypassing quest permission requirements!
+# Sets the message shown when quest bypass is disabled.
+questBypassOffMessage: No longer bypassing quest permission requirements!
+# Sets the message shown when a treasure chest file name is invalid.
+invalidTreasureChestFilename: '&c[EliteMobs] Invalid Treasure Chest file name!'
+# Sets the message showing the relative position to an anchor point.
+# $filename is the placeholder for the dungeon name.
+# $coordinates is the placeholder for the relative coordinates.
+relativePositionMessage: '&8[EliteMobs] &fRelative position to anchor point of &2$filename&f
+  is &2$coordinates'
+# Display name for the cheat sword given by the get tier command.
+cheatSwordDisplayName: CHEAT SWORD

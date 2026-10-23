@@ -1,0 +1,203 @@
+trackingSinceVersion: 10.9.8
+lastObservedVersion: 10.9.10
+cache:
+  plugin:
+    targetVersion: 10.9.10
+    releases:
+    - version: 10.9.10
+      changelog: |-
+        EliteMobs 10.9.10:
+        - [New] Added flight networks: flight masters and wormholes fly players between stations along node routes, built with the in-game /em transport editor.
+        - [New] Wormholes can open flight menus, start instanced dungeons and work inside instanced dungeons.
+        - [New] Added the Railboots enchantment. Double-tap sneak on a rail to ride a minecart down the track.
+        - [New] Added PlaceholderAPI placeholders for the tracked quest and its objectives.
+        - [New] Added allowDialogMenusForBedrockPlayers, which gives Bedrock players the dialog /em, quest and class menus on servers whose Geyser shows dialogs as forms.
+        - [New] /em quest bypass now passes every content permission gate, including flight nodes, instanced dungeons, arenas and party rosters.
+        - [New] Enchantments can now form item sets. A set: section lists the pieces, the set's effects only work while every piece is worn, and item lore shows the set with worn pieces in green and missing ones in red ($itemSet).
+        - [New] Lua powers can spawn item and block display visuals with world:spawn_display_at_location (Bedrock players see an armor stand stand-in), and gain remove, set_invisible, set_silent and the armor stand methods set_marker, set_small, set_base_plate and set_arms.
+        - [Tweak] Quest and boss tracking now follow moving targets, point at the wormhole that starts a target's dungeon and show a height arrow for far targets.
+        - [Tweak] Combat labels ride the player again, and ride the vehicle while the player is mounted. Player names stay visible.
+        - [Tweak] A natural elite spawn cancelled by another plugin is now reported once per mob type instead of on every spawn.
+        - [Tweak] The setup menu's update buttons now explain restart-free updates, and content that isn't released yet says so.
+        - [Tweak] Players now see at most three boss health bars, and bars beyond the first only come from bosses they are fighting.
+        - [Fix] Players who die in a dungeon, arena or class trial come out at full health again.
+        - [Fix] Older items that store their item level in an older format no longer switch off the effects of all EliteMobs gear.
+        - [Fix] Speed and Slowness effects at 00:00 no longer get stuck on players.
+        - [Fix] Staff and wand skill hits are no longer lost to the vanilla hit cooldown, so Starfall Volley lands all its bolts.
+        - [Fix] A boss reinforcement blocked by a protection or mob-limit plugin no longer stops the boss's other powers, and script reinforcements share their summoner's protection bypass.
+        - [Fix] Loud Strikes and other enchantment queries work during attacks from Mind-driven bosses.
+        - [Fix] zombie_bloat releases the zombie after its blast again. Unedited copies of the old script are updated.
+        - [Fix] Overhead boss health bars now move with their elite on Java instead of running ahead of it.
+        - [Fix] Stopping or reloading the server with a phase boss inside a dungeon instance no longer breaks the next startup with "Duplicate ammunition owner".
+        - [Fix] On Windows, a config file briefly locked by an antivirus or file indexer no longer stops EliteMobs from starting.
+        - [Fix] Content package updates now archive files the new version no longer ships.
+        - [Fix] /nightbreak plugins now installs missing plugins into plugins/, so they load on the next start.
+        - [Fix] Restart-free updates no longer keep the old copy of EliteMobs in memory.
+      releasedAt: '2026-10-17T16:21:06.409Z'
+    complete: true
+  content:
+    the-adventurers-guild:
+      targetVersion: '26'
+      releases:
+      - version: '26'
+        changelog: '- [Fix] Fixed the Wood League wave 10 Summon Merchant Scroll reward
+          being skipped on EliteMobs 10.9.7.'
+        releasedAt: '2026-09-30T06:58:59.335Z'
+      complete: true
+    fireworks:
+      targetVersion: '14'
+      releases:
+      - version: '14'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+          - [Fix] Updated existing reward enchantments for the current item system.
+          - [Tweak] Sparky's sword uses the supported maximum Hunter level.
+        releasedAt: '2026-09-12T08:15:34.211Z'
+      complete: true
+    hallosseum:
+      targetVersion: '11'
+      releases:
+      - version: '11'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+        releasedAt: '2026-09-12T08:17:16.163Z'
+      complete: true
+    north-pole:
+      targetVersion: '12'
+      releases:
+      - version: '12'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+        releasedAt: '2026-09-12T08:15:34.192Z'
+      complete: true
+    story-mode-dungeons:
+      targetVersion: '24'
+      releases:
+      - version: '24'
+        changelog: '- [Hotfix] The Climb''s chains are back on servers older than
+          1.21.9. v23 shipped parts of the story mode worlds in the 1.21.11 save format,
+          so those servers replaced the chains with air.'
+        releasedAt: '2026-10-19T05:32:09.087Z'
+      complete: true
+    the-steamworks:
+      targetVersion: '12'
+      releases:
+      - version: '12'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+          - [Fix] Updated existing reward enchantments for the current item system.
+          - [Fix] Removed the incompatible hand-activated Flamethrower enchantment from Hard and Mythic boots.
+        releasedAt: '2026-09-12T08:16:15.046Z'
+      complete: true
+    the-sewers:
+      targetVersion: '14'
+      releases:
+      - version: '14'
+        changelog: '- [Hotfix] The Sewers'' signs show their text again on 1.21.4.
+          v13 shipped the world in the 1.21.10 save format, so 1.21.4 servers loaded
+          its signs blank.'
+        releasedAt: '2026-10-19T05:26:14.271Z'
+      complete: true
+    the-knights-castle:
+      targetVersion: '14'
+      releases:
+      - version: '14'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+        releasedAt: '2026-09-12T08:17:16.144Z'
+      complete: true
+    free-enchantment-challenge-sanctums:
+      targetVersion: '9'
+      releases:
+      - version: '9'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+        releasedAt: '2026-09-12T08:18:21.241Z'
+      complete: true
+    the-dark-cathedral:
+      targetVersion: '17'
+      releases:
+      - version: '17'
+        changelog: '- [Hotfix] The Dark Cathedral''s chains are back on servers older
+          than 1.21.9. v16 shipped the world in the 1.21.10 save format, so those
+          servers replaced its chains with air.'
+        releasedAt: '2026-10-19T05:25:16.346Z'
+      complete: true
+    binder-of-worlds:
+      targetVersion: '14'
+      releases:
+      - version: '14'
+        changelog: |-
+          - [New] Added themed class loot rewards across all 19 equipment families.
+          - [Tweak] Eligible encounters award class loot while preserving existing custom rewards.
+          - [Fix] Updated existing reward enchantments for the current item system.
+          - [Fix] Removed invalid level-zero enchantments from Normal tank rewards.
+        releasedAt: '2026-09-12T08:17:23.935Z'
+      complete: true
+content:
+  the-adventurers-guild:
+    trackingSinceVersion: '26'
+    lastObservedVersion: '26'
+  fireworks:
+    trackingSinceVersion: '14'
+    lastObservedVersion: '14'
+  hallosseum:
+    trackingSinceVersion: '11'
+    lastObservedVersion: '11'
+  north-pole:
+    trackingSinceVersion: '12'
+    lastObservedVersion: '12'
+  story-mode-dungeons:
+    trackingSinceVersion: '23'
+    lastObservedVersion: '24'
+  the-steamworks:
+    trackingSinceVersion: '12'
+    lastObservedVersion: '12'
+  the-sewers:
+    trackingSinceVersion: '13'
+    lastObservedVersion: '14'
+  the-knights-castle:
+    trackingSinceVersion: '14'
+    lastObservedVersion: '14'
+  free-enchantment-challenge-sanctums:
+    trackingSinceVersion: '9'
+    lastObservedVersion: '9'
+  the-dark-cathedral:
+    trackingSinceVersion: '16'
+    lastObservedVersion: '17'
+  binder-of-worlds:
+    trackingSinceVersion: '14'
+    lastObservedVersion: '14'
+players:
+  2373ef38-f1c9-48fe-976d-776050bd2218:
+    dismissedPluginVersions:
+    - 10.9.10
+    dismissedContentVersions:
+      fireworks:
+      - '14'
+      the-sewers:
+      - '14'
+      hallosseum:
+      - '11'
+      story-mode-dungeons:
+      - '24'
+      the-dark-cathedral:
+      - '17'
+      the-steamworks:
+      - '12'
+      north-pole:
+      - '12'
+      free-enchantment-challenge-sanctums:
+      - '9'
+      the-adventurers-guild:
+      - '26'
+      the-knights-castle:
+      - '14'
+      binder-of-worlds:
+      - '14'

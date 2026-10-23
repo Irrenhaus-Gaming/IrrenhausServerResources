@@ -1,0 +1,5 @@
+# Minecraft server files must reach the servers byte-for-byte (the deploy drift check hashes them),
+# so git must never convert their line endings.
+Minecraft/** -text
+*.sh text eol=lf
+.githooks/* text eol=lf

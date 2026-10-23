@@ -1,0 +1,73 @@
+# Pull files that changed on a server back into the repo (secrets masked) and open a PR.
+# Use it when a deploy aborts because of drift, or after plugin updates rewrote configs.
+name: Minecraft sync from server
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Server environment to pull from, e.g. mc-backend-Test or mc-proxy"
+        required: true
+      add:
+        description: "Extra server paths to import, space-separated (relative to the instance root)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: minecraft-sync-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  environment:
+    runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.env.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve GitHub Environment
+        id: env
+        env:
+          MC_TARGET: ${{ inputs.target }}
+        run: bash ./mc.sh target-info "$MC_TARGET"
+
+  sync:
+    needs: environment
+    runs-on: ubuntu-latest
+    environment: ${{ needs.environment.outputs.name }}
+    env:
+      MC_SECRETS_JSON: ${{ toJSON(secrets) }}
+      MC_VARS_JSON: ${{ toJSON(vars) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull and mask server changes
+        id: pull
+        env:
+          MC_TARGET: ${{ inputs.target }}
+          MC_ADD: ${{ inputs.add }}
+        run: |
+          read -r -a extra <<< "$MC_ADD"
+          bash ./mc.sh pull "$MC_TARGET" --add "${extra[@]}"
+      - name: Secret scan of the result
+        run: bash ./mc.sh gitleaks
+      - name: Lint the result
+        run: bash ./mc.sh lint
+      - name: Open pull request
+        if: steps.pull.outputs.changed != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MC_TARGET: ${{ inputs.target }}
+        run: |
+          branch="mc-sync/${MC_TARGET}-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add -- Minecraft
+          git commit -m "Sync ${MC_TARGET} config from server"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Sync ${MC_TARGET} config from server" \
+            --body "Files changed on the ${MC_TARGET} server since the last deploy, pulled with secrets masked. Review before merging; merging redeploys them."

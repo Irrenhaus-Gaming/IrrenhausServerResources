@@ -1,0 +1,20 @@
+# Enables the fixed [Alpha] Advanced Combat System baseline in EliteMobs dungeons and worlds.
+# This feature is under active development. Please test the unchanged defaults and send feedback to the developer.
+# Localization and customization settings are deliberately deferred during alpha.
+# They will be added after the system has been tested, feedback has been gathered, and the system is out of alpha.
+# Please keep the fixed defaults while we establish a solid baseline; no balance settings are exposed yet.
+enabled: true
+# Allows players to enable class ability controls outside EliteMobs dungeons and protected worlds.
+# Players opt in per session by double-tapping F while sneaking. EliteMobs combat content is always enabled.
+allowClassAbilitiesOutsideEliteMobsWorlds: true
+# Displays the graphical combat HUD when ResourcePackManager is enabled.
+# Set to false to use the text action bar for health, class resources and ability feedback.
+# The text display is also used automatically when ResourcePackManager is absent or disabled.
+enableCombatHud: true
+# Shows the class control toggle notice on login to players with at least one unlocked class.
+# Set to false to hide this notice. This does not enable or disable combat.
+showJoinMessage: true
+# Shows administrators MagmaGuy's message about the new combat system when they log in.
+# Clicking Dismiss permanently sets this to false for the entire server.
+# Set this back to true to show the message again. This does not enable or disable combat.
+showDeveloperMessage: false

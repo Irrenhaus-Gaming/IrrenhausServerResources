@@ -1,0 +1,15 @@
+# Whether the combat tag is enabled. Flying players who enter combat are forced to stop flying.
+enableCombatTag: true
+# Message shown when a player's combat tag activates.
+combatTagMessage: '&c[EliteMobs] Combat tag activated!'
+# Whether the /ag teleport has a countdown timer before teleporting.
+enableAdventurersGuildTeleportTimer: true
+# Action bar message shown during the teleport countdown.
+# Placeholder: $time
+teleportTimeLeft: '&7[EM] Teleporting in &a$time &7seconds...'
+# Message shown when a player moves and cancels a pending teleport.
+teleportCancelled: '&7[EM] &cTeleport interrupted!'
+# Whether to show the teleport countdown in the action bar instead of chat.
+useActionBarMessagesInsteadOfChat: true
+# Whether non-OP players are prevented from toggling flight in EliteMobs worlds.
+preventFlyToggleInDungeons: true

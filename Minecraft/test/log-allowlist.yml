@@ -1,0 +1,6 @@
+# Boot-test log lines that are errors but known to be harmless.
+# Any ERROR/SEVERE line or stack trace that matches no entry fails the boot test.
+#   profiles: server kinds the entry applies to: backend and/or proxy
+#   pattern: Python regex, searched in the log entry (message plus following stack-trace lines)
+#   reason:  why this is harmless (required; "noise" is not a reason)
+allow: []

@@ -1,0 +1,38 @@
+# The GitHub Environments ARE the server list (discovered automatically by the workflow):
+#   mc-proxy             the Velocity proxy, deployed with Minecraft/Proxy
+#   mc-backend-<Name>    a Paper backend deployed with Minecraft/Backend and listed in velocity.toml as <Name>
+#   mc-server-<Name>     a server only listed in velocity.toml (its config is not managed here)
+# A new server = a new environment with its secrets (see Minecraft/README.md); nothing to change here.
+# Approval is the environment's own protection rule (required reviewers).
+#
+# Settings below apply to every server of that kind:
+#   source             folder under Minecraft/ that is deployed
+#   platform           paper | velocity (controls the boot test)
+#   java_image         Docker image used to run the server jar in the boot test
+#   server_jar         glob for the server jar in the AMP instance root; must match exactly one file
+#   accept_eula        the Paper boot test writes eula=true only if this is true (Mojang EULA)
+#   memory             -Xmx for the boot test
+
+proxy:
+  environment: mc-proxy
+  source: Proxy
+  platform: velocity
+  java_image: eclipse-temurin:21-jre   # TODO(sftp-probe): confirm
+  server_jar: "*.jar"                  # TODO(sftp-probe): narrow to the real jar name
+  accept_eula: false                   # not used: Velocity has no EULA
+  memory: 1G
+  boot_timeout_seconds: 300
+  settle_seconds: 15
+
+backend:
+  environment_prefix: mc-backend-
+  source: Backend
+  platform: paper
+  java_image: eclipse-temurin:21-jre   # TODO(sftp-probe): confirm the Java version the AMP instances use
+  server_jar: "*.jar"                  # TODO(sftp-probe): narrow to the real jar name
+  accept_eula: false                   # TODO(owner): set true to accept the Mojang EULA for test servers
+  memory: 4G
+  boot_timeout_seconds: 900
+  settle_seconds: 30
+
+listed_server_prefix: mc-server-

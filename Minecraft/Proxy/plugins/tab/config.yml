@@ -1,0 +1,655 @@
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Header-&-Footer
+header-footer:
+  enabled: true
+  designs:
+    world-test:
+      display-condition: "%world%=test"
+      header:
+        - "Test header in world 'test'"
+      footer:
+        - "Test footer in world 'test'"
+    default:
+      header:
+        - "<#FFFFFF>&m                                                </#FFFF00>"
+        - "&3&lIrrenhaus"
+        - "&r&7&l>> %animation:Welcome%&3 &l%player%&7&l! &7&l<<"
+        - "&r&7Online players: &f%online%"
+        - "&6Online staff: &e%staffonline%"
+        - ""
+      footer:
+        - ""
+        - "&r&7Schaut im discord vorbei"
+        - "%animation:web%"
+        - "<#FFFFFF>&m                                                </#FFFF00>"
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Tablist-name-formatting
+tablist-name-formatting:
+  enabled: true
+  disable-condition: '%world%=disabledworld'
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Nametags
+scoreboard-teams:
+  enabled: true
+  enable-collision: true
+  invisible-nametags: false
+  # https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Sorting-players-in-tablist
+  sorting-types:
+    - "GROUPS:owner,admin,mod,helper,builder,vip,default"
+    - "PLACEHOLDER_A_TO_Z:%player%"
+  case-sensitive-sorting: true
+  can-see-friendly-invisibles: false
+  disable-condition: '%world%=disabledworld'
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Playerlist-Objective
+playerlist-objective:
+  enabled: true
+  value: "%ping%"
+  fancy-value: "&7Ping: %ping%"
+  title: "TAB" # Only visible on Bedrock Edition
+  render-type: INTEGER
+  disable-condition: '%world%=disabledworld'
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Belowname
+belowname-objective:
+  enabled: true
+  value: "%player_health_rounded%"
+  fancy-value: "&c%player_health_rounded%"
+  fancy-value-default: "NPC"
+  title: "&cHealth"
+  disable-condition: '%world%=disabledworld'
+  view-distance: 10
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Spectator-fix
+prevent-spectator-effect:
+  enabled: false
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Bossbar
+bossbar:
+  enabled: true
+  toggle-command: /bossbar
+  remember-toggle-choice: true
+  hidden-by-default: false
+  bars:
+    ServerInfo:
+      style: "PROGRESS" # for 1.9+: PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+      color: "%animation:barcolors%" # for 1.9+: BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW
+      progress: "%animation:bossbar-progress%" # in %
+      text: "&f&ddiscord.irrenhaus-gaming.de"
+      display-condition: "%animation:bossbar-toggle%=ON"
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Scoreboard
+scoreboard:
+  enabled: true
+  toggle-command: /qd
+  remember-toggle-choice: true
+  hidden-by-default: false
+  delay-on-join-milliseconds: 5000
+  scoreboards:
+    # 0) EliteMobs-Quest (allein, oder Phase 2 beim Abwechseln)
+    #    MUSS ganz oben stehen
+    elitemobs-quest:
+      display-condition: "em-zeigen"
+      title: "%condition:em-titel%"
+      lines:
+        - "%condition:em-zeile1%"
+        - "%condition:em-zeile2%"
+
+    # 1) Verfolgte Quest ist abgeschlossen
+    quest-completed:
+      display-condition: "sb-quest-completed"
+      title: "<#55FF55>Quest abgeschlossen</#00AA00>"
+      lines:
+        - "&a&l%quests_tracked_p:description%"
+        - "&7Fortschritt||&a%quests_tracked_p:progress%&7/%quests_tracked_p:max%"
+
+    # 2) Verfolgte NPC-Quest mit Zeitlimit
+    npcquest-timelimit:
+      display-condition: "sb-npcquest-timelimit"
+      title: "<#E0B11E>Aktive Quest</#FFD700>"
+      lines:
+        - "&7%quests_tracked_p:description%"
+        - "&7Ziel||&b%quests_tracked_p:target%"
+        - "&7Fortschritt||&f%quests_tracked_p:progress%&7/%quests_tracked_p:max%"
+        - "&7Restzeit||&f%quests_tracked_timeleft%"
+
+    # 3) Verfolgte NPC-Quest ohne Zeitlimit
+    npcquest-notimelimit:
+      display-condition: "sb-npcquest-notimelimit"
+      title: "<#E0B11E>Aktive Quest</#FFD700>"
+      lines:
+        - "&7%quests_tracked_p:description%"
+        - "&7Ziel||&b%quests_tracked_p:target%"
+        - "&7Fortschritt||&f%quests_tracked_p:progress%&7/%quests_tracked_p:max%"
+
+    # 4) Verfolgte Quest hat ein Zeitlimit (nicht NPC)
+    quest-timelimit:
+      display-condition: "sb-quest-timelimit"
+      title: "<#E0B11E>Aktive Quest</#FFD700>"
+      lines:
+        - "&7%quests_tracked_p:description%"
+        - "&7Fortschritt||&f%quests_tracked_p:progress%&7/%quests_tracked_p:max%"
+        - "&7Restzeit||&f%quests_tracked_timeleft%"
+
+    # 5) Verfolgte Quest ohne Zeitlimit (nicht NPC)
+    quest-notimelimit:
+      display-condition: "sb-quest-notimelimit"
+      title: "<#E0B11E>Aktive Quest</#FFD700>"
+      lines:
+        - "&7%quests_tracked_p:description%"
+        - "&7Fortschritt||&f%quests_tracked_p:progress%&7/%quests_tracked_p:max%"
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Layout
+layout:
+  enabled: false
+  direction: COLUMNS
+  default-skin: mineskin:37e93c8e12cd426cb28fce31969e0674
+  enable-remaining-players-text: true
+  remaining-players-text: '... and %s more'
+  empty-slot-ping-value: 1000
+  layouts:
+    default:
+      slot-count: 80
+      fixed-slots:
+        - '1|&3Website&f:'
+        - '2|&bmyserver.net'
+        - '3|&8&m                       '
+        - '4|&3Name&f:'
+        - '5|&b%player%'
+        - '7|&3Rank&f:'
+        - '8|Rank: %group%'
+        - '10|&3World&f:'
+        - '11|&b%world%'
+        - '13|&3Time&f:'
+        - '14|&b%time%'
+        - '21|&3Teamspeak&f:'
+        - '22|&bts.myserver.net'
+        - '23|&8&m                       '
+        - '41|&3Store&f:'
+        - '42|&bshop.myserver.net'
+        - '43|&8&m                       '
+      groups:
+        staff:
+          display-condition: permission:tab.staff
+          slots:
+            - 24-40
+        players:
+          slots:
+            - 44-80
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Ping-Spoof
+ping-spoof:
+  enabled: false
+  value: 0
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Global-playerlist
+global-playerlist:
+  enabled: true
+  display-others-as-spectators: false
+  display-vanished-players-as-spectators: true
+  isolate-unlisted-servers: false
+  update-latency: false
+  spy-servers:
+    - spyserver1
+    - spyserver2
+  server-groups:
+    lobbies:
+      - Lobby
+    group2:
+      - server1
+      - server2
+
+placeholders:
+  date-format: "dd.MM.yyyy"
+  time-format: "[HH:mm:ss / h:mm a]"
+  time-offset: 0
+  register-tab-expansion: false
+  locale: en-US
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Placeholder-output-replacements
+placeholder-output-replacements:
+  "%essentials_vanished%":
+    "yes": "&7| Vanished"
+    "no": ""
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Conditional-placeholders
+conditions:
+  nick: # use it with %condition:nick%
+    conditions:
+      - "%player%=%essentials_nickname%"
+    true: "%player%"
+    false: "~%essentials_nickname%"
+  sb-quest-completed:
+    type: AND
+    conditions:
+    - "%quests_tracked%!="
+    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked_completed%=true"
+  sb-npcquest-timelimit:
+    type: AND
+    conditions:
+    - "%quests_tracked%!="
+    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked_completed%=false"
+    - "%quests_tracked_p:target%!="
+    - "%quests_tracked_p:target%!<-not a valid placeholder"
+    - "%quests_tracked_timeleft%!=No time limit"
+
+  sb-npcquest-notimelimit:
+    type: AND
+    conditions:
+    - "%quests_tracked%!="
+    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked_completed%=false"
+    - "%quests_tracked_p:target%!="
+    - "%quests_tracked_p:target%!<-not a valid placeholder"
+
+  sb-quest-timelimit:
+    type: AND
+    conditions:
+    - "%quests_tracked%!="
+    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked_completed%=false"
+    - "%quests_tracked_timeleft%!=No time limit"
+
+  sb-quest-notimelimit:
+    type: AND
+    conditions:
+    - "%quests_tracked%!="
+    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked_completed%=false"
+    
+  q-bereit:
+    conditions:
+      - "%quests_tracked%!="
+      - "%quests_tracked%!=No tracked quest"
+    type: AND
+
+  # EliteMobs hat Vorrang, wenn keine normale Quest aktiv ist
+  # ODER die Animation gerade auf Phase 2 steht
+  em-vorrang:
+    conditions:
+      - "%condition:q-bereit%=false"
+      - "%animation:QuestWechsel%=2"
+    type: OR
+
+  # EliteMobs-Board anzeigen?
+  # (bei "Uninitialized player data!" direkt nach dem Join ist das automatisch false)
+  em-zeigen:
+    conditions:
+      - "%elitemobs_quest_is_tracking%=yes"
+      - "%condition:em-vorrang%=true"
+    type: AND
+
+  # Titel des EliteMobs-Boards (aktiv vs. abgeschlossen)
+  em-titel:
+    conditions:
+      - "%elitemobs_quest_tracked_complete%=yes"
+    true: "<#55FF55>Elite-Quest erledigt</#00AA00>"
+    false: "<#FF5555>Elite-Quest</#AA0000>"
+
+# ===== EliteMobs: nur offene Ziele anzeigen (max. 2) =====
+  # Zeile 1 im Scoreboard: %condition:em-zeile1%
+  em-zeile1:
+    conditions:
+      - "%elitemobs_quest_tracked_complete%=yes"
+    true: "%elitemobs_quest_tracked_objective_1%"   # Quest fertig -> Abgabe-Hinweis
+    false: "%condition:em-a1%"
+
+  # Zeile 2 im Scoreboard: %condition:em-zeile2%
+  em-zeile2:
+    conditions:
+      - "%elitemobs_quest_tracked_complete%=yes"
+    true: ""
+    false: "%condition:em-b1%"
+
+  # em-aN = erstes offenes Ziel ab Ziel N
+  em-a1:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_1_current%<%elitemobs_quest_tracked_objective_1_target%"
+    true: "%elitemobs_quest_tracked_objective_1%"
+    false: "%condition:em-a2%"
+  em-a2:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_2_current%<%elitemobs_quest_tracked_objective_2_target%"
+    true: "%elitemobs_quest_tracked_objective_2%"
+    false: "%condition:em-a3%"
+  em-a3:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_3_current%<%elitemobs_quest_tracked_objective_3_target%"
+    true: "%elitemobs_quest_tracked_objective_3%"
+    false: "%condition:em-a4%"
+  em-a4:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_4_current%<%elitemobs_quest_tracked_objective_4_target%"
+    true: "%elitemobs_quest_tracked_objective_4%"
+    false: "%condition:em-a5%"
+  em-a5:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_5_current%<%elitemobs_quest_tracked_objective_5_target%"
+    true: "%elitemobs_quest_tracked_objective_5%"
+    false: "%condition:em-a6%"
+  em-a6:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_6_current%<%elitemobs_quest_tracked_objective_6_target%"
+    true: "%elitemobs_quest_tracked_objective_6%"
+    false: "%condition:em-a7%"
+  em-a7:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_7_current%<%elitemobs_quest_tracked_objective_7_target%"
+    true: "%elitemobs_quest_tracked_objective_7%"
+    false: "%condition:em-a8%"
+  em-a8:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_8_current%<%elitemobs_quest_tracked_objective_8_target%"
+    true: "%elitemobs_quest_tracked_objective_8%"
+    false: "%condition:em-a9%"
+  em-a9:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_9_current%<%elitemobs_quest_tracked_objective_9_target%"
+    true: "%elitemobs_quest_tracked_objective_9%"
+    false: "%condition:em-a10%"
+  em-a10:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_10_current%<%elitemobs_quest_tracked_objective_10_target%"
+    true: "%elitemobs_quest_tracked_objective_10%"
+    false: "%condition:em-a11%"
+  em-a11:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_11_current%<%elitemobs_quest_tracked_objective_11_target%"
+    true: "%elitemobs_quest_tracked_objective_11%"
+    false: "%condition:em-a12%"
+  em-a12:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_12_current%<%elitemobs_quest_tracked_objective_12_target%"
+    true: "%elitemobs_quest_tracked_objective_12%"
+    false: "%condition:em-a13%"
+  em-a13:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_13_current%<%elitemobs_quest_tracked_objective_13_target%"
+    true: "%elitemobs_quest_tracked_objective_13%"
+    false: "%condition:em-a14%"
+  em-a14:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_14_current%<%elitemobs_quest_tracked_objective_14_target%"
+    true: "%elitemobs_quest_tracked_objective_14%"
+    false: "%condition:em-a15%"
+  em-a15:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_15_current%<%elitemobs_quest_tracked_objective_15_target%"
+    true: "%elitemobs_quest_tracked_objective_15%"
+    false: "%condition:em-a16%"
+  em-a16:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_16_current%<%elitemobs_quest_tracked_objective_16_target%"
+    true: "%elitemobs_quest_tracked_objective_16%"
+    false: "%condition:em-a17%"
+  em-a17:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_17_current%<%elitemobs_quest_tracked_objective_17_target%"
+    true: "%elitemobs_quest_tracked_objective_17%"
+    false: "%condition:em-a18%"
+  em-a18:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_18_current%<%elitemobs_quest_tracked_objective_18_target%"
+    true: "%elitemobs_quest_tracked_objective_18%"
+    false: "%condition:em-a19%"
+  em-a19:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_19_current%<%elitemobs_quest_tracked_objective_19_target%"
+    true: "%elitemobs_quest_tracked_objective_19%"
+    false: "%condition:em-a20%"
+  em-a20:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_20_current%<%elitemobs_quest_tracked_objective_20_target%"
+    true: "%elitemobs_quest_tracked_objective_20%"
+    false: "%condition:em-a21%"
+  em-a21:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_21_current%<%elitemobs_quest_tracked_objective_21_target%"
+    true: "%elitemobs_quest_tracked_objective_21%"
+    false: "%condition:em-a22%"
+  em-a22:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_22_current%<%elitemobs_quest_tracked_objective_22_target%"
+    true: "%elitemobs_quest_tracked_objective_22%"
+    false: "%condition:em-a23%"
+  em-a23:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_23_current%<%elitemobs_quest_tracked_objective_23_target%"
+    true: "%elitemobs_quest_tracked_objective_23%"
+    false: "%condition:em-a24%"
+  em-a24:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_24_current%<%elitemobs_quest_tracked_objective_24_target%"
+    true: "%elitemobs_quest_tracked_objective_24%"
+    false: "%condition:em-a25%"
+  em-a25:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_25_current%<%elitemobs_quest_tracked_objective_25_target%"
+    true: "%elitemobs_quest_tracked_objective_25%"
+    false: ""
+
+  # em-bN = zweites offenes Ziel ab Ziel N
+  em-b1:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_1_current%<%elitemobs_quest_tracked_objective_1_target%"
+    true: "%condition:em-a2%"
+    false: "%condition:em-b2%"
+  em-b2:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_2_current%<%elitemobs_quest_tracked_objective_2_target%"
+    true: "%condition:em-a3%"
+    false: "%condition:em-b3%"
+  em-b3:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_3_current%<%elitemobs_quest_tracked_objective_3_target%"
+    true: "%condition:em-a4%"
+    false: "%condition:em-b4%"
+  em-b4:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_4_current%<%elitemobs_quest_tracked_objective_4_target%"
+    true: "%condition:em-a5%"
+    false: "%condition:em-b5%"
+  em-b5:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_5_current%<%elitemobs_quest_tracked_objective_5_target%"
+    true: "%condition:em-a6%"
+    false: "%condition:em-b6%"
+  em-b6:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_6_current%<%elitemobs_quest_tracked_objective_6_target%"
+    true: "%condition:em-a7%"
+    false: "%condition:em-b7%"
+  em-b7:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_7_current%<%elitemobs_quest_tracked_objective_7_target%"
+    true: "%condition:em-a8%"
+    false: "%condition:em-b8%"
+  em-b8:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_8_current%<%elitemobs_quest_tracked_objective_8_target%"
+    true: "%condition:em-a9%"
+    false: "%condition:em-b9%"
+  em-b9:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_9_current%<%elitemobs_quest_tracked_objective_9_target%"
+    true: "%condition:em-a10%"
+    false: "%condition:em-b10%"
+  em-b10:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_10_current%<%elitemobs_quest_tracked_objective_10_target%"
+    true: "%condition:em-a11%"
+    false: "%condition:em-b11%"
+  em-b11:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_11_current%<%elitemobs_quest_tracked_objective_11_target%"
+    true: "%condition:em-a12%"
+    false: "%condition:em-b12%"
+  em-b12:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_12_current%<%elitemobs_quest_tracked_objective_12_target%"
+    true: "%condition:em-a13%"
+    false: "%condition:em-b13%"
+  em-b13:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_13_current%<%elitemobs_quest_tracked_objective_13_target%"
+    true: "%condition:em-a14%"
+    false: "%condition:em-b14%"
+  em-b14:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_14_current%<%elitemobs_quest_tracked_objective_14_target%"
+    true: "%condition:em-a15%"
+    false: "%condition:em-b15%"
+  em-b15:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_15_current%<%elitemobs_quest_tracked_objective_15_target%"
+    true: "%condition:em-a16%"
+    false: "%condition:em-b16%"
+  em-b16:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_16_current%<%elitemobs_quest_tracked_objective_16_target%"
+    true: "%condition:em-a17%"
+    false: "%condition:em-b17%"
+  em-b17:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_17_current%<%elitemobs_quest_tracked_objective_17_target%"
+    true: "%condition:em-a18%"
+    false: "%condition:em-b18%"
+  em-b18:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_18_current%<%elitemobs_quest_tracked_objective_18_target%"
+    true: "%condition:em-a19%"
+    false: "%condition:em-b19%"
+  em-b19:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_19_current%<%elitemobs_quest_tracked_objective_19_target%"
+    true: "%condition:em-a20%"
+    false: "%condition:em-b20%"
+  em-b20:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_20_current%<%elitemobs_quest_tracked_objective_20_target%"
+    true: "%condition:em-a21%"
+    false: "%condition:em-b21%"
+  em-b21:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_21_current%<%elitemobs_quest_tracked_objective_21_target%"
+    true: "%condition:em-a22%"
+    false: "%condition:em-b22%"
+  em-b22:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_22_current%<%elitemobs_quest_tracked_objective_22_target%"
+    true: "%condition:em-a23%"
+    false: "%condition:em-b23%"
+  em-b23:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_23_current%<%elitemobs_quest_tracked_objective_23_target%"
+    true: "%condition:em-a24%"
+    false: "%condition:em-b24%"
+  em-b24:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_24_current%<%elitemobs_quest_tracked_objective_24_target%"
+    true: "%condition:em-a25%"
+    false: "%condition:em-b25%"
+  em-b25:
+    conditions:
+      - "%elitemobs_quest_tracked_objective_25_current%<%elitemobs_quest_tracked_objective_25_target%"
+    true: ""
+    false: ""
+
+placeholder-refresh-intervals:
+  default-refresh-interval: 500
+  "%server_uptime%": 1000
+  "%server_tps_1_colored%": 1000
+  "%server_unique_joins%": 5000
+  "%player_health%": 200
+  "%player_ping%": 1000
+  "%vault_prefix%": 1000
+  "%rel_factionsuuid_relation_color%": 1000
+
+# assigning groups by permission nodes instead of taking them from permission plugin
+assign-groups-by-permissions: false
+
+# if the option above is true, all groups are taken based on permissions and the one higher in this list is used as primary
+# Warning! This is not sorting list and has nothing to do with sorting players in tablist!
+primary-group-finding-list:
+  - Owner
+  - Admin
+  - Mod
+  - Helper
+  - default
+
+# Refresh interval (in milliseconds) of:
+# - Permission checks in conditions / sorting
+# - Group retrieving from permission plugin for sorting / per-group properties
+permission-refresh-interval: 1000
+
+# Unlocks extra console messages
+debug: false
+
+# https://github.com/NEZNAMY/TAB/wiki/MySQL
+mysql:
+  enabled: false
+  host: 127.0.0.1
+  port: 3306
+  database: tab
+  username: user
+  password: password
+  useSSL: true
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Multi-server-support
+proxy-support:
+  enabled: true
+  channel-name-suffix: "custom"
+  # Supported types: PLUGIN, REDIS, RABBITMQ
+  type: PLUGIN
+  plugin:
+    # Compatible plugins: RedisBungee
+    # If enabled and compatible plugin is found, hook is enabled to work with proxied players
+    name: RedisBungee
+  redis:
+    url: 'redis://:password@localhost:6379/0'
+  rabbitmq:
+    exchange: 'plugin'
+    url: 'amqp://guest:guest@localhost:5672/%2F'
+
+components:
+  minimessage-support: true
+  disable-shadow-for-heads: true
+
+# Internal value, do not change this
+config-version: 7
+
+########################################################################
+# BUKKIT ONLY - THE FOLLOWING SECTION IS ONLY FOR BACKEND INSTALLATION #
+########################################################################
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Per-world-playerlist
+per-world-playerlist:
+  enabled: false
+  # players with tab.staff will always see all players
+  allow-bypass-permission: false
+  # players in these worlds will always see all players
+  ignore-effect-in-worlds:
+    - ignoredworld
+    - build
+  shared-playerlist-world-groups:
+    lobby:
+      - lobby1
+      - lobby2
+    minigames:
+      - paintball
+      - bedwars
+
+compensate-for-packetevents-bug: false
+
+#####################################################################
+# PROXY ONLY - THE FOLLOWING SECTION IS ONLY FOR PROXY INSTALLATION #
+#####################################################################
+
+# Take permissions and groups from backend server instead of proxy
+use-bukkit-permissions-manager: false
+
+# Sometimes server might be using offline uuids in tablist instead of online, such as disabling waterfall's tablist rewrite option
+# If you experience tablist formatting not working, toggle this option (set it to opposite value)
+# Only affects proxies with online mode enabled
+use-online-uuid-in-tablist: true

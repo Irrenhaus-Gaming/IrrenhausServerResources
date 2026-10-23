@@ -1,0 +1,302 @@
+############################
+# 
+# ITSME.TO - A configuration for quests
+# discord.gg/itsme-to
+#
+############################
+
+# Categories are a way of grouping up quests.
+# When a player uses /quests, a menu of categories will be presented to them.
+# When a player clicks ona category, a list of quests under that category will show.
+# If categories are disabled, all quests will be shown under one big GUI.
+# Players can access specific categories by command using /quests c [category].
+# If a quest does not have a category, it will not be shown.
+categories:
+  farming:
+    display:
+      name: "&dLandwirtschaftsquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Nimm an Quests teil, die sich auf &dLandwirtschaft"
+        - "%itsmyconfig_dark-color_console%konzentrieren. Du wirst ernten, abbauen, und"
+        - "%itsmyconfig_dark-color_console%Feldfrüchte und andere Gegenstände sammeln."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:farming_completed%%itsmyconfig_dark-color_console%/%quests_category:farming_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:farming_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &eMittel %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "WHEAT"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  mining:
+    display:
+      name: "&bBergbauquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Tauche tief in &bBergbau Quests"
+        - "%itsmyconfig_dark-color_console%ein, die dich dazu bringen,"
+        - "%itsmyconfig_dark-color_console%bestimmte Blöcke abzubauen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:mining_completed%%itsmyconfig_dark-color_console%/%quests_category:mining_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:mining_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "GOLDEN_PICKAXE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  collecting:
+    display:
+      name: "&aSammelquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Nimm an Quests teil, die das &aSammeln %itsmyconfig_dark-color_console%einer"
+        - "%itsmyconfig_dark-color_console%Vielzahl von Gegenständen und Blöcken erfordern."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:collecting_completed%%itsmyconfig_dark-color_console%/%quests_category:collecting_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:collecting_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &eMittel %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "HOPPER"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  hunter:
+    display:
+      name: "&cJagdquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Tauche ein in den Nervenkitzel der"
+        - "&cJagd%itsmyconfig_dark-color_console%. Bei diesen Quests wirst du"
+        - "%itsmyconfig_dark-color_console%verschiedene Mobs verfolgen und töten."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:hunter_completed%%itsmyconfig_dark-color_console%/%quests_category:hunter_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:hunter_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &eMittel %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "GOLDEN_SWORD"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  enchanting:
+    display:
+      name: "&5Verzauberungsquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Entfessle die Magie des &5Verzauberns"
+        - "%itsmyconfig_dark-color_console%durch Quests, die von dir verlangen,"
+        - "%itsmyconfig_dark-color_console%verschiedene Gegenstände zu verzaubern."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:enchanting_completed%%itsmyconfig_dark-color_console%/%quests_category:enchanting_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:enchanting_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "ENCHANTING_TABLE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  brewing:
+    display:
+      name: "&eBrauenquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Tauche ein in die Kunst des &eBrauens%itsmyconfig_dark-color_console%"
+        - "%itsmyconfig_dark-color_console%mit Quests, die dich herausfordern,"
+        - "%itsmyconfig_dark-color_console%einzigartige Tränke zu erstellen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:brewing_completed%%itsmyconfig_dark-color_console%/%quests_category:brewing_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:brewing_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "BREWING_STAND"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  woodcutting:
+    display:
+      name: "&6Holzfällerquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Nimm an Quests teil, die sich auf"
+        - "&6Holzfällerei%itsmyconfig_dark-color_console% konzentrieren, bei denen du"
+        - "%itsmyconfig_dark-color_console%verschiedene Holzarten fällen musst."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:woodcutting_completed%%itsmyconfig_dark-color_console%/%quests_category:woodcutting_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:woodcutting_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "GOLDEN_AXE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  building:
+    display:
+      name: "&2Bauquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Zeige deine Kreativität durch Quests, die"
+        - "%itsmyconfig_dark-color_console%sich auf &2Konstruktion%itsmyconfig_dark-color_console% fokussieren. Sei bereit,"
+        - "%itsmyconfig_dark-color_console%verschiedene Blöcke zu platzieren, um Strukturen zu bauen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:building_completed%%itsmyconfig_dark-color_console%/%quests_category:building_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:building_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &eMittel %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "QUARTZ_BLOCK"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  crafting:
+    display:
+      name: "&fHandwerksquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Setze deine Fähigkeiten bei Quests ein,"
+        - "%itsmyconfig_dark-color_console%die sich um &fHandwerk%itsmyconfig_dark-color_console% drehen. Du musst"
+        - "%itsmyconfig_dark-color_console%bestimmte Gegenstände herstellen, um erfolgreich zu sein."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:crafting_completed%%itsmyconfig_dark-color_console%/%quests_category:crafting_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:crafting_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "CRAFTING_TABLE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  digging:
+    display:
+      name: "&eGrabquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Erforsche Quests, die"
+        - "&eGraben%itsmyconfig_dark-color_console% beinhalten. Deine Aufgabe ist es,"
+        - "%itsmyconfig_dark-color_console%bestimmte Blöcke zu brechen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:digging_completed%%itsmyconfig_dark-color_console%/%quests_category:digging_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:digging_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "GOLDEN_SHOVEL"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  activities:
+    display:
+      name: "&9Aktivitätsquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Begib dich auf Abenteuer mit Quests, die"
+        - "%itsmyconfig_dark-color_console%sich um &9Tiere%itsmyconfig_dark-color_console% drehen. Du musst"
+        - "%itsmyconfig_dark-color_console%verschiedene Kreaturen zähmen, züchten und scheren."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:activities_completed%%itsmyconfig_dark-color_console%/%quests_category:activities_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:activities_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "LEAD"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  misc:
+    display:
+      name: "&6Verschiedene Quests"
+      lore:
+        - "%itsmyconfig_dark-color_console%Erkunde eine Vielzahl von &6verschiedenen"
+        - "%itsmyconfig_dark-color_console%Quests, die dich herausfordern,"
+        - "%itsmyconfig_dark-color_console%verschiedene einzigartige Aufgaben zu erfüllen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:misc_completed%%itsmyconfig_dark-color_console%/%quests_category:misc_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:misc_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &eMittel %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "SADDLE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  fishing:
+    display:
+      name: "&3Angelquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Erlebe den Nervenkitzel des &3Angelns"
+        - "%itsmyconfig_dark-color_console%mit Quests, die dich herausfordern,"
+        - "%itsmyconfig_dark-color_console%bestimmte Gegenstände zu fangen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:fishing_completed%%itsmyconfig_dark-color_console%/%quests_category:fishing_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:fishing_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "FISHING_ROD"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  impossible:
+    display:
+      name: "&4Unmögliche Quest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Stelle dich der ultimativen Herausforderung mit"
+        - "&4unmöglichen%itsmyconfig_dark-color_console% Quests, die dich dazu bringen,"
+        - "%itsmyconfig_dark-color_console%nahezu unerreichbare Aufgaben zu erfüllen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:impossible_completed%%itsmyconfig_dark-color_console%/%quests_category:impossible_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:impossible_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &cSchwer %itsmyconfig_dark-color_console%bis &4Unmöglich"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "ENDER_EYE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  weaponsmith:
+    display:
+      name: "&8Waffenschmied-Quest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Schlüpfe in die Rolle eines %itsmyconfig_darkest-color_console%Waffenschmieds bei"
+        - "%itsmyconfig_dark-color_console%Quests, die dich herausfordern, verschiedene "
+        - "%itsmyconfig_dark-color_console%Rüstungen und Werkzeuge herzustellen oder zu beschaffen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:weaponsmith_completed%%itsmyconfig_dark-color_console%/%quests_category:weaponsmith_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:weaponsmith_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "ANVIL"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  smelting:
+    display:
+      name: "&cSchmelzquest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Beherrsche die Kunst des &cSchmelzens"
+        - "%itsmyconfig_dark-color_console%mit Quests, die dich dazu bringen,"
+        - "%itsmyconfig_dark-color_console%bestimmte Gegenstände zu kochen oder zu schmelzen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:smelting_completed%%itsmyconfig_dark-color_console%/%quests_category:smelting_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:smelting_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "BLAST_FURNACE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  expquests:
+    display:
+      name: "&aEXP-Quest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Verdiene Erfahrungspunkte mit Quests,"
+        - "%itsmyconfig_dark-color_console%die dich dazu bringen,"
+        - "%itsmyconfig_dark-color_console%bestimmte Aufgaben und Herausforderungen zu erfüllen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:expquests_completed%%itsmyconfig_dark-color_console%/%quests_category:expquests_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:expquests_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &cSchwer"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "EXPERIENCE_BOTTLE"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+  npcquest:
+    hidden: true
+    display:
+      name: "&bNPC-Quest"
+      lore:
+        - "%itsmyconfig_dark-color_console%Erledige Aufträge für die &bBewohner"
+        - "%itsmyconfig_dark-color_console%der Welt. Diese Quests werden dir von"
+        - "%itsmyconfig_dark-color_console%NPCs direkt gegeben und abgenommen."
+        - ""
+        - "%itsmyconfig_darkest-color_console%Informationen:"
+        - "%itsmyconfig_text-color_console% • Abgeschlossene Quests: %itsmyconfig_primary-color_console%%quests_category:npcquest_completed%%itsmyconfig_dark-color_console%/%quests_category:npcquest_all%"
+        - "%itsmyconfig_text-color_console% • Gestartete Quests: %itsmyconfig_secondary-color_console%%quests_category:npcquest_started%"
+        - "%itsmyconfig_text-color_console% • Schwierigkeit: &aEinfach %itsmyconfig_dark-color_console%bis &eMittel"
+        - ""
+        - "%itsmyconfig_dark-color_console%◆ %itsmyconfig_primary-color_console%Klicken:%itsmyconfig_text-color_console% Diese Kategorie anzeigen"
+      type: "PLAYER_HEAD"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]

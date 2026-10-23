@@ -1,0 +1,201 @@
+# Sets the message that appears when the quest target is inside an instanced dungeon
+# and no portal to that dungeon was found. $dungeon is the dungeon's name.
+questDestinationInInstance: '[EM] Enter $dungeon!'
+# Sets if quests have to be returned to quest givers to complete the quest.
+requireQuestTurnIn: true
+# Sets the message sent when a quest is accepted.
+questJoinMessage: '&aYou have accepted the quest $questName &a!'
+# Sets the message sent when a quest is abandoned.
+questLeaveMessage: '&cYou have abandoned the quest $questName &c!'
+# Sets message sent when a quest is completed.
+questCompleteMessage: '&2You completed the quest $questName &2!'
+# Sets the message sent when a player tried to abandon a quest when none are active.
+leaveWhenNoActiveQuestsExist: '&cYou don''t currently have an active quest!'
+# Sets if some of the messages related to quests will use titles instead of chat messages.
+useQuestAcceptTitles: true
+# Sets the title sent when a players starts a quest.
+questStartTitle: '&aQuest Accepted!'
+# Sets the subtitle sent when a players starts a quest.
+questStartSubtitle: $questName
+# Sets if titles will be sent when players complete a quest.
+useQuestCompleteTitles: true
+# Sets the title sent when a player completes a quest.
+questCompleteTitle: '&2Quest Completed!'
+# Sets the subtitle sent when a player completes a quest.
+questCompleteSubtitle: $questName
+# Sets if titles are sent when players leave quests..
+useQuestLeaveTitles: true
+# Sets the title sent when a player leaves a quest.
+questLeaveTitle: '&cQuest Abandoned!'
+# Sets the subtitle sent when a player leaves a quest.
+questLeaveSubtitle: $questName
+# Sets if messages are sent on chat reporting quest objective progression.
+doQuestChatProgression: true
+# Sets the color codes for ongoing objectives.
+ongoingQuestColorCode: '&c'
+# Sets the color codes for completed objectives.
+completedQuestColorCode: '&a'
+# Sets if single-step scoreboard objectives (target of 1, e.g. 'talk to') show a status symbol
+# instead of a meaningless '0/1' counter. Completed objectives are shown struck through.
+binaryObjectiveStatusEnabled: true
+# Symbol shown before an incomplete single-step objective when binaryObjectiveStatusEnabled is true.
+binaryObjectiveIncompleteSymbol: '&7➤'
+# Symbol shown before a completed single-step objective when binaryObjectiveStatusEnabled is true.
+binaryObjectiveCompleteSymbol: '&a✔'
+# Sets the formatting for progression messages of kill quests.
+killQuestChatProgressionMessage: '&8[EliteMobs] &7➤ Kill &f$name&7: $color$current&7/$color$target'
+# Sets the formatting for progression messages of fetch quests.
+fetchQuestChatProgressionMessage: '&8[EliteMobs] &7➤ Get &f$name&7: $color$current&7/$color$target'
+# Sets the formatting for progression messages of dialog quests.
+dialogQuestChatProgressionMessage: '&8[EliteMobs] &7➤ Talk to &f$name&7: $color$current&7/$color$target'
+# Sets the maximum amount of accepted quests a player can have.
+maximumActiveQuests: 10
+# Sets the message sent to players when trying to accept an amount of quests that exceed the active quest cap.
+questCapMessage: '&8[EliteMobs] &cYou have reached the maximum amount of active quests
+  (10)! &4Abandon or complete at least one active quest if you want to get more quests!'
+# Sets if scoreboards messages will be used for quests.
+useQuestScoreboards: false
+# Sets the formatting for scoreboard progression messages of kill quests.
+killQuestScoreboardProgressionMessage: '&7➤ Kill &f$name&7: $color$current&7/$color$target'
+# Sets the formatting for scoreboard progression message of fetch quests.
+fetchQuestScoreboardProgressionMessage: '&7➤ Get &f$name&7: $color$current&7/$color$target'
+# Sets the formatting for scoreboard progression messages of dialog quests.
+dialogQuestScoreboardProgressionMessage: '&7➤ Talk to &f$name&7: $color$current&7/$color$target'
+# Progress message for unlocking a class.
+classUnlockQuestChatProgressionMessage: '&8[EliteMobs] &7Unlock &f$name&7: $color$current&7/$color$target'
+# Scoreboard objective for unlocking a class.
+classUnlockQuestScoreboardProgressionMessage: '&7Unlock &f$name&7: $color$current&7/$color$target'
+# Sets the formatting for scoreboard progression messages of arena quests.
+arenaQuestScoreboardProgressionMessage: '&7➤ Complete &f$arenaName'
+questEntityTypes:
+- BLAZE
+- CAVE_SPIDER
+- DROWNED
+- ELDER_GUARDIAN
+- ENDERMAN
+- ENDERMITE
+- EVOKER
+- GHAST
+- GUARDIAN
+- HUSK
+- ILLUSIONER
+- IRON_GOLEM
+- PILLAGER
+- RAVAGER
+- SILVERFISH
+- SKELETON
+- SPIDER
+- STRAY
+- VINDICATOR
+- WITCH
+- WITHER_SKELETON
+- WOLF
+- ZOMBIE
+- HOGLIN
+- ZOGLIN
+- PIGLIN_BRUTE
+- PIGLIN
+- ZOMBIFIED_PIGLIN
+# Sets the message sent to players to activate quest tracking.
+chatTrackMessage: '&8[EliteMobs]&2 Click here to track your quest!'
+# Sets the hover message of the quest tracking message.
+chatTrackHover: '&2Click to track!'
+# Sets the command sent when clicking on the tracking message. You really should not modify this.
+chatTrackCommand: /elitemobs quest track $questID
+# Sets the message sent to players when activating quest tracking.
+chatTrackingMessage: '&8[EliteMobs]&9 You are now tracking a quest!'
+# Sets the hover message of the quest tracking enabled message.
+chatTrackingHover: '&2Click to untrack/track! /em -> Quests to track a different quest!'
+# Sets the command sent when click on the quest tracking activation message. You really should not modify this.
+chatTrackingCommand: /elitemobs quest track $questID
+# Sets if quests are automatically tracked when accepted.
+autoTrackQuestsOnAccept: true
+# Sets if completing the tracked quest automatically starts tracking another active quest.
+autoTrackNextQuestOnCompletion: true
+# Sets the message sent when tracking switches to the next active quest after completing one.
+questAutoTrackNextMessage: '&8[EliteMobs]&9 Now tracking: &f$questName'
+# Sets the confirmation message shown when a player clicks to abandon a quest.
+# Abandoning starts the quest's full cooldown, so it requires a second click to confirm.
+questAbandonConfirmationText: '&cAbandoning &f$questName &cstarts its full cooldown!
+  &4&l[Click here to confirm abandoning]'
+# Sets the hover message of the quest abandon confirmation.
+questAbandonConfirmationHover: '&cThis cannot be undone!'
+# Sets the message that appears when the destination of the quest could not be found.
+noQuestDestinationFound: '[EM] No quest destination found!'
+# Sets the message that appears when the quest target is in a different world.
+questDestinationInOtherWorld: '[EM] Go to world $world!'
+# Sets the message sent to players when trying to accept a quest they have already completed.
+questAlreadyCompletedMessage: '&8[EliteMobs] &cYou already completed this quest!'
+# Sets the message sent to players when trying to accept a quest they do not have the permission for.
+questPrerequisitesMissingMessage: '&8[EliteMobs] &cThis NPC has some quest(s) you
+  can''t accept yet!'
+# Sets the message sent to players trying to get a quest for which they do not have the correct guild rank activated.
+lowRankDynamicQuestWarning: '&8[EliteMobs] &cYou can''t take these quests with your
+  current guild rank! Increase your guild rank to accept these quests.'
+# Sets the formatting for the quest turn-in message.
+questTurnInObjective: '&aTalk to $npcName'
+# Sets the maximum amount of characters inventory-based menus for quests will have before breaking the line.
+horizontalCharacterLimitBedrockMenu: 30
+# Sets the maximum amount of characters per item entry in inventory-based menus for quests before creating another item to continue the entry.
+itemEntryCharacterLimitBedrockMenu: 300
+# Previous page button in inventory quest menus
+previousInventoryPage: Previous page
+# Next page button in inventory quest menus
+nextInventoryPage: Next page
+# Shown when a quest reward preview cannot be generated
+rewardPreviewUnavailable: Reward preview unavailable.
+# Sets the subtitle shown when a player tries to accept a quest they are locked out from
+questLockoutSubtitle: '&cQuest Lockout!'
+# Sets the chat message shown when a player tries to accept a quest they are locked out from
+# $questName is the placeholder for the quest name
+# $remainingTime is the placeholder for the remaining lockout time
+questLockoutChatMessage: '&c[EliteMobs] &7You completed &c$questName &7recently and
+  must wait another &e$remainingTime &7before you can accept it again.'
+# Sets the message sent when a player tries to start a quest with an invalid ID.
+# $questId is the placeholder for the quest ID
+invalidQuestIdMessage: '&8[EliteMobs] &cInvalid quest ID for ID $questId'
+# Sets the message sent when an NPC has an invalid quest configuration.
+invalidQuestNpcMessage: '[EliteMobs] This NPC''s quest is not valid! This might be
+  a configuration error on the NPC or on the quest.'
+# Sets the message sent to admins when a specific quest filename is invalid.
+# $quest is the placeholder for the quest filename
+invalidQuestMessage: 'Invalid quest: $quest'
+# Sets the message sent when quest tracking fails due to an invalid quest ID.
+questTrackingInvalidMessage: '[EliteMobs] Failed to get a valid quest with that quest
+  ID!'
+# Sets the status suffix shown when a quest is ready to turn in.
+questTurnInStatus: ' §f| §2Turn in!'
+# Sets the status suffix shown when a quest is accepted.
+questAcceptedStatus: ' §f| §aAccepted'
+# Sets the text for the back button to return to the status menu.
+questBackToStatusMenu: ← Back to Status Menu
+# Sets the text shown on the abandon quest button.
+questAbandonText: §l§c[Abandon]
+# Experimental: shows quest NPC text through top-anchored boss bars before opening the quest menu.
+useQuestDialogueBossBars: true
+# Experimental: hides the quest tracking scoreboard while quest dialogue is active.
+# Boss bars are always hidden because the dialogue layout requires exclusive control of that area.
+hideQuestScoreboardDuringQuestDialogue: false
+# Experimental: maximum visible characters per boss-bar dialogue line before wrapping.
+questDialogueCharactersPerLineV2: 52
+# Experimental: visible characters added per tick while quest dialogue types in.
+questDialogueCharactersPerTick: 2
+# Experimental: prefix placed before the NPC name boss-bar title. Use this for custom font offset glyphs.
+questDialogueNamePrefix: ''
+# Experimental: suffix placed after the NPC name boss-bar title. Use this for custom font offset glyphs.
+questDialogueNameSuffix: ''
+# Experimental: prefix placed before each dialogue line boss-bar title. Use this for custom font offset glyphs.
+questDialogueLinePrefix: ''
+# Experimental: suffix placed after each dialogue line boss-bar title. Use this for custom font offset glyphs.
+questDialogueLineSuffix: ''
+# Experimental: horizontal pixel shift of the dialogue box image (positive = right).
+# Default 0 keeps the box aligned with the shift-click quest dialogue menu art.
+questDialogueBoxOffetXV2: 0
+# Experimental: horizontal pixel shift of the NPC name line (negative = left).
+questDialogueNameOffsetXV2: -90
+# Experimental: horizontal pixel shift of each dialogue body line (negative = left).
+questDialogueLineOffsetX: 0
+# Experimental: horizontal pixel shift of the 'sneak to continue' prompt line (positive = right).
+questDialoguePromptOffsetXV2: 74
+# Experimental: text shown on the prompt line of the dialogue box telling players how to advance.
+questDialoguePromptText: '&7&oSneak to continue'

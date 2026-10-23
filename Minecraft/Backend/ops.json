@@ -1,0 +1,14 @@
+[
+  {
+    "uuid": "d7668334-edd5-4d3f-a8e6-4fe721688f50",
+    "name": "_Rideck_",
+    "level": 4,
+    "bypassesPlayerLimit": true
+  },
+  {
+    "uuid": "2373ef38-f1c9-48fe-976d-776050bd2218",
+    "name": "Jodsderechte",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]

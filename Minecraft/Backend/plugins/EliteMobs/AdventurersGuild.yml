@@ -1,0 +1,11 @@
+# Sets if user commands get rerouted to the adventurer's guild hub. This is highly recommended for gameplay immersion and tutorial purposes.
+userCommandsTeleportToAdventurersGuild: true
+# Sets the in-game display name of the adventurer's guild
+adventurersGuildMenuName: '&6&lAdventurer''s Hub'
+# Sets if players are restricted from equipping gear above their skill level.
+# Gear type determines which skill is checked (e.g., axes check AXES skill, armor checks ARMOR skill).
+skillBasedGearRestriction: true
+# Sets the message sent to players when they try to equip gear above their skill level.
+# $itemLevel is the item level, $skillLevel is their current skill level, $skillType is the skill name.
+gearRestrictionMessage: '&c[EM] You need $skillType level $itemLevel to equip this!
+  (Current: $skillLevel)'

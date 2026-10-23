@@ -1,0 +1,53 @@
+############################
+# 
+# ITSME.TO - A configuration for quests
+# discord.gg/itsme-to
+#
+############################
+
+tasks:
+  mine:
+    type: "blockbreakcertain"
+    amount: 200
+    block: PRISMARINE
+    reverse-if-placed: true
+display:
+  name: "&bBergbauquest • Prismarin #4"
+  lore-normal:
+  - "%itsmyconfig_dark-color_console%Baue die erforderlichen Ressourcen ab"
+  - "%itsmyconfig_dark-color_console%um deine Belohnung zu bekommen."
+  - ""
+  - "%itsmyconfig_darkest-color_console%Information:"
+  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Baue 200 Prismarin ab"
+  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{mine:progress}%itsmyconfig_dark-color_console%/200 Prismarin"
+  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_eco-format_console_{itsmyconfig_price-modifier_1000}%"
+  - ""
+  type: "PRISMARINE"
+  itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
+# Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
+startstring:
+- "$<p:text-color> • Schließe diese Quest ab, um <p:eco-format:'<p:price-modifier:1000>'> zu erhalten."
+rewards:
+- "eco give {player} %itsmyconfig_price-modifier_1000%"
+# Here you can list messages which will be sent to the player (if they are online) upon completion.
+rewardstring:
+- "$<p:text-color> • <p:eco-format:'<p:price-modifier:1000>'> wurde deinem In-Game-Guthaben hinzugefügt."
+
+# These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
+# They are useful for putting information about the players tracked quest on a scoreboard
+# You may want to keep the names of them the same for ALL quests for this use-case
+
+
+options:
+  category: "mining"
+  requires:
+  - "mining-24-prismarine-3"
+  repeatable: false
+  cooldown:
+    enabled: true
+    time: 82600
+  sort-order: 243
+placeholders:
+  description: "Baue 200 Prismarin ab"
+  progress: '{mine:progress}'
+  max: '200'

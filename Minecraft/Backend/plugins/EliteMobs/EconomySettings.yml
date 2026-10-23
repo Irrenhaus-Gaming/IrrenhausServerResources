@@ -1,0 +1,214 @@
+# Shown when a shop transaction could not be confirmed
+shopTransactionFailedMessage: '&cThe transaction could not be confirmed. Contact an
+  administrator before trying again.'
+# Whether the EliteMobs economy is enabled (elite coins, shops, guild ranks).
+# If disabled, players will not be able to progress in the plugin!
+enableEconomy: true
+# Percentage of the original price players get when reselling items. 5 = 5%.
+itemResaleValue: 5.0
+# The display name of the currency used throughout the plugin.
+currencyName: Elite Coins
+# Whether to use Vault for the economy instead of the built-in system.
+# NOT RECOMMENDED! See: https://wiki.nightbreak.io/EliteMobs/vault
+useVault: false
+# Whether elites drop currency (coins) on death.
+enableCurrencyShower: true
+# Multiplier for currency dropped by elites. 1.0 = normal, 2.0 = double drops.
+currencyShowerTierMultiplier: 1.0
+# Chat message shown when a player picks up elite currency.
+# Placeholders: $amount, $currency_name
+chatCurrencyShowerMessage: '&7[EM] You''ve picked up &a$amount $currency_name!'
+# Action bar message shown when a player picks up elite currency.
+# Placeholders: $amount, $currency_name
+actionbarCurrencyShowerMessage: '&7[EM] You''ve picked up &a$amount $currency_name!'
+lootShowerDataV2:
+  '1': elitemobs:coins/coin1
+  '5': elitemobs:coins/coin1
+  '10': elitemobs:coins/coin2
+  '20': elitemobs:coins/coin3
+  '50': elitemobs:coins/coin4
+  '100': elitemobs:coins/coin4
+  '500': elitemobs:coins/coin4
+  '1000': elitemobs:coins/coin4
+# Hint message shown to players after picking up currency, pointing them to the Adventurer's Guild.
+adventurersGuildNotificationMessages: '&7[EM] Extra spending money? Try &a/ag !'
+# Tax rate (0.0-1.0) on player-to-player currency transfers. 0.2 = 20% tax.
+# Recommended to prevent high-level players from funneling currency through alts to avoid taxes.
+playerToPlayerPaymentTaxes: 0.2
+# Message shown to the sender when paying another player.
+# Placeholders: $amount_sent, $currency_name, $receiver, $amount_received
+economyPayMessageV2: '&2You have paid &2$amount_sent $currency_name &2to $receiver&2,
+  who got $amount_received after taxes!'
+# Message showing remaining balance after paying another player.
+# Placeholders: $amount_left, $currency_name
+economyCurrencyLeftMessage: You now have &2$amount_left $currency_name
+# Message shown to the recipient when receiving currency from another player.
+# Placeholders: $amount_received, $currency_name, $sender
+economyPaymentReceivedMessage: You have received &2$amount_received $currency_name
+  &ffrom $sender
+# Message shown when a player tries to pay another player more currency than they have.
+# Placeholder: $currency_name
+economyPaymentInsufficientCurrency: '&cYou don''t have enough $currency_name to do
+  that!'
+# Message shown when a player checks their balance with /em wallet.
+# Placeholders: $balance, $currency_name
+walletCommandMessage: You have &2$balance $currency_name
+# Message shown when a player buys an item from the shop.
+# Placeholders: $item_name, $item_value, $currency_name
+shopBuyMessage: '&aYou have bought $item_name &afor $item_value $currency_name!'
+# Message showing the player's current balance when interacting with a shop.
+# Placeholders: $currency_amount, $currency_name
+shopCurrentBalanceMessage: '&aYou have $currency_amount $currency_name.'
+# Message shown when a player cannot afford to buy an item from the shop.
+# Placeholder: $currency_name
+shopInsufficientFundsMessage: '&cYou don''t have enough $currency_name!'
+# Message showing the price of an item the player cannot afford.
+# Placeholders: $item_value, $currency_name
+shopItemCostMessage: That item costs &c$item_value $currency_name.
+# Message shown when a player sells an item to the shop.
+# Placeholders: $item_name, $currency_amount, $currency_name
+shopSellMessage: '&aYou have sold $item_name &afor $currency_amount $currency_name!'
+# Message shown when a player tries to sell an item that is not soulbound to them.
+shopSalePlayerItemsWarning: '&cYou can''t sell items that are not currently soulbound
+  to you!'
+# Message shown when a player tries to sell a non-EliteMobs item to the shop.
+shopSaleInstructions: '&cYou can only sell EliteMobs loot here! (Armor / weapons dropped
+  from elites showing a value on their lore)'
+# Message sent upon selling a batch of elite items.
+shopBatchSellItem: '&aYou have sold your items &afor $currency_amount $currency_name!'
+lootShowerMaterial:
+  # Material used for dropped coins worth 1 currency.
+  '1': GOLD_NUGGET
+  '5': GOLD_INGOT
+  '10': GOLD_BLOCK
+  '20': EMERALD
+  '50': EMERALD_BLOCK
+  '100': DIAMOND
+  '500': DIAMOND_BLOCK
+  '1000': NETHER_STAR
+lootShowerData:
+  # Custom model data ID for dropped coins worth 1 currency. Used by the resource pack.
+  '1': 1
+materialWorth:
+  # Currency value of this material when sold to shops.
+  DIAMOND_AXE: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_BOOTS: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_CHESTPLATE: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_LEGGINGS: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_HELMET: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_PICKAXE: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_SHOVEL: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_SWORD: 17.0
+  # Currency value of this material when sold to shops.
+  DIAMOND_HOE: 17.0
+  # Currency value of this material when sold to shops.
+  IRON_AXE: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_BOOTS: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_LEGGINGS: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_CHESTPLATE: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_HELMET: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_PICKAXE: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_SHOVEL: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_HOE: 16.0
+  # Currency value of this material when sold to shops.
+  IRON_SWORD: 16.0
+  # Currency value of this material when sold to shops.
+  SHIELD: 16.0
+  # Currency value of this material when sold to shops.
+  BOW: 16.0
+  # Currency value of this material when sold to shops.
+  CHAINMAIL_BOOTS: 15.0
+  # Currency value of this material when sold to shops.
+  CHAINMAIL_LEGGINGS: 15.0
+  # Currency value of this material when sold to shops.
+  CHAINMAIL_CHESTPLATE: 15.0
+  # Currency value of this material when sold to shops.
+  CHAINMAIL_HELMET: 15.0
+  # Currency value of this material when sold to shops.
+  STONE_SWORD: 15.0
+  # Currency value of this material when sold to shops.
+  STONE_AXE: 15.0
+  # Currency value of this material when sold to shops.
+  STONE_PICKAXE: 15.0
+  # Currency value of this material when sold to shops.
+  STONE_SHOVEL: 15.0
+  # Currency value of this material when sold to shops.
+  STONE_HOE: 15.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_AXE: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_BOOTS: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_LEGGINGS: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_CHESTPLATE: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_HELMET: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_SWORD: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_SHOVEL: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_PICKAXE: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_HOE: 13.0
+  # Currency value of this material when sold to shops.
+  GOLDEN_APPLE: 17.0
+  # Currency value of this material when sold to shops.
+  ENCHANTED_GOLDEN_APPLE: 17.0
+  # Currency value of this material when sold to shops.
+  LEATHER_BOOTS: 13.0
+  # Currency value of this material when sold to shops.
+  LEATHER_LEGGINGS: 13.0
+  # Currency value of this material when sold to shops.
+  LEATHER_CHESTPLATE: 13.0
+  # Currency value of this material when sold to shops.
+  LEATHER_HELMET: 13.0
+  # Currency value of this material when sold to shops.
+  WOODEN_SWORD: 13.0
+  # Currency value of this material when sold to shops.
+  WOODEN_AXE: 13.0
+  # Currency value of this material when sold to shops.
+  WOODEN_HOE: 13.0
+  # Currency value of this material when sold to shops.
+  WOODEN_PICKAXE: 13.0
+  # Currency value of this material when sold to shops.
+  TRIDENT: 17.0
+  # Currency value of this material when sold to shops.
+  ELYTRA: 17.0
+  # Currency value of this material when sold to shops.
+  TURTLE_HELMET: 13.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_AXE: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_PICKAXE: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_SHOVEL: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_HOE: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_SWORD: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_HELMET: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_CHESTPLATE: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_LEGGINGS: 18.0
+  # Currency value of this material when sold to shops.
+  NETHERITE_BOOTS: 18.0
+  # Default currency value for materials not listed above.
+  defaultMaterialWorth: 1.0

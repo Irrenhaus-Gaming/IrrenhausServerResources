@@ -1,0 +1,9 @@
+title = "Irrenhaus server resources"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "mcdeploy placeholders and the published dummy test values"
+regexes = ['''__(SECRET|VAR)_[A-Z0-9_]+__''']
+paths = ['''Minecraft/test/test-values\.env''']

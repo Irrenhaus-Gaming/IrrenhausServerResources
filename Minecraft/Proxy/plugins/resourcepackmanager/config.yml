@@ -1,0 +1,34 @@
+# ResourcePackManager proxy config.
+# There is no network key to set here. This proxy establishes its own
+# network key at boot and pushes it to each backend over the
+# rspm:network plugin channel the first time a player connects there,
+# so proxy and backends link themselves with no manual setup.
+# The key is kept in the `network-key` file next to this config. If
+# Floodgate happens to be installed on this proxy the first time
+# ResourcePackManager boots, the key is seeded once from
+# plugins/floodgate/key.pem so an existing network keeps its identity
+# across the upgrade — after that, key.pem is never read again.
+# Floodgate is NOT required for the proxy↔backend link (a Java-only
+# network needs none); it is only needed for Bedrock players to
+# authenticate.
+
+# Fallback offset added to each backend's Minecraft port to derive the
+# HTTP port this proxy will hit for /bedrock.zip and /mappings.json
+# before that backend has announced its exact ResourcePackManager HTTP
+# port. Default 1.
+# Why so small: shared / managed Minecraft hosting (Pterodactyl panels,
+# etc.) allocates a narrow port range per container — offset 100 lands
+# outside the range and the host firewall silently drops the request.
+# Offset 1 fits even tight allocations. In normal operation the backend
+# announces the port it actually bound, so this is only a startup/failure
+# fallback.
+#
+# Note: if a backend has rcon enabled on MC port + 1, choose 2 or 3 to
+# avoid a port collision.
+network-http-offset-v2: 1
+
+# Installs and updates this universal ResourcePackManager.jar in Geyser's
+# extensions folder for custom Bedrock entity models. Set false to prevent
+# future installation/staging; remove existing extension JARs while Geyser
+# is stopped if the bridge must remain disabled.
+geyser-extension-auto-install: true

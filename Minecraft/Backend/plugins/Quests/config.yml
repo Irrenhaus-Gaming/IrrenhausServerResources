@@ -1,0 +1,546 @@
+# | ======================================================== |
+# |                                                          |
+# |                       [ Quests ]                         |
+# |                                                          |
+# |      SpigotMC: https://www.spigotmc.org/resources/23696/ |
+# |   Source code: https://github.com/LMBishop/Quests/       |
+# | Documentation: https://quests.leonardobishop.com/        |
+# |                                                          |
+# |                           =x=                            |
+# |                                                          |
+# | First time configuring Quests?                           |
+# |                                                          |
+# | Go to /plugins/Quests/quests to see example quests.      |
+# |                                                          |
+# |                           =x=                            |
+# |                                                          |
+# | Have Discord and need help?                              |
+# |                                                          |
+# | Head to GitHub to get a Discord invite link, or open an  |
+# | issue.                                                   |
+# |                                                          |
+# | ======================================================== |
+
+# Trying to add new categories? This has been moved to the categories.yml file.
+
+# -----------------------------------------------------------
+#  Basic options
+#  -------------
+#
+#  Docs: https://quests.leonardobishop.com/configuration/basic-options.html
+# -----------------------------------------------------------
+options:
+  # If categories are disabled, quests will be put into one big gui.
+  categories-enabled: true
+  # If true, the gui size will automatically change based on the amount of quests inside it.
+  trim-gui-size:
+    quests-category-menu: true
+    quests-menu: true
+    quests-started-menu: true
+  # Enable/disable titles
+  titles-enabled: true
+  # Enable/disable BossBars
+  bossbar:
+    progress: false
+    complete: true
+    # Time in seconds of bossbar showed
+    time: 5
+    # See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html
+    color:
+      '0.0': BLUE # for 0.0 and higher progress values (progress is always between 0.0 and 1.0)
+    # See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html
+    style:
+      '0.0': SOLID # for 0.0 and higher progress values (progress is always between 0.0 and 1.0)
+    # Max amount of active task progress boss bars at once
+    limit: -1
+    # Whether new boss bar should be added and make another (the least progress one - if exists) disappear
+    replace-on-limit: true
+  # Enable/disable ActionBar
+  actionbar:
+    progress: false
+    complete: true
+  # Allow players to have multiple active quests.
+  # You can set the default number of quests using the 'default' rank below.
+  # To grant different quest limits to different people, you can define a 'quest-rank'
+  # Create the 'quest-rank' below, and give the matching permission: quests.limit.<quest-rank>
+  quest-limit:
+    default: 2
+    #vip: 5
+    #staff: 10
+  # Allow players to cancel a quest (you may want to remove the cancel instructions in the global item lore)
+  allow-quest-cancel: true
+  # Allow players to track a quest (you may want to remove the tracking instructions in the global item lore)
+  allow-quest-track: true
+  # Task type exclusions - include task IDs in this list which you don't want registering
+  task-type-exclusions: []
+  # Titles for the GUIs
+  guinames:
+    quests-category: "Quests Categories"
+    quests-menu: "Quests"
+    quests-started-menu: "Started Quests"
+    daily-quests: "Daily Quests"
+    quest-cancel: "Cancel Quest"
+  # See https://quests.leonardobishop.com/configuration/basic-options.html#sounds
+  sounds:
+    quest-start: "ENTITY_PLAYER_LEVELUP:2:3"
+    quest-cancel: "UI_TOAST_OUT:2:3"
+    quest-complete: "UI_TOAST_CHALLENGE_COMPLETE:1.25:3"
+    gui:
+      open: "ITEM_BOOK_PAGE_TURN:1:3"
+      interact: ""
+  # Hide locked quests, quests on cooldown and completed (but not repeatable) quests
+  gui-hide-locked: false
+  # Confirm quest cancellation with a separate menu
+  gui-confirm-cancel: true
+  # Hide quests which a player cannot start due to permissions.
+  gui-hide-quests-nopermission: true
+  # Hide categories which a player cannot open due to permissions.
+  gui-hide-categories-nopermission: true
+  # Replace placeholders from PlaceholderAPI in Quests GUI items and titles
+  gui-use-placeholderapi: false
+  # Truncate quest requirements when there are multiple requirements to prevent enormous display items
+  gui-truncate-requirements: true
+  # Close the UI automatically when a quest is accepted
+  gui-close-after-accept: true
+  # Set the action buttons for the GUI
+  gui-actions:
+    start-quest: "LEFT"
+    track-quest: "DROP"
+    cancel-quest: "RIGHT"
+  # Make it so players do not have to start quest themselves
+  quest-autostart: false
+  # Automatically track quests on start, and stop tracking on completion
+  quest-autotrack: true
+  # How much Quests should log, 0 = errors only, 1 = warnings, 2 = info, 3 = debug
+  verbose-logging-level: 2
+  # Record Quests log history for /q a debug
+  record-log-history: true
+  # Replace placeholders from PlaceholderAPI in rewards, rewardstrings and start strings
+  quests-use-placeholderapi: false
+  # Replace placeholders from PlaceholderAPI in boss bar and action bar progress strings
+  progress-use-placeholderapi: false
+  # If true, progress string from placeholders section will be used as fallback in boss bar
+  # and action bar in case there is no matching string set in progress-placeholders section.
+  # Otherwise, the bar will not appear at all.
+  use-progress-as-fallback: true
+  # PlayerBlockTracker class to be used with the hook
+  # Original solution: https://github.com/Flo0/PlayerBlockTracker
+  # Modern alternative: https://github.com/Krakenied/BlockTracker
+  playerblocktracker-class-name: "dev.krakenied.blocktracker.bukkit.BukkitBlockTrackerPlugin"
+  # How frequently placeholderapi_evaluate task placeholders will be refreshed (def=30 - 1.5s)
+  # (multiply SECONDS by 20 to get the number of ticks)
+  placeholderapi-global-refresh-ticks: 30
+  # By how much (in millis) CoreProtect database async block lookups will be
+  # delayed. It may be helpful in case CoreProtect block lookups work sometimes
+  # weird and doesn't account for some last instant/spammed block changes
+  coreprotect-block-lookup-delay: -1
+  # If true and WildStacker plugin is present and enabled, Quests will try to set up
+  # a dedicated WildStacker event handler for mobkilling kills. The dedicated handler
+  # makes the task type count kills depending on the number of "virtual" merged entities
+  # killed. Otherwise, vanilla approach will be used.
+  mobkilling-use-wildstacker-hook: true
+  # Verify quests exist when a player's data is loaded - inconsistencies may arise when
+  # players progress on specific quests and those quests are later removed. The problem is that their progress
+  # is still kept in the quest progress file, which may lead to issues such as players reaching a quest started
+  # limit when the quests they had active no longer exist - having this option enabled prevents
+  # non-existent quests from being loaded
+  verify-quest-exists-on-load: true
+  performance-tweaking: # The following are measured in server ticks, multiply SECONDS by 20 to get the number of ticks.
+    quest-queue-executor-interval: 1      # how frequently Quests should execute the next check in the completion queue (def=1 - 0.05s) - increase this value if you are struggling with performance
+    quest-autosave-interval: 12000        # how frequently online players data will be autosaved (def=12000 - 10 minutes)
+  tab-completion:
+    enabled: true
+  error-checking:
+    # Allow quests to be loaded if they contain errors
+    # This may lead to errors in the console!
+    override-errors: false
+  # How much time (in seconds) that plugin will cache placeholders
+  placeholder-cache-time: 10
+  # Whether the global task configuration will override per-task configuration settings
+  global-task-configuration-override: false
+  # Whether the global display configuration will override per-quest display settins
+  global-quest-display-configuration-override: false
+  # Storage options - please see the following: https://quests.leonardobishop.com/configuration/storage-providers.html
+  storage:
+    # Either 'yaml' (flatfile) or 'mysql' (network)
+    # Please read the following before using MySQL https://quests.leonardobishop.com/configuration/storage-providers.html#network
+    provider: "mysql"
+    # See: https://quests.leonardobishop.com/configuration/storage-providers.html#data-synchronisiation
+    #      https://github.com/LMBishop/Quests/issues/180
+    synchronisation:
+      delay-loading: 100 # (ticks)
+    # The following is only applicable for database storage providers (e.g. mysql)
+    database-settings:
+      network:
+        # The name of the database. This database should already exist!
+        database: "Minecraft"
+        username: "__SECRET_MC_DB_USERNAME__"
+        password: "__SECRET_MC_DB_PASSWORD__"
+        # Address should be in the format ip:port (just like the game itself)
+        address: "__SECRET_MC_DB_HOST__:__SECRET_MC_DB_PORT__"
+      # This plugin uses HikariCP (https://github.com/brettwooldridge/HikariCP)
+      # for connection pooling, its configuration can be changed here:
+      connection-pool-settings:
+        # (*) From HikariCP docs:
+        # This property controls the minimum number of idle connections that HikariCP tries to maintain
+        # in the pool. If the idle connections dip below this value and total connections in the pool are
+        # less than maximum-pool-size, HikariCP will make the best effort to add additional connections
+        # quickly and efficiently. However, for maximum performance and responsiveness to spike demands,
+        # we recommend not setting this value and instead allowing HikariCP to act as a fixed size
+        # connection pool. Default: same as maximum-pool-size
+        # (*) Quests note:
+        # The default value has been decreased to 8.
+        minimum-idle: 8
+        # (*) From HikariCP docs:
+        # This property controls the maximum size that the pool is allowed to reach, including both idle and
+        # in-use connections. Basically this value will determine the maximum number of actual connections to
+        # the database backend. A reasonable value for this is best determined by your execution environment.
+        # When the pool reaches this size, and no idle connections are available, calls to getConnection() will
+        # block for up to connection-timeout milliseconds before timing out. Please read about pool sizing
+        # (https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing). Default: 10
+        # (*) Quests note:
+        # The default value has been decreased to 8.
+        maximum-pool-size: 8
+        # (*) From HikariCP docs:
+        # This property controls the maximum number of milliseconds that a client (that's you) will wait for
+        # a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException
+        # will be thrown. Lowest acceptable connection timeout is 250 ms. Default: 30000 (30 seconds)
+        # (*) Quests note:
+        # The default value has been decreased to 5000 as setting it to 30000 seems a bit too excessive.
+        connection-timeout: 5000
+        # (*) From HikariCP docs:
+        # This property controls the maximum amount of time that a connection is allowed to sit idle in the pool. This
+        # setting only applies when minimum-idle is defined to be less than maximum-pool-size. Idle connections will not
+        # be retired once the pool reaches minimum-idle connections. Whether a connection is retired as idle or not is
+        # subject to a maximum variation of +30 seconds, and average variation of +15 seconds. A connection will never
+        # be retired as idle before this timeout. A value of 0 means that idle connections are never removed from the
+        # pool. The minimum allowed value is 10000ms (10 seconds). Default: 600000 (10 minutes)
+        idle-timeout: 600000
+        # (*) From HikariCP docs:
+        # This property controls how frequently HikariCP will attempt to keep a connection alive, in order to
+        # prevent it from being timed out by the database or network infrastructure. This value must be less
+        # than the maximum-lifetime value. A "keepalive" will only occur on an idle connection. When the time
+        # arrives for a "keepalive" against a given connection, that connection will be removed from the pool,
+        # "pinged", and then returned to the pool. The 'ping' is one of either: invocation of the JDBC4 isValid()
+        # method, or execution of the connectionTestQuery. Typically, the duration out-of-the-pool should be
+        # measured in single digit milliseconds or even sub-millisecond, and therefore should have little or
+        # no noticeable performance impact. The minimum allowed value is 30000ms (30 seconds), but a value in
+        # the range of minutes is most desirable. Default: 0 (disabled)
+        keepalive-time: 0
+        # (*) From HikariCP docs:
+        # This property controls the maximum lifetime of a connection in the pool. An in-use connection will never
+        # be retired, only when it is closed will it then be removed. On a connection-by-connection basis, minor
+        # negative attenuation is applied to avoid mass-extinction in the pool. We strongly recommend setting this
+        # value, and it should be several seconds shorter than any database or infrastructure imposed connection
+        # time limit. A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the
+        # idle-timeout setting. The minimum allowed value is 30000ms (30 seconds). Default: 1800000 (30 minutes)
+        maximum-lifetime: 1800000
+        # Additional data source properties to be used by the HikariCP connection pool.
+        # All available properties can be found in the HikariCP docs.
+        data-source-properties: {}
+      # The prefix each table will use
+      table-prefix: "quests_"
+
+quest-mode:
+  mode: "NORMAL" # More modes are a work in progress
+
+# Most common locales:
+# de-DE: 1.234,56
+# en-US: 1,234.56
+# fr-ch: 1'234,56
+number-formats:
+  # decimal format used for processing float, double and BigDecimal placeholders
+  floating:
+    format: '#,##0.00'
+    locale: 'de-DE'
+  # decimal format used for processing int, long and BigInteger placeholders
+  integral:
+    format: '#,##0'
+    locale: 'de-DE'
+
+# -----------------------------------------------------------
+#  Global task configuration
+#  -------------------------
+#
+#  The global task configuration will apply to the config of each task of a specified type in each quest.
+#  In the example below, every task with a type of "inventory" will have the config option "update-progress"
+#  set to true. This is useful if you do not want to go through each quest if you want to update the configuration
+#  for every task of a specific type.
+#
+#  Docs: https://quests.leonardobishop.com/configuration/global-configurations.html#global-task-configuration
+# -----------------------------------------------------------
+#global-task-configuration:
+#  types:
+#    inventory:
+#      update-progress: true
+
+
+# -----------------------------------------------------------
+#  Global quest display
+#  --------------------
+#
+#  The global quest display appends text to items in the GUI.
+#  Docs: https://quests.leonardobishop.com/configuration/global-configurations.html#global-quest-display-configuration
+# -----------------------------------------------------------
+global-quest-display:
+  lore:
+#    append-normal:
+#      - "..."
+    append-not-started:
+      - ""
+      - "&eLeft Click &7to start this quest."
+    append-started:
+      - ""
+      - "&aYou have started this quest."
+      - "&ePress Q &7to track this quest."
+      - "&eRight Click &7to cancel this quest."
+    append-tracked:
+      - ""
+      - "&aYou are &etracking &athis quest."
+      - "&ePress Q &7to stop tracking this quest."
+      - "&eRight Click &7to cancel this quest."
+
+
+# -----------------------------------------------------------
+#  Macros
+#  ------
+#
+#  Macros for faster quests configuration without having to repeat yourself.
+#  Docs: https://quests.leonardobishop.com/configuration/global-configurations.html#global-macros
+# -----------------------------------------------------------
+global-macros:
+  bar: "&6---&7---&6---"
+
+
+# -----------------------------------------------------------
+#  GUI configuration
+#  -----------------
+#
+#  The items listed below are placeholder items for quests which the player cannot start.
+#  You should change these for 1.8
+#  Docs: https://quests.leonardobishop.com/configuration/gui-configuration.html
+# -----------------------------------------------------------
+gui:
+  back-button:
+    enabled: true
+    slot: 45
+    name: "&cReturn"
+    lore:
+      - "&7Return to the categories menu."
+    type: "ARROW"
+  page-prev:
+    enabled: true
+    slot: 48
+    name: "&7Previous Page"
+    lore:
+      - "&7Switch the page to page &c{prevpage}."
+    type: "FEATHER"
+  page-next:
+    enabled: true
+    slot: 50
+    name: "&7Next Page"
+    lore:
+      - "&7Switch the page to page &c{nextpage}."
+    type: "FEATHER"
+  page-desc:
+    enabled: true
+    slot: 49
+    name: "&7Page &c{page}"
+    lore:
+      - "&7You are currently viewing page &c{page}."
+    type: "PAPER"
+  quest-locked-display:
+    name: "&c&lQuest Locked"
+    lore:
+      - "&7You have not completed the requirements"
+      - "&7for this quest (&c{quest}&7)."
+      - ""
+      - "&7Requires: &c{requirements}"
+      - "&7to be completed to unlock."
+    type: "RED_STAINED_GLASS_PANE"
+  quest-permission-display:
+    name: "&6&lNo Permission"
+    lore:
+      - "&7You do not have permission for this"
+      - "&7quest (&6{quest}&7)."
+    type: "BROWN_STAINED_GLASS_PANE"
+  quest-cooldown-display:
+    name: "&e&lQuest On Cooldown"
+    lore:
+      - "&7You have recently completed this quest"
+      - "&7(&e{quest}&7) and you must"
+      - "&7wait another &e{time} &7to unlock again."
+    type: "ORANGE_STAINED_GLASS_PANE"
+  quest-completed-display:
+    name: "&a&lQuest Complete"
+    lore:
+      - "&7You have completed this quest"
+      - "&7(&a{quest}&7) and cannot."
+      - "&7repeat it."
+    type: "GREEN_STAINED_GLASS_PANE"
+  no-started-quests:
+    name: "&c&lNo Started Quests"
+    lore:
+      - "&7Go start some!"
+    type: "FEATHER"
+  quest-cancel-yes:
+    name: "&a&lConfirm Cancel"
+    lore:
+      - "&7Confirm you wish to cancel"
+      - "&7this quest and lose all"
+      - "&7progress."
+    type: "GREEN_STAINED_GLASS_PANE"
+  quest-cancel-no:
+    name: "&c&lAbort Cancel"
+    lore:
+      - "&7Return to the quest menu."
+    type: "RED_STAINED_GLASS_PANE"
+  quest-cancel-background:
+    type: "GRAY_STAINED_GLASS_PANE"
+
+
+# -----------------------------------------------------------
+#  Custom GUI elements
+#  -------------------
+#
+#  Custom elements allow you to add custom items to quest GUIs.
+#  See this page for more info: https://quests.leonardobishop.com/configuration/custom-gui-items.html
+# -----------------------------------------------------------
+#custom-elements:
+#  "categories": # apply to the categories menu (the main menu by default)
+#    0:   # <--- slot 1, note the slots start from 0! so 0 = slot 1 in this case
+#      display:
+#        name: "&cExample Custom Item (slot 1)"
+#        lore:
+#          - "&7This is a custom item which can be added"
+#          - "&7to your menus. This is purely cosmetic."
+#          - ""
+#          - "&7Two empty slots should follow."
+#        type: "DIAMOND_BLOCK"
+#    1:   # <--- start from slot 2
+#      spacer: true # empty slot in GUI
+#      repeat: 2 # repeats for 2 slots
+#    3:   # <--- start from slot 4
+#      display:
+#        name: "&cExample Custom Item (slots 4 - 7)"
+#        lore:
+#          - "&7This is a custom item which can be added"
+#          - "&7to your menus, but in slot 4 and repeated"
+#          - "&73 times."
+#          - "&7"
+#          - "&7This will come after 2 empty slots."
+#          - "&7"
+#          - "&7This is purely cosmetic."
+#        type: "NETHERRACK"
+#      repeat: 3 # repeats for 3 more slots
+#  "c:examples": # apply to the category "examples"
+#    0:
+#      display:
+#        name: "&cExample Custom Item (slot 1)"
+#        lore:
+#          - "&7This is a custom item which can be added"
+#          - "&7to your menus. This is purely cosmetic."
+#        type: "EMERALD_BLOCK"
+#  "quests": # apply to the general quests menu IF categories are disabled
+#    0:
+#      display:
+#        name: "&cExample Custom Item (slot 1)"
+#        lore:
+#          - "&7This is a custom item which can be added"
+#          - "&7to your menus. This is purely cosmetic."
+#        type: "EMERALD_BLOCK"
+#  "started": # apply to the started quests menu
+#    0:
+#      display:
+#        name: "&cExample Custom Item (slot 1)"
+#        lore:
+#          - "&7This is a custom item which can be added"
+#          - "&7to your menus. This is purely cosmetic."
+#        type: "EMERALD_BLOCK"
+
+
+# -----------------------------------------------------------
+#  Titles and messages
+#  -------------------
+#
+#  Please refer to the source code for the default messages.
+# -----------------------------------------------------------
+titles:
+  quest-start:
+    title: "&cQuest Started"
+    subtitle: "&7{quest}"
+  quest-complete:
+    title: "&cQuest Complete"
+    subtitle: "&7{quest}"
+
+messages:
+  time-format: "{hours}h {minutes}m"
+  quest-start: "&7Quest &c{quest} &7started!"
+  quest-complete: "&7Quest &c{quest} &7completed!"
+  quest-cancel: "&7Quest &c{quest} &7cancelled!"
+  quest-expire: "&7Quest &c{quest} &7has expired."
+  quest-track: "&7Tracking quest &c{quest}&7."
+  quest-track-stop: "&7No longer tracking quest &c{quest}&7."
+  quest-random-none: "&cYou have no quests which you can start."
+  quest-start-limit: "&7Players are limited to &c{limit} &7started quests at a time."
+  quest-start-disabled: "&7You cannot repeat this quest."
+  quest-start-locked: "&7You have not unlocked this quest yet."
+  quest-start-cooldown: "&7You have recently completed this quest. You have to wait &c{time} &7until you are able to restart it."
+  quest-start-started: "&7You have already started this quest."
+  quest-start-permission: "&7You do not have permission to start this quest."
+  quest-category-permission: "&7You do not have permission to view this category."
+  quest-category-quest-permission: "&7You do not have permission to start this quest since it is in a category you do not have permission to view."
+  quest-cancel-notstarted: "&7You have not started this quest."
+  quest-cancel-notcancellable: "&7You cannot cancel this quest."
+  quest-updater: "&cQuests > &7A new version &c{newver} &7was found on Spigot (your version: &c{oldver}&7). Please update me! <3 - Link: {link}"
+  command-data-not-loaded: "&4Your quests progress file has not been loaded; you cannot use quests. If this issue persists, contact an admin."
+  command-sub-doesntexist: "&7The specified subcommand '&c{sub}' &7does not exist."
+  command-no-permission: "&7You do not have permission to use this command."
+  command-quest-cancel-specify: "&7You must specify a quest to cancel."
+  command-quest-start-doesntexist: "&7The specified quest '&c{quest}&7' does not exist."
+  command-quest-general-doesntexist: "&7The specified quest '&c{quest}&7' does not exist."
+  command-category-open-disabled: "&7Categories are disabled."
+  command-category-open-doesntexist: "&7The specified category '&c{category}&7' does not exist."
+  command-quest-admin-playernotfound: "&7Player '&c{player}&7' could not be found."
+  command-quest-openquests-admin-success: "&7Opened Quest GUI for player &c{player}&7."
+  command-quest-openstarted-admin-success: "&7Opened started Quest GUI for player &c{player}&7."
+  command-quest-opencategory-admin-success: "&7Opened category &c{category} &7for player &c{player}&7."
+  command-taskview-admin-fail: "&7Task type '&c{task}&7' does not exist."
+  beta-reminder: "&cQuests > &7Reminder: you are currently using a &cbeta &7version of Quests. Please send bug reports to https://github.com/LMBishop/Quests/issues and check for updates regularly using &c/quests admin update&7!"
+  command-quest-admin-loaddata: "&7Quest data for '&c{player}&7' is being loaded."
+  command-quest-admin-nodata: "&7No data could be found for player &c{player}&7."
+  command-quest-admin-fullreset: "&7Data for player &c{player}&7 has been fully reset."
+  command-quest-admin-start-faillocked: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. They have not yet unlocked it."
+  command-quest-admin-start-failcooldown: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. It is still on cooldown for them."
+  command-quest-admin-start-failcomplete: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. They have already completed it."
+  command-quest-admin-start-faillimit: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. They have reached their quest start limit."
+  command-quest-admin-start-failstarted: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. It is already started."
+  command-quest-admin-start-failpermission: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. They do not have permission."
+  command-quest-admin-start-failcategorypermission: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7. They do not have permission for the category which the quest is in."
+  command-quest-admin-start-failother: "&7Quest '&c{quest}&7' could not be started for player &c{player}&7."
+  command-quest-admin-start-success: "&7Quest &c{quest} &7started for player &c{player}&7."
+  command-quest-admin-category-permission: "&7Category &c{category} &7 could not be opened for player &c{player}&7. They do not have permission to view it."
+  command-quest-admin-complete-success: "&7Quest &c{quest} &7completed for player &c{player}&7."
+  command-quest-admin-reset-success: "&7Successfully reset quest '&c{quest}&7' for player &c{player}&7."
+  command-quest-admin-random-none: "&7Player &c{player}&7 has no quests which they can start."
+  command-quest-admin-random-success: "&7Successfully started random quest '&c{quest}&7' for player &c{player}&7."
+  command-quest-admin-random-category-none: "&7Player &c{player}&7 has no quests in category '&c{category}&7' which they can start."
+  command-quest-admin-random-category-success: "&7Successfully started random quest '&c{quest}&7' from category '&c{category}&7' for player &c{player}&7."
+  ui-placeholder-completed-true: "true"
+  ui-placeholder-completed-false: "false"
+  ui-placeholder-truncated: " +{amount} more"
+  ui-placeholder-no-time-limit: "No time limit"
+  placeholderapi-true: "true"
+  placeholderapi-false: "false"
+  placeholderapi-no-tracked-quest: "No tracked quest"
+  placeholderapi-quest-not-started: "Quest not started"
+  placeholderapi-no-time-limit: "No time limit"
+  placeholderapi-data-not-loaded: "Data not loaded"
+
+
+# -----------------------------------------------------------
+#  There are more configuration options available.
+#  Please see the documentation for all available options.
+#
+#  https://quests.leonardobishop.com/
+# -----------------------------------------------------------

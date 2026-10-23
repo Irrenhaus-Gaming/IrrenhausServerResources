@@ -1,0 +1,19 @@
+# ------------------------------------------------------------------------------------------
+#                 author: Imperialroma10
+#     our project: https://www.curseforge.com/members/imperialroma10/projects
+# ------------------------------------------------------------------------------------------
+#      In discord we can help with customization of plugins, as well as if you found a bug write us
+#              Discord : http://discord.gg/fsEZEnE58g
+# ------------------------------------------------------------------------------------------
+#              If you like our plugin support us with a cup of coffee
+#             Donate:   https://www.patreon.com/c/PluginDEV/membership
+# ------------------------------------------------------------------------------------------
+
+player-chunk-limit: 5 # unlimited permission chunkloader.bypasslimit
+
+craft:
+  chunkblock-havecraft: false # if true unblock craft, Create a craft below
+  shape: # EXAMPLE !
+    - AIR DIAMOND AIR
+    - AIR AIR AIR
+    - AIR AIR AIR

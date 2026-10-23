@@ -1,0 +1,63 @@
+# Prefix used by changelog chat messages. Placeholder: $plugin.
+prefix: '&8[<g:#8B0000:#CC4400:#DAA520>◆</g> &f$plugin&8] &f'
+# Login reminder shown to administrators. Placeholder: $prefix.
+pendingNotice: '$prefix<g:#B8860B:#F0C040>New update notes are waiting.</g> '
+# Clickable button appended to the login reminder.
+viewButton: <g:#267A78:#58B8A9>[VIEW CHANGELOG]</g>
+# Hover text for the view-changelog button.
+viewHover: '&7See what changed since your last review'
+# Shown when an administrator opens the inbox with nothing unread. Placeholder: $prefix.
+noUnread: $prefix&7There are no unread changelogs.
+# Title shown inside the changelog dialog. Placeholder: $plugin.
+dialogTitle: <g:#8B0000:#CC4400:#DAA520>Update Notes</g> &f— $plugin
+# Title shown outside the changelog dialog. Placeholder: $plugin.
+dialogExternalTitle: $plugin Changelog
+# Dialog notice when more releases exist than fit on one page. Placeholder: $count.
+omittedDialog: '&7$count older tracked release(s) were omitted to keep this digest
+  readable.'
+# Text layout for each release heading. Placeholders: $component and $version.
+# The dialog applies its own safe heading style; color codes in this value are ignored.
+releaseHeader: |
+  $component $version
+# Dialog button that marks the displayed updates as read.
+dismissButton: <g:#2E7D4F:#69C56F>Dismiss These Updates</g>
+# Dialog button that permanently disables reminders for that administrator.
+disableButton: <g:#7A1F2B:#C2414A>Never Show Changelogs</g>
+# Hover text for the permanent-disable button.
+disableTooltip: '&7Permanently hide update-note reminders for this plugin'
+# Header used by the chat fallback. Placeholder: $plugin.
+chatHeader: '&8&m---------------- <g:#8B0000:#CC4400:#DAA520>Update Notes</g> &f$plugin
+  &8&m----------------'
+# Chat notice when more releases exist than fit on one page. Placeholder: $count.
+omittedChat: '&7$count older release(s) were omitted from this digest.'
+# Controls shown at the end of the chat fallback. Placeholder: $command.
+chatInstructions: '&7Use &f/$command dismiss &7to dismiss these notes, or &f/$command
+  disable &7to permanently hide reminders.'
+# Shown after dismissing one page when older unread pages remain. Placeholder: $prefix.
+dismissedPage: '$prefix&7These update notes were dismissed. Older notes remain. '
+# Clickable button used to open the next unread page.
+viewNextButton: <g:#267A78:#58B8A9>[VIEW NEXT]</g>
+# Hover text for the next-page button.
+viewNextHover: '&7Open the next page of unread update notes'
+# Shown after the final unread page is dismissed. Placeholder: $prefix.
+dismissedAll: $prefix&7The currently available update notes were dismissed.
+# Confirmation after an administrator permanently disables reminders. Placeholder: $prefix.
+disabled: $prefix&7Changelog reminders have been permanently disabled for you.
+# Shown if the changelog command remains registered while its service is unavailable.
+unavailable: '&cThe changelog service is not currently available.'
+# Shown when a non-administrator or the console tries to open the changelog inbox.
+adminOnly: '&cThis command is only available to plugin administrators in-game.'
+# Description registered for the changelog command. Placeholder: $plugin.
+commandDescription: Views unread $plugin changelogs.
+# Usage shown after an invalid changelog command. Placeholder: $command.
+commandUsage: /$command [dismiss|disable]
+# Description registered for the shared /nightbreaklogout command.
+logoutCommandDescription: Remove the registered Nightbreak account token
+# Shown when someone without nightbreak.login uses /nightbreaklogout.
+logoutPermissionDenied: '&cYou don''t have permission to use this command.'
+# Shown after the shared Nightbreak account token is removed.
+logoutSuccess: '&aThis server is no longer connected to a Nightbreak account.'
+# Shown after logout to explain how an administrator can reconnect the server.
+logoutReconnect: '&7Use &a/nightbreaklogin <token> &7to connect it again.'
+# Shown when the shared Nightbreak account token could not be removed.
+logoutFailure: '&cThe shared Nightbreak account token could not be removed.'

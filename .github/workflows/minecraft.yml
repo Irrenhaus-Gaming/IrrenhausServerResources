@@ -1,0 +1,179 @@
+# Validate, boot-test and deploy the Minecraft configs (see Minecraft/README.md).
+# All logic lives in Minecraft/tools (mcdeploy) and runs through ./mc.sh; every step fails hard.
+#
+# The GitHub Environments are the server list: mc-proxy, mc-backend-<Name> (deployed with
+# Minecraft/Backend), mc-server-<Name> (only listed in velocity.toml). A job only sees the secrets
+# of its own environment, so every server's job hands its Velocity entry to the proxy job as an
+# artifact encrypted with the repository secret MC_COLLECT_KEY.
+name: Minecraft config
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Minecraft/**"
+      - "mc.sh"
+      - ".gitleaks.toml"
+      - ".gitattributes"
+      - ".gitignore"
+      - ".github/workflows/minecraft.yml"
+  pull_request:
+    paths:
+      - "Minecraft/**"
+      - "mc.sh"
+      - ".gitleaks.toml"
+      - ".gitattributes"
+      - ".gitignore"
+      - ".github/workflows/minecraft.yml"
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Comma-separated environments to deploy, e.g. mc-proxy,mc-backend-Test (empty = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: minecraft-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Lint configs, placeholders, schema and test values
+        run: bash ./mc.sh lint
+      - name: Secret scan (working tree)
+        run: bash ./mc.sh gitleaks
+      - name: Secret scan (git history)
+        run: bash ./mc.sh gitleaks --history
+      - name: Unit tests
+        run: bash ./mc.sh unit-tests
+
+  plan:
+    needs: validate
+    runs-on: ubuntu-latest
+    outputs:
+      backends: ${{ steps.plan.outputs.backends }}
+      collectors: ${{ steps.plan.outputs.collectors }}
+      proxy: ${{ steps.plan.outputs.proxy }}
+      proxy_environment: ${{ steps.plan.outputs.proxy_environment }}
+      expected_servers: ${{ steps.plan.outputs.expected_servers }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Discover server environments and choose jobs
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MC_EVENT: ${{ github.event_name }}
+          MC_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          MC_HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          MC_TARGETS: ${{ inputs.targets }}
+        run: bash ./mc.sh plan-targets --event "$MC_EVENT" --base "$MC_BASE" --head "$MC_HEAD" --targets "$MC_TARGETS"
+
+  backend:
+    needs: plan
+    if: needs.plan.outputs.backends != '[]'
+    name: ${{ matrix.environment }} (${{ matrix.mode }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.backends) }}
+    # Protected environments (required reviewers) make this job wait for approval.
+    environment: ${{ matrix.environment }}
+    env:
+      # The secrets schema decides which names are needed; a missing one fails before any upload.
+      MC_SECRETS_JSON: ${{ toJSON(secrets) }}
+      MC_VARS_JSON: ${{ toJSON(vars) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Boot test with the server's own jars
+        run: bash ./mc.sh test "${{ matrix.environment }}" --jars-from remote
+      - name: Drift check and upload
+        if: matrix.mode == 'deploy'
+        run: bash ./mc.sh deploy "${{ matrix.environment }}"
+      - name: Hand the server entry to the proxy job (encrypted)
+        if: matrix.collect
+        run: bash ./mc.sh collect-server "${{ matrix.environment }}"
+      - name: Upload encrypted server entry
+        if: matrix.collect
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-entry-${{ matrix.environment }}
+          path: .cache/collected-out/${{ matrix.environment }}.server.enc
+          if-no-files-found: error
+          retention-days: 1
+      - name: Keep boot log
+        if: always() && !env.ACT
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-log-${{ matrix.environment }}
+          path: .cache/boot-logs/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  collect:
+    needs: plan
+    if: needs.plan.outputs.collectors != '[]'
+    name: collect ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.collectors) }}
+    environment: ${{ matrix.environment }}
+    env:
+      MC_SECRETS_JSON: ${{ toJSON(secrets) }}
+      MC_VARS_JSON: ${{ toJSON(vars) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Encrypt this server's Velocity entry
+        run: bash ./mc.sh collect-server "${{ matrix.environment }}"
+      - name: Upload encrypted server entry
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-entry-${{ matrix.environment }}
+          path: .cache/collected-out/${{ matrix.environment }}.server.enc
+          if-no-files-found: error
+          retention-days: 1
+
+  proxy:
+    needs: [plan, backend, collect]
+    # Runs after every entry was delivered; any failed backend or collector job blocks it.
+    if: ${{ !cancelled() && needs.plan.outputs.proxy == 'deploy' && !contains(needs.*.result, 'failure') }}
+    name: ${{ needs.plan.outputs.proxy_environment }} (deploy)
+    runs-on: ubuntu-latest
+    environment: ${{ needs.plan.outputs.proxy_environment }}
+    env:
+      MC_SECRETS_JSON: ${{ toJSON(secrets) }}
+      MC_VARS_JSON: ${{ toJSON(vars) }}
+      MC_COLLECTED_DIR: .cache/collected
+      MC_EXPECTED_SERVERS: ${{ needs.plan.outputs.expected_servers }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the encrypted server entries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: server-entry-*
+          merge-multiple: true
+          path: .cache/collected
+      - name: Boot test with the server's own jars
+        run: bash ./mc.sh test "${{ needs.plan.outputs.proxy_environment }}" --jars-from remote
+      - name: Drift check and upload
+        run: bash ./mc.sh deploy "${{ needs.plan.outputs.proxy_environment }}"
+      - name: Keep boot log
+        if: always() && !env.ACT
+        uses: actions/upload-artifact@v4
+        with:
+          name: boot-log-${{ needs.plan.outputs.proxy_environment }}
+          path: .cache/boot-logs/
+          if-no-files-found: ignore
+          retention-days: 14
