@@ -154,8 +154,14 @@ def masked_diff(rel: str, remote_text: str, repo_text: str, masker: Masker) -> l
 
 
 def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], masker: Masker,
-                adopt: bool = False) -> tuple[dict, list[str]]:
+                adopt: bool = False, full: bool = False) -> tuple[dict, list[str]]:
     """Compare server files with the last deploy manifest. Returns (manifest, changed files).
+
+    Incremental by default: the manifest holds the hash of every file as last deployed, so only
+    files whose rendered content differs from it (changed config or changed secret) are read
+    from the server, drift-checked and uploaded. Untouched files are never overwritten, so a
+    server-side edit to them is preserved (bring it in with the sync workflow). The first
+    deploy (no manifest), adopt and full=True compare every managed file.
 
     adopt: one-time takeover of a server that was never deployed to (no manifest yet), e.g. a
     fresh AMP instance full of generated defaults. Differing files are replaced instead of
@@ -177,7 +183,16 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
     drifted: list[str] = []
     diff_lines: list[str] = []
     changed: list[str] = []
-    for rel, data in rendered.items():
+    incremental = raw_manifest is not None and not adopt and not full
+    if incremental:
+        candidates = {rel: d for rel, d in rendered.items() if manifest["files"].get(rel) != sha256(d)}
+        print(f"{target.name}: incremental deploy, {len(candidates)} of {len(rendered)} managed files differ "
+              f"from the last deploy ({str(manifest.get('commit', '?'))[:12]}); only those are checked and uploaded")
+    else:
+        candidates = rendered
+        print(f"{target.name}: full check of all {len(rendered)} managed files"
+              + (" (first deploy)" if raw_manifest is None else ""))
+    for rel, data in candidates.items():
         remote_data = remote.read(rel)
         new_hash = sha256(data)
         if remote_data is None:
@@ -189,11 +204,13 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
             continue
         remote_hash = sha256(remote_data)
         expected = manifest["files"].get(rel, new_hash)
+        if remote_hash == new_hash:
+            continue  # already up to date (e.g. an earlier deploy stopped before writing the manifest)
         if remote_hash != expected:
             drifted.append(rel)
             repo_text = (target.source_dir / rel).read_bytes().decode("utf-8", errors="replace")
             diff_lines += masked_diff(rel, remote_data.decode("utf-8", errors="replace"), repo_text, masker)
-        elif remote_hash != new_hash:
+        else:
             changed.append(rel)
     if drifted and adopt:
         OUTPUTS.add_summary(
@@ -229,7 +246,7 @@ def git_commit() -> str:
 
 
 def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, values: dict[str, str] | None = None,
-               adopt: bool = False) -> None:
+               adopt: bool = False, full: bool = False) -> None:
     if is_act() and not dry_run and os.environ.get("MC_ACT_ALLOW_DEPLOY") != "true":
         print("Running under act: forcing --dry-run (set var MC_ACT_ALLOW_DEPLOY=true to really deploy).")
         dry_run = True
@@ -252,7 +269,7 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
             remote.close()
             raise
     try:
-        manifest, changed = check_drift(target, remote, rendered, masker, adopt)
+        manifest, changed = check_drift(target, remote, rendered, masker, adopt, full)
         print(f"{target.name}: {len(rendered)} managed files, {len(changed)} to upload")
         for rel in changed:
             print(f"  upload {rel}")

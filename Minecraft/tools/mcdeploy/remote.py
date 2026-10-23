@@ -76,6 +76,8 @@ class SftpRemote(RemoteBase):
         except ValueError:
             raise McDeployError("MC_SERVER_SFTP_PORT must be a number") from None
         self.root = "."
+        self._known_dirs: set[str] = set()  # remote folders already checked/created this session
+        self._posix_rename = True           # until the server shows it lacks the extension
         pinned = _parse_host_key(v["AMP_SFTP_HOST_KEY"])
         self.transport = paramiko.Transport((v["MC_SERVER_HOST"], port))
         try:
@@ -142,6 +144,9 @@ class SftpRemote(RemoteBase):
         current = ""
         for part in rel_dir.split("/"):
             current = f"{current}/{part}" if current else part
+            if current in self._known_dirs:
+                continue
+            self._known_dirs.add(current)
             if not self.exists(current):
                 try:
                     self.sftp.mkdir(self._abs(current))
@@ -150,11 +155,14 @@ class SftpRemote(RemoteBase):
 
     def _replace(self, src: str, dst: str) -> None:
         """Move src over dst. Uses posix-rename when the server supports it, else rename-aside."""
-        try:
-            self.sftp.posix_rename(self._abs(src), self._abs(dst))
-            return
-        except IOError:
-            pass  # extension unsupported or failed; fall back below and verify explicitly
+        if self._posix_rename:
+            try:
+                self.sftp.posix_rename(self._abs(src), self._abs(dst))
+                return
+            except IOError:
+                # Unsupported by this server (AMP may not offer the extension): stop trying for
+                # every file and use the explicit rename-aside below from now on.
+                self._posix_rename = False
         if self.exists(dst):
             self.sftp.rename(self._abs(dst), self._abs(dst + OLD_SUFFIX))
             try:

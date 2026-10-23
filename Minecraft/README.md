@@ -55,7 +55,7 @@ Consequences:
 2. Merge to `main`. For each affected server the workflow:
    - downloads the server jar and plugin jars **from that server** over SFTP
    - boots them in Docker with the repo configs (rendered with dummy values from `test/test-values.env`) and a throwaway MySQL 8.4.13. It fails if a plugin doesn't enable or an ERROR/stack trace appears that isn't in `test/log-allowlist.yml`.
-   - renders the configs with the real secrets and compares the server's current files with the manifest from the last deploy. A manual change on the server aborts the deploy and prints a diff with the values masked.
+   - renders the configs with the real secrets and compares them with the server's deploy manifest, which records each file as last deployed. Only files that differ from it are read from the server, drift-checked and uploaded: a commit touching one quest uploads one file, and a changed secret redeploys exactly the files that use it. A manual change on the server to such a file aborts the deploy and prints a diff with the values masked. Server edits to files the commit doesn't touch are left alone; run the workflow manually with **`full_check`** (locally `mc drift <env>`) to compare every file.
    - uploads the changed files atomically (temp files first, then replace). It never deletes anything and never restarts the server.
 3. Unprotected environments deploy immediately; protected ones wait for approval in the Actions run.
 4. Restart the instance in AMP when convenient.

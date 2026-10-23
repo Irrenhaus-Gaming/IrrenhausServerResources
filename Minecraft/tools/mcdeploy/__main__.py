@@ -131,6 +131,8 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("deploy", help="drift-check and upload a target")
     p.add_argument("target")
     p.add_argument("--dry-run", action="store_true", help="only check drift and list the files that would change")
+    p.add_argument("--full", action="store_true",
+                   help="compare every managed file with the server, not only those changed since the last deploy")
     p.add_argument("--adopt", action="store_true",
                    help="one-time takeover of a server never deployed to (no manifest): replace differing files")
     p = sub.add_parser("drift", help="alias for deploy --dry-run")
@@ -181,9 +183,9 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "render":
             cmd_render(args)
         elif args.command == "deploy":
-            deploy.run_deploy(get_target(args.target), args.dry_run, adopt=args.adopt)
+            deploy.run_deploy(get_target(args.target), args.dry_run, adopt=args.adopt, full=args.full)
         elif args.command == "drift":
-            deploy.run_deploy(get_target(args.target), True)
+            deploy.run_deploy(get_target(args.target), True, full=True)
         elif args.command == "pull":
             pull.run_pull(get_target(args.target), args.add)
         elif args.command == "sftp-probe":

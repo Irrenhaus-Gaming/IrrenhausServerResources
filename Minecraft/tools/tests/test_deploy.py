@@ -55,10 +55,15 @@ def test_missing_secret_fails_before_touching_server(env):
     assert not any(server.iterdir())
 
 
+def change_repo_file(target, extra="new: 1\n"):
+    (target.source_dir / FILE).write_bytes((REPO_TEXT + extra).encode())
+
+
 def test_server_edit_after_deploy_aborts_with_masked_diff(env, capsys):
     target, remote, server = env
     deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     (server / FILE).write_text(rendered_text() + "extra: true\n")
+    change_repo_file(target)  # the commit touches the file, so the deploy must look at it
     with pytest.raises(McDeployError, match="changed on the server"):
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     out = capsys.readouterr().out
@@ -83,12 +88,59 @@ def test_existing_unmanaged_different_file_aborts(env):
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
 
 
-def test_deleted_managed_file_counts_as_drift(env):
+def test_deleted_managed_file_counts_as_drift_when_touched_or_in_full_check(env):
     target, remote, server = env
     deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     (server / FILE).unlink()
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})  # untouched: ignored
+    assert not (server / FILE).exists()
     with pytest.raises(McDeployError, match="changed on the server"):
-        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, full=True)
+
+
+class CountingLocalRemote(LocalRemote):
+    def __init__(self, root):
+        super().__init__(root)
+        self.reads = []
+
+    def read(self, rel):
+        self.reads.append(rel)
+        return super().read(rel)
+
+
+def test_unchanged_files_are_neither_read_nor_uploaded(env):
+    target, _, server = env
+    deploy.run_deploy(target, dry_run=False, remote=LocalRemote(server), values={"DB_PW": "hunter2!"})
+    remote = CountingLocalRemote(server)
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    assert remote.reads == [deploy.MANIFEST]
+
+
+def test_server_edit_to_untouched_file_is_preserved_and_found_by_full_check(env):
+    target, remote, server = env
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    (server / FILE).write_text("edited on the server\n")
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    assert (server / FILE).read_text() == "edited on the server\n"
+    with pytest.raises(McDeployError, match="changed on the server"):
+        deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, full=True)
+
+
+def test_changed_secret_redeploys_the_file(env):
+    target, remote, server = env
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "rotated-pw"})
+    assert (server / FILE).read_text() == rendered_text("rotated-pw")
+
+
+def test_half_finished_deploy_is_not_drift(env):
+    target, remote, server = env
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    change_repo_file(target)
+    (server / FILE).write_bytes((rendered_text() + "new: 1\n").encode())  # uploaded, manifest not written
+    deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
+    manifest = json.loads((server / deploy.MANIFEST).read_text())
+    assert manifest["files"][FILE] == deploy.sha256((rendered_text() + "new: 1\n").encode())
 
 
 def test_dry_run_writes_nothing(env):
@@ -110,6 +162,7 @@ def test_in_github_actions_values_appear_only_in_add_mask_commands(env, monkeypa
     monkeypatch.setenv("GITHUB_ACTIONS", "true")
     deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     (server / FILE).write_text(rendered_text() + "extra: true\n")
+    change_repo_file(target)
     with pytest.raises(McDeployError):
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     leaking = [l for l in capsys.readouterr().out.splitlines() if "hunter2!" in l and not l.startswith("::add-mask::")]
@@ -131,6 +184,7 @@ def test_adopt_is_refused_once_a_manifest_exists(env):
     target, remote, server = env
     deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"})
     (server / FILE).write_text("edited on the server\n")
+    change_repo_file(target)
     with pytest.raises(McDeployError, match="only for a server that was never deployed to"):
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, adopt=True)
     assert (server / FILE).read_text() == "edited on the server\n"
