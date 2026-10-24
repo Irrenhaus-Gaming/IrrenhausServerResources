@@ -1,0 +1,36 @@
+# Tutorial step 9/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Gildenbote Kasimir"
+display:
+  name: "&6Tutorial 9/13 • Der Ruf der Gilde"
+  lore-normal:
+  - "&7Sprich mit &fGildenbote Kasimir &7beim Wurmloch am Spawn."
+  lore-started:
+  - "&7Sprich mit &fGildenbote Kasimir &7beim Wurmloch am Spawn."
+  type: "BELL"
+startstring:
+- "&7Zeit für Abenteuer! Kehre mit &e/spawn &7zurück."
+- "&7Sprich dort mit &fGildenbote Kasimir &7beim Wurmloch."
+rewards:
+- "minecraft:xp add {player} 25 points"
+- "quests a moddata start {player} tutorial-10-wurmloch"
+rewardstring:
+- "&7Kasimir: &f„In dieser Welt lauern &cElite-Mobs&f – stärker als normale Monster, aber mit besserer Beute.“"
+- "&7Kasimir: &f„Die Abenteurergilde bildet dich aus. Geh durch das Wurmloch!“"
+- "&a+ 25 XP"
+placeholders:
+  description: "Sprich mit Gildenbote Kasimir"
+  progress: '0'
+  max: '1'
+  target: "Gildenbote Kasimir"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-08-heimweg"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 9

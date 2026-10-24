@@ -1,0 +1,43 @@
+# Tutorial step 4/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  deliver:
+    type: "citizens_deliver"
+    npc-name: "Wegmeisterin Frieda"
+    item: "OAK_LOG"
+    amount: 16
+    remove-items-when-complete: true
+    allow-partial-completion: true
+display:
+  name: "&6Tutorial 4/13 • Holz für die Wegmeisterin"
+  lore-normal:
+  - "&7Bringe &f16 Eichenstämme &7zu &fWegmeisterin Frieda&7."
+  lore-started:
+  - "&7Bringe &f16 Eichenstämme &7zu &fWegmeisterin Frieda&7."
+  - ""
+  - "&7Fortschritt: &f{deliver:progress}&7/16"
+  type: "OAK_LOG"
+startstring:
+- "&7Bringe &f16 Eichenstämme &7zu &fWegmeisterin Frieda&7."
+- "&7Rechtsklicke Frieda mit dem Holz im Inventar – du kannst auch in Teilen abgeben."
+- "&8So funktionieren alle Liefer-Quests bei NPCs."
+rewards:
+- "minecraft:give {player} minecraft:red_bed 1"
+- "minecraft:xp add {player} 50 points"
+- "quests a moddata start {player} tutorial-05-bauplatz"
+rewardstring:
+- "&7Frieda: &f„Danke! Hier ist ein Bett für dein neues Zuhause.“"
+- "&a+ Rotes Bett, 50 XP"
+placeholders:
+  description: "Bringe 16 Eichenstämme"
+  progress: '{deliver:progress}'
+  max: '16'
+  target: "Wegmeisterin Frieda"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-03-wegmeisterin"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 4

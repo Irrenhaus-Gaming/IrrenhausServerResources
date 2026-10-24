@@ -1,0 +1,41 @@
+# Tutorial step 8/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  command:
+    type: "command"
+    command:
+    - "home"
+    ignore-case: true
+    command-match-mode: "STARTS_WITH"
+display:
+  name: "&6Tutorial 8/13 • Der Heimweg"
+  lore-normal:
+  - "&7Reise mit &e/home &7zu deinem Zuhause."
+  lore-started:
+  - "&7Reise mit &e/home &7zu deinem Zuhause."
+  type: "OAK_DOOR"
+startstring:
+- "&7Genauso schnell geht es nach Hause: &e/home &7(oder &e/home <Name>&7)."
+- "&7Weitere nützliche Befehle:"
+- "&7• &e/tpa <Spieler> &7– Teleport-Anfrage an einen Freund, &e/tpaccept &7nimmt sie an"
+- "&7• &e/back &7– zurück zu dem Ort, an dem du gestorben bist"
+- "&7• &e/warp &7– öffentliche Orte des Servers"
+rewards:
+- "minecraft:xp add {player} 25 points"
+- "quests a moddata start {player} tutorial-09-gildenbote"
+rewardstring:
+- "&7Zuhause ist es doch am schönsten!"
+- "&a+ 25 XP"
+placeholders:
+  description: "Reise mit /home nach Hause"
+  progress: '0'
+  max: '1'
+  target: "/home"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-07-spawn"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 8

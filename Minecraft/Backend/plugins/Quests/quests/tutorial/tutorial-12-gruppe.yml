@@ -1,0 +1,40 @@
+# Tutorial step 12/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  command:
+    type: "command"
+    command:
+    - "em party"
+    ignore-case: true
+    command-match-mode: "STARTS_WITH"
+display:
+  name: "&6Tutorial 12/13 • Gemeinsam stark"
+  lore-normal:
+  - "&7Lade Freunde mit &e/em party invite <Spieler> &7ein."
+  lore-started:
+  - "&7Lade Freunde mit &e/em party invite <Spieler> &7ein."
+  type: "CAKE"
+startstring:
+- "&7Gemeinsam ist man stärker! Gründe eine Gruppe mit deinen Freunden."
+- "&7Lade sie mit &e/em party invite <Spieler> &7ein, mit &e/em party leave &7verlässt du sie."
+- "&7Gib jetzt einen &e/em party&7-Befehl ein."
+- "&8Dungeons erreichst du über die Teleporter in der Gilde – zusammen geht es leichter."
+rewards:
+- "minecraft:xp add {player} 50 points"
+- "quests a moddata start {player} tutorial-13-abschluss"
+rewardstring:
+- "&7Jetzt bist du bereit für gemeinsame Abenteuer!"
+- "&a+ 50 XP"
+placeholders:
+  description: "Nutze einen /em party Befehl"
+  progress: '0'
+  max: '1'
+  target: "/em party"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-11-gildenmenue"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 12

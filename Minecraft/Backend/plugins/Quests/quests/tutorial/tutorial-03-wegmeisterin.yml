@@ -1,0 +1,35 @@
+# Tutorial step 3/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Wegmeisterin Frieda"
+display:
+  name: "&6Tutorial 3/13 • Die Wegmeisterin"
+  lore-normal:
+  - "&7Sprich mit &fWegmeisterin Frieda &7am Spawn."
+  lore-started:
+  - "&7Sprich mit &fWegmeisterin Frieda &7am Spawn."
+  type: "COMPASS"
+startstring:
+- "&7Otto: &f„Wegmeisterin Frieda kennt jeden Weg auf diesem Server.“"
+- "&7Sprich mit &fWegmeisterin Frieda &7am Spawn."
+rewards:
+- "minecraft:give {player} minecraft:stone_axe 1"
+- "quests a moddata start {player} tutorial-04-holz"
+rewardstring:
+- "&7Frieda: &f„Jedes Zuhause braucht ein Bett. Nimm diese Axt und hol mir etwas Holz!“"
+- "&a+ Steinaxt"
+placeholders:
+  description: "Sprich mit Wegmeisterin Frieda"
+  progress: '0'
+  max: '1'
+  target: "Wegmeisterin Frieda"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-02-questbuch"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 3

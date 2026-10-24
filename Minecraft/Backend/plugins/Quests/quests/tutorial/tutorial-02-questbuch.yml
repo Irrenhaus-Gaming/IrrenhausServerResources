@@ -1,0 +1,44 @@
+# Tutorial step 2/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  command:
+    type: "command"
+    command:
+    - "quests"
+    - "quest"
+    - "q"
+    ignore-case: true
+    command-match-mode: "EQUALS"
+display:
+  name: "&6Tutorial 2/13 • Das Questbuch"
+  lore-normal:
+  - "&7Öffne dein Questbuch mit &e/quests&7."
+  lore-started:
+  - "&7Öffne dein Questbuch mit &e/quests&7."
+  type: "BOOK"
+startstring:
+- "&7Auf dem Server warten über &f1400 Quests &7in vielen Kategorien auf dich."
+- "&7Öffne dein Questbuch mit &e/quests&7."
+- "&7• &fLinksklick &7auf eine Quest startet sie, &fRechtsklick &7bricht sie ab."
+- "&7• &fQ &7(Wegwerfen-Taste) verfolgt eine Quest in der Seitenleiste."
+- "&7• Du kannst &f2 Quests &7gleichzeitig haben – das Tutorial zählt nicht dazu."
+- "&7• Mit &e/qd &7blendest du die Seitenleiste aus und wieder ein."
+rewards:
+- "minecraft:give {player} minecraft:torch 16"
+- "quests a moddata start {player} tutorial-03-wegmeisterin"
+rewardstring:
+- "&7Gut gemacht! Das Questbuch kannst du jederzeit wieder öffnen."
+- "&a+ 16 Fackeln"
+placeholders:
+  description: "Öffne das Questbuch mit /quests"
+  progress: '0'
+  max: '1'
+  target: "/quests"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-01-willkommen"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 2

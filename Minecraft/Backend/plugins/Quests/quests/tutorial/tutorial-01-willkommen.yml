@@ -1,0 +1,41 @@
+# Tutorial step 1/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Wärter Otto"
+display:
+  name: "&6Tutorial 1/13 • Willkommen im Irrenhaus"
+  lore-normal:
+  - "&7Sprich mit &fWärter Otto &7am Spawn."
+  - "&7Er erklärt dir, wie der Server funktioniert."
+  lore-started:
+  - "&7Sprich mit &fWärter Otto &7am Spawn."
+  - "&7Er erklärt dir, wie der Server funktioniert."
+  type: "OAK_SIGN"
+startcommands:
+- "lp user {player} permission set irrenhaus.tutorial.aktiv true"
+startstring:
+- "&6&lWillkommen im Irrenhaus!"
+- "&7Dieses Tutorial zeigt dir Schritt für Schritt den Server."
+- "&7In der Seitenleiste rechts steht immer dein nächstes &fZiel&7."
+- "&7Sprich jetzt mit &fWärter Otto &7am Spawn (Rechtsklick)."
+- "&8Schon erfahren? Der &7Alte Hase &8am Spawn lässt dich das Tutorial überspringen."
+rewards:
+- "minecraft:give {player} minecraft:bread 8"
+- "quests a moddata start {player} tutorial-02-questbuch"
+rewardstring:
+- "&7Otto: &f„Schön, dass du da bist! Als Erstes zeige ich dir dein Questbuch.“"
+- "&a+ 8 Brot"
+placeholders:
+  description: "Sprich mit Wärter Otto"
+  progress: '0'
+  max: '1'
+  target: "Wärter Otto"
+options:
+  category: "tutorial"
+  requires: []
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 1

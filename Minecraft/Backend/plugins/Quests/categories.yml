@@ -12,6 +12,18 @@
 # Players can access specific categories by command using /quests c [category].
 # If a quest does not have a category, it will not be shown.
 categories:
+  tutorial:
+    display:
+      name: "&6Tutorial • Willkommen im Irrenhaus"
+      lore:
+        - "&7Lerne den Server kennen: Quests, Homes,"
+        - "&7Teleports und die Abenteurergilde."
+        - ""
+        - "&7 • Schwierigkeit: &aEinfach"
+        - ""
+        - "&e◆ Klicken: &7Diese Kategorie anzeigen"
+      type: "KNOWLEDGE_BOOK"
+      itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
   farming:
     display:
       name: "&dLandwirtschaftsquest"

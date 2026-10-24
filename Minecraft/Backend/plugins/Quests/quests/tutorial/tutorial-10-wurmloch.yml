@@ -1,0 +1,38 @@
+# Tutorial step 10/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  reach:
+    type: "position"
+    world: "em_adventurers_guild"
+    x: 204
+    y: 89
+    z: 235
+    distance-padding: 8
+display:
+  name: "&6Tutorial 10/13 • Durch das Wurmloch"
+  lore-normal:
+  - "&7Geh durch das &dWurmloch &7am Spawn in die &fAbenteurergilde&7."
+  lore-started:
+  - "&7Geh durch das &dWurmloch &7am Spawn in die &fAbenteurergilde&7."
+  type: "ENDER_PEARL"
+startstring:
+- "&7Geh durch das &dWurmloch &7neben Kasimir in die &fAbenteurergilde&7."
+rewards:
+- "minecraft:xp add {player} 50 points"
+- "quests a moddata start {player} tutorial-11-gildenmenue"
+rewardstring:
+- "&7Willkommen in der &fAbenteurergilde&7!"
+- "&a+ 50 XP"
+placeholders:
+  description: "Betrete die Abenteurergilde"
+  progress: '0'
+  max: '1'
+  target: "Abenteurergilde"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-09-gildenbote"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 10

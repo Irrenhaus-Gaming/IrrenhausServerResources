@@ -1,0 +1,38 @@
+# Tutorial step 7/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  command:
+    type: "command"
+    command:
+    - "spawn"
+    ignore-case: true
+    command-match-mode: "EQUALS"
+display:
+  name: "&6Tutorial 7/13 • Zurück zum Spawn"
+  lore-normal:
+  - "&7Kehre mit &e/spawn &7zum Spawn zurück."
+  lore-started:
+  - "&7Kehre mit &e/spawn &7zum Spawn zurück."
+  type: "LODESTONE"
+startstring:
+- "&7Von überall kommst du mit &e/spawn &7zurück zum Spawn."
+- "&7Probier es jetzt aus!"
+rewards:
+- "minecraft:xp add {player} 25 points"
+- "quests a moddata start {player} tutorial-08-heimweg"
+rewardstring:
+- "&7Willkommen zurück am Spawn!"
+- "&a+ 25 XP"
+placeholders:
+  description: "Kehre mit /spawn zurück"
+  progress: '0'
+  max: '1'
+  target: "/spawn"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-06-sethome"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 7

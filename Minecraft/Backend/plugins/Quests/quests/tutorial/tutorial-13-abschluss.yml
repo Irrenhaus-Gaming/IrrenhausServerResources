@@ -1,0 +1,41 @@
+# Tutorial step 13/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Wärter Otto"
+display:
+  name: "&6Tutorial 13/13 • Bereit für das Irrenhaus"
+  lore-normal:
+  - "&7Kehre zu &fWärter Otto &7am Spawn zurück."
+  lore-started:
+  - "&7Kehre zu &fWärter Otto &7am Spawn zurück."
+  type: "NETHER_STAR"
+startstring:
+- "&7Kehre mit &e/spawn &7zurück und sprich ein letztes Mal mit &fWärter Otto&7."
+rewards:
+- "minecraft:give {player} minecraft:iron_pickaxe 1"
+- "minecraft:give {player} minecraft:iron_axe 1"
+- "minecraft:give {player} minecraft:shield 1"
+- "minecraft:give {player} minecraft:cooked_beef 16"
+- "minecraft:xp add {player} 5 levels"
+- "lp user {player} permission unset irrenhaus.tutorial.aktiv"
+rewardstring:
+- "&6&lTutorial abgeschlossen!"
+- "&7Otto: &f„Jetzt kennst du dich aus. Viel Spaß im Irrenhaus!“"
+- "&7Weitere Quests findest du jederzeit unter &e/quests&7."
+- "&7Komm auf unseren Discord: &bdiscord.irrenhaus-gaming.de"
+- "&a+ Eisenspitzhacke, Eisenaxt, Schild, 16 Steaks, 5 Level"
+placeholders:
+  description: "Sprich mit Wärter Otto"
+  progress: '0'
+  max: '1'
+  target: "Wärter Otto"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-12-gruppe"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 13

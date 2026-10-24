@@ -1,0 +1,40 @@
+# Tutorial step 6/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+tasks:
+  command:
+    type: "command"
+    command:
+    - "sethome"
+    ignore-case: true
+    command-match-mode: "STARTS_WITH"
+display:
+  name: "&6Tutorial 6/13 • Ein Zuhause"
+  lore-normal:
+  - "&7Setze dein Zuhause mit &e/sethome&7."
+  lore-started:
+  - "&7Setze dein Zuhause mit &e/sethome&7."
+  type: "RED_BED"
+startstring:
+- "&7Setze hier dein Zuhause mit &e/sethome&7."
+- "&7Du kannst bis zu &f10 Homes &7mit Namen setzen: &e/sethome <Name>&7."
+- "&7Mit &e/delhome <Name> &7löschst du ein Home wieder."
+- "&8Nicht schön hier? Nutze &7/rtp &8noch einmal (alle 10 Minuten)."
+rewards:
+- "minecraft:give {player} minecraft:chest 2"
+- "quests a moddata start {player} tutorial-07-spawn"
+rewardstring:
+- "&7Dein Zuhause ist gespeichert!"
+- "&a+ 2 Truhen"
+placeholders:
+  description: "Setze ein Home mit /sethome"
+  progress: '0'
+  max: '1'
+  target: "/sethome"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-05-bauplatz"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 6
