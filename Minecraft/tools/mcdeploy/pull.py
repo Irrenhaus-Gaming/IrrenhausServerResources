@@ -56,8 +56,9 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
         files = keep_files(target, names)
         if files:
             base_resolved.update(keep_values(files, remote.read))
+        remote_files = remote.read_many(paths)
         for rel in paths:
-            data = remote.read(rel)
+            data = remote_files[rel]
             if data is None:
                 problems.append(f"{rel}: missing on the server")
                 continue

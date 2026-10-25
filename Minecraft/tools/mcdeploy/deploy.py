@@ -226,8 +226,9 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
         candidates = rendered
         print(f"{target.name}: full check of all {len(rendered)} managed files"
               + (" (first deploy)" if raw_manifest is None else ""))
+    remote_files = remote.read_many(list(candidates))
     for rel, data in candidates.items():
-        remote_data = remote.read(rel)
+        remote_data = remote_files[rel]
         new_hash = sha256(data)
         if remote_data is None:
             if rel in manifest["files"]:
