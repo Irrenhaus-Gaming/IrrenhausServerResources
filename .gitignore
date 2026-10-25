@@ -30,7 +30,9 @@ Minecraft/Backend/plugins/FastAsyncWorldEdit/clipboard
 Minecraft/Backend/plugins/FastAsyncWorldEdit/lang
 Minecraft/Backend/plugins/FreeMinecraftModels/content_packages
 Minecraft/Backend/plugins/FreeMinecraftModels/enchantments
-Minecraft/Backend/plugins/FreeMinecraftModels/models
+Minecraft/Backend/plugins/FreeMinecraftModels/models/*
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_flight_dragon.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_flight_dragon.source.md
 Minecraft/Backend/plugins/FreeMinecraftModels/output
 Minecraft/Backend/plugins/FreeMinecraftModels/recipes
 Minecraft/Backend/plugins/FreeMinecraftModels/resource_pack
@@ -48,7 +50,8 @@ Minecraft/Backend/plugins/LuckPerms/luckperms-h2-v2.mv.db
 Minecraft/Backend/plugins/LuckPerms/editor-keystore.json
 Minecraft/Backend/plugins/LuckPerms/contexts.json
 Minecraft/Backend/plugins/MagmaCore
-Minecraft/Backend/plugins/EliteMobs/custombosses
+Minecraft/Backend/plugins/EliteMobs/custombosses/*
+!Minecraft/Backend/plugins/EliteMobs/custombosses/irrenhaus_flight_mount.yml
 Minecraft/Backend/plugins/EliteMobs/customitems
 Minecraft/Backend/plugins/EliteMobs/customquests
 Minecraft/Backend/plugins/EliteMobs/customspawns
