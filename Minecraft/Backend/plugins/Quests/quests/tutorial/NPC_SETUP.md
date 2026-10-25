@@ -114,6 +114,21 @@ To start over, right-click Alter Hase while the tutorial is running, or reset ev
 
 ## 7. First-join trigger and old quest file
 
-- In AMP, add a first-join trigger on this server that runs `quests a moddata start <player> tutorial-01-willkommen`, with AMP's variable for the player name.
+In AMP, add a trigger "A player joins the server for the first time" on this server with these three tasks, in this order:
+
+1. Wait for 15 seconds
+2. Minecraft - Send console input to the Minecraft server:
+   ```
+   execute if entity @a[name={@User},tag=!irr_tutorial_offered] run quests a moddata start {@User} tutorial-01-willkommen
+   ```
+3. Minecraft - Send console input to the Minecraft server:
+   ```
+   execute if entity @a[name={@User},tag=!irr_tutorial_offered] run tag {@User} add irr_tutorial_offered
+   ```
+
+- **The wait is required.** Quests loads a player's data `delay-loading` ticks after join (`config.yml`, 100 ticks = 5 s, plus the database load). A `quests a moddata …` command before that loads the data a second time, and the quest Quests tracks on login lands on that copy: chat says "Tracking quest …", but the sidebar stays empty until the player tracks the quest again.
+- **The tag stands in for "first time".** AMP's first-join event fires on every login. The `irr_tutorial_offered` tag (saved in the player's data on this server) lets both commands run once per player; on later logins both conditions fail and nothing is logged. Players who were on the server before the trigger existed get the start command once more, which fails harmlessly if they already finished step 1.
+- Use `execute if`, not `execute as`: with `as` the player would run the `quests` command and need admin permission.
+- Check it once: log in twice with a test account. On the first login step 1 starts and the sidebar shows "Ziel: Wärter Otto"; on the second the console shows neither `Quest data for '<name>' is being loaded.` nor a `tag` message. To repeat the test, run `tag <name> remove irr_tutorial_offered` and reset the tutorial steps as in section 6.
 - Delete `plugins/Quests/quests/npcquests/npcquest-tutorial.yml` on the server. Deploys never delete remote files.
 - Restart the instance, or run `/quests a reload`, so the old quest is gone.
