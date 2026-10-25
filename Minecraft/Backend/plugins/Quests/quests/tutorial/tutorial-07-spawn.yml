@@ -1,4 +1,4 @@
-# Tutorial step 7/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+# Tutorial step 7/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -14,8 +14,8 @@ display:
   - "&7Kehre mit &e/spawn &7zum Spawn zurück."
   type: "LODESTONE"
 startstring:
-- "&7Von überall kommst du mit &e/spawn &7zurück zum Spawn."
-- "&7Probier es jetzt aus!"
+- "&7Von überall kommst du mit &e/spawn &7zurück zum Spawn. Probier es jetzt aus!"
+- "&7Jeder Teleport hat &f5 Sekunden &7Wartezeit: nicht bewegen und keinen Schaden nehmen!"
 rewards:
 - "minecraft:xp add {player} 25 points"
 - "quests a moddata start {player} tutorial-08-heimweg"

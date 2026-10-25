@@ -1,0 +1,38 @@
+# Tutorial step 5/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Flugmeister"
+display:
+  name: "&6Tutorial 5/13 • Flugrouten"
+  lore-normal:
+  - "&7Rechtsklicke den &fFlugmeister &7am Spawn"
+  - "&7und nutze eine &fFlugroute&7."
+  lore-started:
+  - "&7Rechtsklicke den &fFlugmeister &7am Spawn"
+  - "&7und nutze eine &fFlugroute&7."
+  type: "FEATHER"
+startstring:
+- "&7Frieda: &f„Zu Fuß ist die Welt groß. Der Flugmeister bringt dich schneller ans Ziel!“"
+- "&7Rechtsklicke den &fFlugmeister &7am Spawn, um eine &fFlugroute &7zu starten."
+- "&7Flugrouten verbinden den Spawn mit wichtigen Orten der Welt."
+rewards:
+- "minecraft:give {player} minecraft:cooked_beef 8"
+- "quests a moddata start {player} tutorial-06-sethome"
+rewardstring:
+- "&7Guten Flug! Beim Flugmeister kannst du jederzeit wieder abheben."
+- "&a+ 8 Steaks"
+placeholders:
+  description: "Nutze eine Flugroute beim Flugmeister"
+  progress: '0'
+  max: '1'
+  target: "Flugmeister"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-04-holz"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 5

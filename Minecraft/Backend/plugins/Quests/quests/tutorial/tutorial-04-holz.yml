@@ -1,4 +1,4 @@
-# Tutorial step 4/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+# Tutorial step 4/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   deliver:
     type: "citizens_deliver"
@@ -23,7 +23,7 @@ startstring:
 rewards:
 - "minecraft:give {player} minecraft:red_bed 1"
 - "minecraft:xp add {player} 50 points"
-- "quests a moddata start {player} tutorial-05-bauplatz"
+- "quests a moddata start {player} tutorial-05-flugroute"
 rewardstring:
 - "&7Frieda: &f„Danke! Hier ist ein Bett für dein neues Zuhause.“"
 - "&a+ Rotes Bett, 50 XP"

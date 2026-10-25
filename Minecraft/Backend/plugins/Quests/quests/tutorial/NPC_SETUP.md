@@ -10,6 +10,7 @@ Run the commands in game as an operator. An NPC spawns exactly where you stand a
 |---|---|---|
 | `Wärter Otto` | spawn | 1 (start), 13 (finale) |
 | `Wegmeisterin Frieda` | spawn | 3, 4 (takes 16 oak logs) |
+| `Flugmeister` | spawn | 5 (starts a flight route) |
 | `Gildenbote Kasimir` | spawn, next to the Adventurer's Guild wormhole | 9 |
 | `Alter Hase` | next to Wärter Otto | skips the tutorial |
 
@@ -52,12 +53,30 @@ Stand next to the wormhole into the Adventurer's Guild:
 /npc lookclose
 ```
 
-## 5. Alter Hase (skip)
+## 5. Flugmeister
 
-Stand next to Wärter Otto:
+The flight NPC already exists: on right-click it runs `em transport start flightmaster_01` as the player. Step 5 completes on the same right-click, so the NPC needs no extra command for the quest, but its name must be exactly `Flugmeister`. Check it and rename it if needed:
 
 ```
-Run this whole block in one go, in this order. `/npc create` selects the new NPC and `/npc command add` adds to the selected NPC, so all 15 commands end up on Alter Hase. Don't select or create another NPC in between.
+/npc list
+/npc select <id of the flight NPC>
+/npc rename Flugmeister
+/npc command
+```
+
+`/npc command` should list `em transport start flightmaster_01`, run as the player on right-click. If the NPC is missing on this server, create it at the spawn with its flight command in one go:
+
+```
+/npc create Flugmeister
+/npc lookclose
+/npc command add -r -p em transport start flightmaster_01
+```
+
+The route `flightmaster_01` (`plugins/EliteMobs/transport_routes/flightmaster_01.yml`) must exist on the server. The quest doesn't care where it flies; it can be changed later without touching the tutorial.
+
+## 6. Alter Hase (skip)
+
+Stand next to Wärter Otto. Run this whole block in one go, in this order. `/npc create` selects the new NPC and `/npc command add` adds to the selected NPC, so all 15 commands end up on Alter Hase. Don't select or create another NPC in between.
 
 - `-r` means right-click only.
 - Without `-p` the commands run from the console, and Citizens replaces `<p>` with the clicking player's name.
@@ -70,7 +89,7 @@ Run this whole block in one go, in this order. `/npc create` selects the new NPC
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-02-questbuch
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-03-wegmeisterin
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-04-holz
-/npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-05-bauplatz
+/npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-05-flugroute
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-06-sethome
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-07-spawn
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-08-heimweg
@@ -91,13 +110,13 @@ Check the result with `/npc command`. It should list these 15 commands in this o
 /npc command remove all
 ```
 
-## 6. Check
+## 7. Check
 
 ```
 /npc list
 ```
 
-The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Gildenbote Kasimir` and `Alter Hase`.
+The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Flugmeister`, `Gildenbote Kasimir` and `Alter Hase`.
 
 Play through once with your own account:
 
@@ -107,12 +126,13 @@ Play through once with your own account:
 
 - Right-click Otto: step 2 starts, and the sidebar shows "Ziel: /quests".
 - Each finished step starts the next one by itself.
+- Step 5: right-clicking the Flugmeister completes the step and starts the flight. Test this with a normal player account too, because the flight command runs with the player's own permissions.
 - Right-clicking Alter Hase during the tutorial stops it.
 - After the finale, Alter Hase refuses (missing permission).
 
 To start over, right-click Alter Hase while the tutorial is running, or reset every step with the `quests a moddata reset` commands above.
 
-## 7. First-join trigger and old quest file
+## 8. First-join trigger and old quest file
 
 In AMP, add a trigger "A player joins the server for the first time" on this server with these three tasks, in this order:
 

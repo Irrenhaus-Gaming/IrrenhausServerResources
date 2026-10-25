@@ -1,4 +1,4 @@
-# Tutorial step 6/13. NPCs are matched by name and placed by hand on the server (see Minecraft/TUTORIAL-SETUP.md).
+# Tutorial step 6/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -14,10 +14,10 @@ display:
   - "&7Setze dein Zuhause mit &e/sethome&7."
   type: "RED_BED"
 startstring:
-- "&7Setze hier dein Zuhause mit &e/sethome&7."
+- "&7Frieda: &f„Am Spawn ist kein Platz für dich. Such dir in der Wildnis dein eigenes Fleckchen!“"
+- "&7Hast du einen schönen Ort gefunden? Setze dort dein Zuhause mit &e/sethome&7."
 - "&7Du kannst bis zu &f10 Homes &7mit Namen setzen: &e/sethome <Name>&7."
 - "&7Mit &e/delhome <Name> &7löschst du ein Home wieder."
-- "&8Nicht schön hier? Nutze &7/rtp &8noch einmal (alle 10 Minuten)."
 rewards:
 - "minecraft:give {player} minecraft:chest 2"
 - "quests a moddata start {player} tutorial-07-spawn"
@@ -32,7 +32,7 @@ placeholders:
 options:
   category: "tutorial"
   requires:
-  - "tutorial-05-bauplatz"
+  - "tutorial-05-flugroute"
   repeatable: false
   cancellable: true
   counts-towards-limit: false
