@@ -1,9 +1,7 @@
 # Known findings in OLD history that cannot be removed from a public repo anymore.
 # Each line is one exact finding (commit:file:rule:line); anything else still fails the scan.
 #
-# DiscordQueryBot (removed in "remove query bot"): Settings.json held the bot's token, committed
-# on 2023-10-15 and public since then. The token must be revoked in the Discord developer portal;
-# ignoring it here only stops CI from failing on history that cannot be rewritten.
+# DiscordQueryBot (removed in "remove query bot"): Settings.json held the bot's token. The token was revoked in the Discord developer portal so we ignore it.
 b756f8882726cc301d8861b56038afecdb6dfa41:DiscordQueryBot/Settings.json:generic-api-key:2
 a6236ad498ee7fad836a2ab0f686bab63ebd8218:DiscordQueryPackaging/obj/x86/Debug/PackageLayout/DiscordQueryBot/Settings.json:generic-api-key:2
 d8c5f62eb2c4b4eb97cb84abf469ca395252fb4e:DiscordQueryBot/bin/Debug/net7.0/Settings.json:generic-api-key:2

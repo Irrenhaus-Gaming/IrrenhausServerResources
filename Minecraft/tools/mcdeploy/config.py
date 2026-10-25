@@ -15,6 +15,7 @@ REPO_ROOT = Path(os.environ.get("MC_REPO_ROOT", Path.cwd())).resolve()
 MC_DIR = REPO_ROOT / "Minecraft"
 TARGETS_FILE = MC_DIR / "targets.yml"
 SCHEMA_FILE = MC_DIR / "secrets.schema.yml"
+KNOBS_FILE = MC_DIR / "knobs.yml"
 TEST_VALUES_FILE = MC_DIR / "test" / "test-values.env"
 LOG_ALLOWLIST_FILE = MC_DIR / "test" / "log-allowlist.yml"
 SCAN_ALLOWLIST_FILE = MC_DIR / "secret-scan-allowlist.yml"

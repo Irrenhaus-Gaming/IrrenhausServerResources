@@ -1,0 +1,56 @@
+# Currency display name.
+# https://nightexpressdev.com/nightcore/configuration/text-formation/
+Name: Moneten
+# Currency symbol.
+# https://nightexpressdev.com/nightcore/configuration/text-formation/
+Symbol: Moneten
+# Currency prefix.
+# https://nightexpressdev.com/nightcore/configuration/text-formation/
+Prefix: Moneten
+# Currency command aliases. Split with comma.
+# [*] Server reboot is required for the changes to apply.
+Command_Aliases: moneten
+# Currency display format.
+# Placeholders:
+# - %amount% - Amount value.
+# - Currency placeholders: https://nightexpressdev.com/excellenteconomy/utility/internal-placeholders
+# - PlaceholderAPI placeholders that are NOT bound to a player (e.g. Oraxen or ItemsAdder %img% placeholders)
+# https://nightexpressdev.com/nightcore/configuration/text-formation/
+Format: '%amount% %currency_symbol%'
+# Currency short display format.
+# - %amount% - Amount value.
+# - Currency placeholders: https://nightexpressdev.com/excellenteconomy/utility/internal-placeholders
+# - PlaceholderAPI placeholders that are NOT bound to a player (e.g. Oraxen or ItemsAdder %img% placeholders)
+# https://nightexpressdev.com/nightcore/configuration/text-formation/
+Format_Short: '%amount% %currency_symbol%'
+# Currency icon.
+# https://nightexpressdev.com/nightcore/configuration/item-formation/
+Icon:
+  Material: minecraft:gold_nugget
+  Lore: []
+# Database column name where this currency will be saved.
+Column_Name: moneten
+# Controls whether currency is included in data synchronization.
+Synchronized: true
+# Controls whether permission is required for this currency.
+Permission_Required: false
+# Controls whether decimal values are allowed for this currency.
+Decimal: false
+# Start currency value for new players.
+Start_Value: 0.0
+# Max. possible value that players can have on their balance.
+# [*] Set to '-1' to disable.
+Max_Value: -1.0
+# Controls whether players can send this currency to other players.
+Transfer_Allowed: true
+# Min. amount to send this currency to other players.
+# [*] Set to '-1' for no limit.
+Transfer_Min_Amount: -1.0
+Exchange:
+  # Controls whether this currency can be exchanged for other ones.
+  Allowed: false
+  Rates: {}
+Leaderboard:
+  # Controls whether this currency can have a leaderboard.
+  # [*] Requires the Tops module to be enabled.
+  Enabled: true

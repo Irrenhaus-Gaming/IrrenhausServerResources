@@ -1,0 +1,189 @@
+Command:
+  Argument:
+    Name:
+      Currency: currency
+      Page: page
+      Plugin: plugin
+      Symbol: symbol
+      Decimals: allowDecimals
+  Create:
+    Desc: Create a new currency.
+  Migrate:
+    Desc: Migrate data from other plugin(s).
+  Reset:
+    Desc: Reset player's balances.
+  ResetAll:
+    Desc: Reset balances of all users.
+  Wallet:
+    Desc: View full balance.
+  Currency:
+    Root:
+      Desc: '%currency_name% commands.'
+    Balance:
+      Desc: View balance.
+    Give:
+      Desc: Add currency to a player.
+      Done: '<gray>Added <soft_yellow>%amount%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>''s balance. New balance: <soft_yellow>%balance%</soft_yellow>.</gray>'
+      Notify: <gray><soft_yellow>%amount%</soft_yellow> has been added to your account!</gray>
+    GiveAll:
+      Desc: Add currency to all online players.
+      Done: <gray>Added <soft_yellow>%amount%</soft_yellow> to <soft_yellow>All Online</soft_yellow> players.</gray>
+    Take:
+      Desc: Take player's currency.
+      Done: '<gray>Taken <soft_yellow>%amount%</soft_yellow> from <soft_yellow>%player_name%</soft_yellow>''s balance. New balance: <soft_yellow>%balance%</soft_yellow>.</gray>'
+      Notify: <gray><soft_yellow>%amount%</soft_yellow> has been taken from your account!</gray>
+    Set:
+      Desc: Set player's currency balance.
+      Done: <gray>Set <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%currency_name%</soft_yellow> balance to <soft_yellow>%balance%</soft_yellow>.</gray>
+      Notify: <gray>Your <soft_yellow>%currency_name%</soft_yellow> balance has been set to <soft_yellow>%amount%</soft_yellow>.</gray>
+    Send:
+      Desc: Transfer currency to a player.
+      Error:
+        NotEnough: <gray>You don't have enough <soft_red>%currency_name%</soft_red>!</gray>
+        TooLow: <gray>You can not send smaller than <soft_red>%amount%</soft_red>!</gray>
+        NoPayments: <gray><soft_red>%player_name%</soft_red> does not accept <soft_red>%currency_name%</soft_red>!</gray>
+      Done:
+        Sender: <gray>You sent <soft_yellow>%amount%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>!</gray>
+        Notify: <gray>You received <soft_yellow>%amount%</soft_yellow> from <soft_yellow>%player_name%</soft_yellow>.</gray>
+    Payments:
+      Desc: Toggle payments acception from other players.
+      Toggle: '<gray><soft_yellow>%currency_name%</soft_yellow> payments acception: <soft_yellow>%state%</soft_yellow>.</gray>'
+      Target: '<gray><soft_yellow>%currency_name%</soft_yellow> payments acception for <soft_yellow>%player_name%</soft_yellow>: <soft_yellow>%state%</soft_yellow>.</gray>'
+    Exchange:
+      Desc: Exchange currency.
+    Top:
+      Desc: List of players with the most balance.
+      List:
+      - '[prefix="false"]'
+      - <dark_gray><st>--------------------------------</st></dark_gray>
+      - <gray>Top players with <white>%currency_name%</white></gray>
+      - ' '
+      - '%entry%'
+      - ' '
+      - '%previous_page%  <gray>Page <white>%current%</white><dark_gray>/</dark_gray><white>%max%</white></gray>  %next_page%'
+      - <dark_gray><st>--------------------------------</st></dark_gray>
+      Entry: <yellow>#%pos%</yellow> <white>%player_name%</white><dark_gray> ▪ </dark_gray><green>%balance%</green>
+  Syntax:
+    InvalidCurrency: <gray><soft_red>%input%</soft_red> is not a valid currency!</gray>
+Currency:
+  Operation:
+    Disabled: <soft_red>Currency operations are temporarily disabled.</soft_red>
+    Reset:
+      Feedback: <gray><soft_yellow>%player_name%</soft_yellow>'s balance has been reset to <soft_yellow>%balance%</soft_yellow>.</gray>
+      Notify: <gray>Your balance has been reset to <soft_yellow>%balance%</soft_yellow>.</gray>
+  Create:
+    BadName: <soft_red>Invalid name provided! Only latin letters and digits are supported.</soft_red>
+    Duplicated: <soft_red>There is already a currency with this name.</soft_red>
+    Success: '<gray>Created new currency: <green>%currency_name%</green> (ID: <white>%currency_id%</white>)</gray>'
+  Balance:
+    Display:
+      Own: '<gray>Balance: <soft_yellow>%balance%</soft_yellow>.</gray>'
+      Others: '<gray><soft_yellow>%player_name%</soft_yellow>''s balance: <soft_yellow>%balance%</soft_yellow>.</gray>'
+  Wallet:
+    Own:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<green>$</green>] Your Wallet:</gray>
+    - ' '
+    - '%entry%'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    Others:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<green>$</green>] <white>%player_name%</white>'s Wallet:</gray>
+    - ' '
+    - '%entry%'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    Entry: <yellow>•</yellow> <white>%currency_name%:</white> <green>%balance%</green>
+  Exchange:
+    Error:
+      Disabled: <gray><soft_red>%currency_name%</soft_red> can not be exchanged!</gray>
+      NoRate: <gray><soft_red>%currency_name%</soft_red> can not be exchanged for <soft_red>%name%</soft_red>!</gray>
+      LowAmount: <gray><soft_red>%currency_name%</soft_red> amount is too low for exchange!</gray>
+      LimitExceed: <gray>You could get <soft_red>%amount%</soft_red>, but you can't hold more than <soft_red>%max%</soft_red> total!</gray>
+      LowBalance: <gray>You don't have <soft_red>%amount%</soft_red> for exchange!</gray>
+    Success: <gray>You exchanged <soft_yellow>%balance%</soft_yellow> for <soft_yellow>%amount%</soft_yellow>!</gray>
+Migration:
+  Start:
+    Blocked: <soft_red>Could not start migration due to background tasks already running!</soft_red>
+    BadPlugin: <soft_red>Plugin is not supported or installed!</soft_red>
+    BadCurrency: <soft_red>Could not migrate data from %name% to %currency_name%.</soft_red>
+  Started:
+  - '[prefix="false"]'
+  - <dark_gray><st>--------------------------------</st></dark_gray>
+  - <gray>[<red>→</red>] Data Migration:</gray>
+  - ' '
+  - <gray>Started data migration from <white>%name%</white>. Please wait...</gray>
+  - ' '
+  - <red><u>All currency operations are disabled until migration is completed.</u></red>
+  - <dark_gray><st>--------------------------------</st></dark_gray>
+  Completed:
+  - '[prefix="false"]'
+  - <dark_gray><st>--------------------------------</st></dark_gray>
+  - <gray>[<green>→</green>] Data Migration:</gray>
+  - ' '
+  - <gray>Finished data migration from <white>%name%</white>!</gray>
+  - ' '
+  - <green><u>All currency operations are enabled again.</u></green>
+  - <dark_gray><st>--------------------------------</st></dark_gray>
+ResetAll:
+  Start:
+    Blocked: <soft_red>Could not start balance reset due to background tasks already running!</soft_red>
+  Started:
+    Currency:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<red>$</red>] Balance Reset:</gray>
+    - ' '
+    - <gray>Started <white>%currency_name%</white> balance reset for all players. Please wait...</gray>
+    - ' '
+    - <red><u>All currency operations are disabled until reset is completed.</u></red>
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    Global:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<red>$</red>] Balance Reset:</gray>
+    - ' '
+    - <gray>Started balance reset for all currencies for all players. Please wait...</gray>
+    - ' '
+    - <red><u>All currency operations are disabled until reset is completed.</u></red>
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+  Completed:
+    Currency:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<green>$</green>] Balance Reset:</gray>
+    - ' '
+    - <gray>Finished <white>%currency_name%</white> balance reset for all players!</gray>
+    - ' '
+    - <green><u>All currency operations are enabled again.</u></green>
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    Global:
+    - '[prefix="false"]'
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+    - <gray>[<green>$</green>] Balance Reset:</gray>
+    - ' '
+    - <gray>Finished balance reset for all currencies for all players!</gray>
+    - ' '
+    - <green><u>All currency operations are enabled again.</u></green>
+    - <dark_gray><st>--------------------------------</st></dark_gray>
+TopList:
+  NextPage:
+    Active: <hover:show_text:"<gray>Click to get to the next page.</gray>"><click:run_command:"/%currency_label% top %value%"><green>[→]</green></click></hover>
+    Inactive: <hover:show_text:"<gray>There are no more pages.</gray>"><gray>[→]</gray></hover>
+  PreviousPage:
+    Active: <hover:show_text:"<gray>Click to get to the previous page.</gray>"><click:run_command:"/%currency_label% top %value%"><green>[←]</green></click></hover>
+    Inactive: <hover:show_text:"<gray>There are no more pages.</gray>"><gray>[←]</gray></hover>
+VaultEconomy:
+  Error:
+    InvalidPlayer: Player not found.
+    InsufficientFunds: Insufficient Funds!
+Other:
+  NoTopEntry: <none>
+Leaderboards:
+  UI:
+    Leaderboard:
+      Entry:
+        Name: <yellow>#%pos%</yellow> <white>%player_name%</white>
+        Lore:
+        - <green>%balance%</green>

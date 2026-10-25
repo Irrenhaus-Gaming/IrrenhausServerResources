@@ -97,7 +97,7 @@ options:
   # Hide categories which a player cannot open due to permissions.
   gui-hide-categories-nopermission: true
   # Replace placeholders from PlaceholderAPI in Quests GUI items and titles
-  gui-use-placeholderapi: false
+  gui-use-placeholderapi: true
   # Truncate quest requirements when there are multiple requirements to prevent enormous display items
   gui-truncate-requirements: true
   # Close the UI automatically when a quest is accepted

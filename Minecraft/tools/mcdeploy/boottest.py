@@ -25,7 +25,7 @@ from .config import (
     CACHE_DIR, LOG_ALLOWLIST_FILE, OUTPUTS, Target, load_test_values, load_yaml,
     require_values,
 )
-from .deploy import render_target, target_placeholders
+from .deploy import render_target, resolve_values, target_placeholders
 from .errors import McDeployError, fail_if
 from .remote import RemoteBase, SftpRemote, verify_instance
 from .config import deploy_values
@@ -383,7 +383,7 @@ def run_boot_test(target: Target, jars_from: str) -> None:
         )
     test_values = load_test_values()
     names = target_placeholders(target)
-    values = require_values(sorted(names), test_values, f"{target.name} boot test (test-values.env)")
+    values = resolve_values(names, test_values, f"{target.name} boot test (test-values.env)")
     values.update(_list_values_from_real_names(names))
     stack = require_values(["TEST_MYSQL_ROOT_PASSWORD", "TEST_MYSQL_DATABASES"], test_values, "the test MySQL")
     databases = [d.strip() for d in stack["TEST_MYSQL_DATABASES"].split(",") if d.strip()]

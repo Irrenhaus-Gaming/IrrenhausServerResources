@@ -14,23 +14,23 @@ tasks:
 display:
   name: "&aEXP-Quest • Grobe Erde"
   lore-normal:
-  - "%itsmyconfig_dark-color_console%Grabe die erforderliche Menge an"
-  - "%itsmyconfig_dark-color_console%Blöcken aus, um deine Belohnung zu bekommen."
+  - "__STYLE_DARK__Grabe die erforderliche Menge an"
+  - "__STYLE_DARK__Blöcken aus, um deine Belohnung zu bekommen."
   - ""
-  - "%itsmyconfig_darkest-color_console%Information:"
-  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Grabe 576 Grobe Erde aus"
-  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{dig:progress}%itsmyconfig_dark-color_console%/576 Grobe Erde"
-  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_exp-format_console_315%."
+  - "__STYLE_DARKEST__Information:"
+  - "__STYLE_TEXT__ • Ziel: __STYLE_SECONDARY__Grabe 576 Grobe Erde aus"
+  - "__STYLE_TEXT__ • Fortschritt: __STYLE_PRIMARY__{dig:progress}__STYLE_DARK__/576 Grobe Erde"
+  - "__STYLE_TEXT__ • Belohnung: __REWARD_XP_TEXT_315__."
   - ""
   type: "COARSE_DIRT"
   itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
 # Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
 startstring:
-- "$<p:text-color> • Schließe diese Quest ab, um <p:exp-format:315> zu erhalten."
+- "__STYLE_TEXT__ • Schließe diese Quest ab, um __REWARD_XP_TEXT_315__ __STYLE_TEXT__zu erhalten."
 rewards:
-- "xp give {player} 315"
+- "minecraft:xp add {player} __REWARD_XP_315__ points"
 rewardstring:
-- "$<p:text-color> • <p:exp-format:315> wurden deinem In-Game-Guthaben hinzugefügt."
+- "__STYLE_TEXT__ • __REWARD_XP_TEXT_315__ __STYLE_TEXT__wurden deinem In-Game-Guthaben hinzugefügt."
 
 # These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
 # They are useful for putting information about the players tracked quest on a scoreboard

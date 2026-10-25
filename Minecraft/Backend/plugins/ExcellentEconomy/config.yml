@@ -1,0 +1,45 @@
+Integration:
+  Vault:
+    # Enables Vault integration.
+    Enabled: true
+    # Sets a currency used as primary sever economy using the Vault API.
+    EconomyCurrency: moneten
+Top:
+  # Turns the entire leaderboard system on or off.
+  # [*] This feature is required for the 'server balance' placeholders to work.
+  Enabled: true
+  # Enables a visual menu for players to view rankings.
+  Use_GUI: true
+  # Sets how many players are shown on a single page in the chat-based rankings.
+  # For the GUI, there is an explicit slots setting in the GUI config.
+  Entries_Per_Page: 10
+  # Controls how often the plugin recalculates the top player list.
+  # [Asynchronous]
+  # [Default is 900 (15 minutes)]
+  Update_Interval: 900
+Currency:
+  Prefix:
+    # Controls whether or not currency messages will use custom prefix instead of the plugin's one.
+    Enabled: true
+    # Sets custom prefix format for currency messages.
+    # You can use 'Currency' placeholders: https://nightexpressdev.com/excellenteconomy/utility/internal-placeholders
+    Format: <soft_yellow><b>%currency_prefix%</b></soft_yellow><dark_gray> » </dark_gray>
+Wallet:
+  # Controls whether Wallet feature is enabled.
+  Enabled: true
+  # Command aliases for the Wallet feature.
+  Command_Aliases: wallet
+Migration:
+  # Controls whether Migration feature is available.
+  # Disable if you don't plan to migrate from other plugins to save some RAM.
+  Enabled: true
+Logs:
+  Enabled:
+    # Controls whether currency operations will be logged to console.
+    Console: false
+    # Controls whether currency operations will be logged to a file.
+    File: true
+  # Logs date format.
+  DateFormat: dd/MM/yyyy HH:mm:ss
+  # Controls how often currency operations writes to the log file.
+  Write_Interval: 5

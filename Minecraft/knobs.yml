@@ -1,0 +1,24 @@
+# Design and economy knobs, baked into the config files whenever they are rendered (deploy, boot
+# test, mc render). Not secret: the values are committed and visible. Change a value here and the
+# next deploy uploads every file whose rendered text changed (no restart: reload the plugin in game).
+#
+# Tokens in Minecraft/<source>/ files:
+#   __STYLE_<NAME>__             style.<NAME>
+#   __REWARD_<KIND>_<N>__        N * rewards.<KIND>.multiplier, rounded half up to a whole number
+#   __REWARD_<KIND>_TEXT_<N>__   rewards.<KIND>.text with {amount} = that number and {<NAME>} = style.<NAME>
+# <N> is the base amount written in the quest; KIND names contain no underscore.
+
+style:
+  PRIMARY: "&e"     # yellow: progress numbers, highlights
+  SECONDARY: "&6"   # gold: quest goal
+  TEXT: "&f"        # white: normal text
+  DARK: "&7"        # gray: descriptions, separators
+  DARKEST: "&8"     # dark gray: section headers
+
+rewards:
+  MONEY:            # ExcellentEconomy currency "moneten"
+    multiplier: 3
+    text: "{PRIMARY}{amount} Moneten"
+  XP:               # vanilla experience points
+    multiplier: 1
+    text: "&#F15BB5{amount}◎"

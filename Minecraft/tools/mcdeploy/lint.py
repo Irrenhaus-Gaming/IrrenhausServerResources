@@ -13,6 +13,8 @@ from .blocks import expand_blocks
 from .workflowcheck import check_workflows
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
+from .keep import KEEP_KIND, keep_lines
+from .knobs import KNOB_KINDS, knob_values, load_knobs
 from .placeholders import find_tokens
 from .scan import filter_allowed, load_scan_allowlist, scan_text
 
@@ -33,6 +35,9 @@ SWALLOW_PATTERNS = [
     (re.compile(r"\|\|\s*:\s*$", re.M), "'|| :'"),
 ]
 SWALLOW_FILES = [".github/workflows/minecraft.yml", ".github/workflows/minecraft-sync.yml", "mc.sh", ".githooks/pre-commit"]
+
+# ItsMyConfig is not installed: its placeholders, <p:...> tags and "$" parse marker would show as raw text.
+ITSMYCONFIG_RE = re.compile(r"""itsmyconfig|<p:|["']\$<""", re.I)
 
 
 def forbidden_reason(rel: str) -> str | None:
@@ -57,6 +62,7 @@ def run_lint() -> None:
     problems: list[str] = []
     used: dict[str, set[str]] = {}       # placeholder name -> source folders using it
     kinds: dict[str, set[str]] = {}      # placeholder name -> token kinds seen
+    knobs: dict[str, str] = {}           # knob name -> kind (style/reward)
     file_count = 0
 
     for source in layout.sources():
@@ -72,6 +78,11 @@ def run_lint() -> None:
             if text is not None:
                 uses, token_problems = find_tokens(full_rel, text)
                 for u in uses:
+                    if u.kind in KNOB_KINDS:
+                        knobs[u.name] = u.kind
+                        continue
+                    if u.kind == KEEP_KIND:
+                        continue
                     used.setdefault(u.name, set()).add(source)
                     kinds.setdefault(u.name, set()).add(u.kind)
             file_count += 1
@@ -87,6 +98,13 @@ def run_lint() -> None:
                 problems.append(f"{full_rel}: not valid UTF-8")
                 continue
             problems += token_problems
+            try:
+                keep_lines(full_rel, text)
+            except McDeployError as exc:
+                problems.append(str(exc))
+            for lineno, line in enumerate(text.splitlines(), 1):
+                if ITSMYCONFIG_RE.search(line):
+                    problems.append(f"{full_rel}:{lineno}: ItsMyConfig syntax; use __STYLE_/__REWARD_ knobs (knobs.yml) instead")
             fmt = detect_format(rel)
             if fmt != "text":
                 try:
@@ -115,6 +133,12 @@ def run_lint() -> None:
         extra = set(entry.sources) - used[name]
         if extra:
             problems.append(f"schema: {name} lists sources {sorted(extra)} that never use it")
+    try:
+        knob_values(knobs, load_knobs())  # validates knobs.yml even when no file uses a knob
+    except McDeployError as exc:
+        problems.append(str(exc))
+    for name in sorted(set(knobs) & (set(used) | set(schema))):
+        problems.append(f"{name} is used both as a knob and as a secret/variable placeholder; rename one")
     for name in sorted(set(used) - set(schema)):
         problems.append(f"placeholder {name} is used but not declared in secrets.schema.yml")
     for name in sorted(set(schema) - set(test_values)):
@@ -139,9 +163,11 @@ def run_lint() -> None:
 
     fail_if(problems, f"Lint failed ({len(problems)} problem(s)):")
     OUTPUTS.add_summary(
-        f"### Lint passed\n{file_count} config files, {len(schema)} placeholders, {len(layout.sources())} config folders."
+        f"### Lint passed\n{file_count} config files, {len(schema)} placeholders, {len(knobs)} knob tokens, "
+        f"{len(layout.sources())} config folders."
     )
-    print(f"lint ok: {file_count} files, {len(schema)} placeholders, {len(layout.sources())} config folders")
+    print(f"lint ok: {file_count} files, {len(schema)} placeholders, {len(knobs)} knob tokens, "
+          f"{len(layout.sources())} config folders")
 
 
 def _is_utf8(data: bytes) -> bool:

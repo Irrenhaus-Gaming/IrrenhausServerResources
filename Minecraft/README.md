@@ -80,6 +80,19 @@ A missing or empty value fails the run before anything is uploaded. Environment 
 
 Files that are secrets as a whole (`forwarding.secret`, `floodgate/key.pem`, `votifierplus/rsa/*`, `resourcepackmanager/network-key`) stay on the servers only.
 
+### Knobs (not secret)
+
+`knobs.yml` holds the design and economy knobs, baked in whenever files are rendered (deploy, boot test, `mc render`):
+- `__STYLE_<NAME>__`: a color code from `style` (the quests use PRIMARY, SECONDARY, TEXT, DARK, DARKEST)
+- `__REWARD_<KIND>_<N>__`: base amount N times `rewards.<KIND>.multiplier`, rounded half up (e.g. `moneten give {player} __REWARD_MONEY_750__ -s`)
+- `__REWARD_<KIND>_TEXT_<N>__`: the same amount in the kind's display `text` (e.g. `&e2250 Moneten`)
+
+Change a multiplier or color in `knobs.yml`, and the next deploy uploads every quest that changed. Reload Quests in game afterwards (`/q a reload`). ItsMyConfig is not installed: lint rejects `%itsmyconfig_…%`, `<p:…>` and `"$<…` in configs.
+
+### Values the server generates
+
+`__KEEP_<NAME>__` (the only placeholder on its line) keeps a value the server created itself, e.g. ExcellentEconomy's `MySQL.ServerId`, which must differ on every backend. A deploy reads it from the same line in the server's current file. If the server doesn't have the file yet, it gets a new UUID. Boot tests and `mc render` use a dummy value.
+
 ## Local use (Windows, Docker Desktop running)
 
 `mc.cmd` (cmd) and `mc.ps1` (PowerShell) are equivalent; use `mc.cmd` where PowerShell scripts are disabled. Both run the tools image, so the commands are identical.

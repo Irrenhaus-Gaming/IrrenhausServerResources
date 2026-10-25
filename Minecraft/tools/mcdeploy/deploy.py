@@ -14,6 +14,8 @@ from .config import (
 )
 from .blocks import expand_blocks, verify_blocks
 from .errors import McDeployError, fail_if
+from .keep import KEEP_KIND, dummy_keep_values, keep_values
+from .knobs import KNOB_KINDS, knob_values
 from .placeholders import TOKEN_RE, find_tokens, mask, render_file, substitute, token_text
 from .remote import RemoteBase, SftpRemote, verify_instance
 from .scan import scan_text
@@ -26,7 +28,8 @@ def sha256(data: bytes) -> str:
 
 
 def target_placeholders(target: Target) -> dict[str, str]:
-    """Placeholder name -> kind for everything this target's files use (validated against the schema)."""
+    """Placeholder name -> kind for everything this target's files use (validated against the schema,
+    knobs against knobs.yml; keep tokens need no declaration)."""
     schema = load_schema()
     names: dict[str, str] = {}
     for rel in managed_files(target):
@@ -38,18 +41,49 @@ def target_placeholders(target: Target) -> dict[str, str]:
         uses, problems = find_tokens(rel, text)
         fail_if(problems, "Malformed placeholders:")
         for u in uses:
-            names[u.name] = u.kind
-    problems = [f"{n} is not declared in secrets.schema.yml" for n in names if n not in schema]
+            if names.setdefault(u.name, u.kind) != u.kind:
+                fail_if([f"{u.name} is used as {names[u.name]} and as {u.kind} ({rel})"], "Conflicting placeholders:")
+    knobs = {n: k for n, k in names.items() if k in KNOB_KINDS}
+    knob_values(knobs)  # fails on unknown knobs
+    names_in_schema = {n: k for n, k in names.items() if n not in knobs and k != KEEP_KIND}
+    problems = [f"{n} is not declared in secrets.schema.yml" for n in names_in_schema if n not in schema]
     problems += [
         f"{n} is declared as {schema[n].kind} but used as {k}" for n, k in names.items()
         if n in schema and schema[n].kind != k
     ]
     problems += [
         f"{n} is used in Minecraft/{target.source} but its schema sources are {list(schema[n].sources)}"
-        for n in names if n in schema and target.source not in schema[n].sources
+        for n in names_in_schema if n in schema and target.source not in schema[n].sources
     ]
     fail_if(problems, f"{target.name}: placeholder declarations do not match:")
     return names
+
+
+def resolve_values(names: dict[str, str], values: dict[str, str], context: str) -> dict[str, str]:
+    """Value of every placeholder in `names` (name -> kind): secrets and variables from `values`
+    (all must be set), knobs computed from knobs.yml, keep tokens with dummies (a deploy replaces
+    them with the server's values, see keep_files)."""
+    knobs = {n: k for n, k in names.items() if k in KNOB_KINDS}
+    keeps = [n for n, k in names.items() if k == KEEP_KIND]
+    resolved = require_values(sorted(set(names) - set(knobs) - set(keeps)), values, context)
+    resolved.update(knob_values(knobs))
+    resolved.update(dummy_keep_values(keeps))
+    return resolved
+
+
+def keep_files(target: Target, names: dict[str, str]) -> dict[str, str]:
+    """Repo text of every managed file that holds a __KEEP_ token."""
+    if KEEP_KIND not in names.values():
+        return {}
+    files: dict[str, str] = {}
+    for rel in managed_files(target):
+        try:
+            text = (target.source_dir / rel).read_bytes().decode("utf-8")
+        except UnicodeDecodeError:
+            continue
+        if any(m.group(1) == "KEEP" for m in TOKEN_RE.finditer(text)):
+            files[rel] = text
+    return files
 
 
 def load_mask_scopes() -> dict[str, str]:
@@ -254,12 +288,12 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
         assert_clean_worktree(target)
     values = deploy_values() if values is None else values
     names = target_placeholders(target)
-    resolved = require_values(sorted(names), values, f"target {target.name} (GitHub Environment secrets/vars)")
-    for value in resolved.values():
-        if os.environ.get("GITHUB_ACTIONS"):
+    resolved = resolve_values(names, values, f"target {target.name} (GitHub Environment secrets/vars)")
+    for name, value in resolved.items():
+        # Knob values are public design values ("&e", "750"); masking them would garble the logs.
+        if os.environ.get("GITHUB_ACTIONS") and names[name] not in (*KNOB_KINDS, KEEP_KIND):
             print(f"::add-mask::{value}")
-    masker = Masker(names, resolved, load_mask_scopes(), load_expansions())
-    rendered = render_target(target, resolved)
+    rendered = render_target(target, resolved)  # with dummy keep values: render errors stop us before connecting
     own_remote = remote is None
     remote = remote or SftpRemote(values)
     if own_remote:
@@ -269,6 +303,13 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
             remote.close()
             raise
     try:
+        files = keep_files(target, names)
+        if files:
+            resolved.update(keep_values(files, remote.read))
+            expansions = load_expansions()
+            for rel, text in files.items():
+                rendered[rel] = render_text(rel, text, resolved, expansions).encode("utf-8")
+        masker = Masker(names, resolved, load_mask_scopes(), load_expansions())
         manifest, changed = check_drift(target, remote, rendered, masker, adopt, full)
         print(f"{target.name}: {len(rendered)} managed files, {len(changed)} to upload")
         for rel in changed:

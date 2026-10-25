@@ -12,24 +12,24 @@ tasks:
 display:
   name: "&cJagdquest • Schaden zufügen #3"
   lore-normal:
-  - "%itsmyconfig_dark-color_console%Besiege die angegebenen Kreaturen"
-  - "%itsmyconfig_dark-color_console%um deine Belohnung zu erhalten."
+  - "__STYLE_DARK__Besiege die angegebenen Kreaturen"
+  - "__STYLE_DARK__um deine Belohnung zu erhalten."
   - ""
-  - "%itsmyconfig_darkest-color_console%Information:"
-  - "%itsmyconfig_text-color_console% • Ziel: %itsmyconfig_secondary-color_console%Verursache 200 Schaden"
-  - "%itsmyconfig_text-color_console% • Fortschritt: %itsmyconfig_primary-color_console%{damage:progress}%itsmyconfig_dark-color_console%/200 Schäden"
-  - "%itsmyconfig_text-color_console% • Belohnung: %itsmyconfig_eco-format_console_{itsmyconfig_price-modifier_1500}%"
+  - "__STYLE_DARKEST__Information:"
+  - "__STYLE_TEXT__ • Ziel: __STYLE_SECONDARY__Verursache 200 Schaden"
+  - "__STYLE_TEXT__ • Fortschritt: __STYLE_PRIMARY__{damage:progress}__STYLE_DARK__/200 Schäden"
+  - "__STYLE_TEXT__ • Belohnung: __REWARD_MONEY_TEXT_1500__"
   - ""
   type: "IRON_SWORD"
   itemflags:  [ HIDE_ARMOR_TRIM, HIDE_ATTRIBUTES, HIDE_DESTROYS, HIDE_DYE, HIDE_ENCHANTS, HIDE_PLACED_ON, HIDE_POTION_EFFECTS, HIDE_UNBREAKABLE ]
 # Here you can list messages which will be sent to the player (if they are online) upon the quest starting.
 startstring:
-- "$<p:text-color> • Schließe diese Quest ab, um <p:eco-format:'<p:price-modifier:1500>'> zu erhalten."
+- "__STYLE_TEXT__ • Schließe diese Quest ab, um __REWARD_MONEY_TEXT_1500__ __STYLE_TEXT__zu erhalten."
 rewards:
-- "eco give {player} %itsmyconfig_price-modifier_1500%"
+- "moneten give {player} __REWARD_MONEY_1500__ -s"
 # Here you can list messages which will be sent to the player (if they are online) upon completion.
 rewardstring:
-- "$<p:text-color> • <p:eco-format:'<p:price-modifier:1500>'> wurde deinem In-Game-Guthaben hinzugefügt."
+- "__STYLE_TEXT__ • __REWARD_MONEY_TEXT_1500__ __STYLE_TEXT__wurde deinem In-Game-Guthaben hinzugefügt."
 
 # These placeholders are accessible using PlaceholderAPI, for example %quests_tracked_p:description%
 # They are useful for putting information about the players tracked quest on a scoreboard

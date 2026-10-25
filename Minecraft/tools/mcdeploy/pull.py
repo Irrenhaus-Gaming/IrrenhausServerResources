@@ -5,15 +5,16 @@ import json
 import re
 
 from .blocks import entries_from_server
-from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files, require_values
-from .deploy import Masker, load_expansions, load_mask_scopes, render_text, target_placeholders
+from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files
+from .deploy import Masker, keep_files, load_expansions, load_mask_scopes, render_text, resolve_values, target_placeholders
+from .keep import keep_values
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
 from .remote import SftpRemote, verify_instance
 from .scan import filter_allowed, load_scan_allowlist, scan_text
 
 # A plugin rewriting its config may drop the quotes around a value; put them back around tokens.
-BARE_TOKEN_RE = re.compile(r"^(?P<head>[^#\r\n]*?[:=][ \t]+)(?P<token>__(?:SECRET|VAR)_[A-Z0-9_]+__)(?P<tail>[ \t]*(?:#.*)?)$", re.M)
+BARE_TOKEN_RE = re.compile(r"^(?P<head>[^#\r\n]*?[:=][ \t]+)(?P<token>__(?:SECRET|VAR|STYLE|REWARD|KEEP)_[A-Z0-9_]+__)(?P<tail>[ \t]*(?:#.*)?)$", re.M)
 
 
 def requote(text: str, fmt: str, repo_lines: frozenset[str] = frozenset()) -> str:
@@ -36,7 +37,7 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
     # Collected placeholders (the Velocity server list) only exist inside a deploy run; here they
     # are read back from the server's own file, per file below.
     collected = {n for n, e in load_schema().items() if e.scope == "collected"}
-    base_resolved = require_values(sorted(set(names) - collected), values, f"target {target.name}")
+    base_resolved = resolve_values({n: k for n, k in names.items() if n not in collected}, values, f"target {target.name}")
     expansions = load_expansions()
     scopes = load_mask_scopes()
     allow = load_scan_allowlist()
@@ -51,6 +52,10 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
     problems: list[str] = []
     updates: dict[str, bytes] = {}
     try:
+        # Kept values are the server's own; with them the server line equals the rendered repo line.
+        files = keep_files(target, names)
+        if files:
+            base_resolved.update(keep_values(files, remote.read))
         for rel in paths:
             data = remote.read(rel)
             if data is None:
