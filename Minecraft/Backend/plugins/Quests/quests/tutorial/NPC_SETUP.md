@@ -10,9 +10,10 @@ Run the commands in game as an operator. An NPC spawns exactly where you stand a
 |---|---|---|
 | `Wärter Otto` | spawn | 1 (start), 13 (finale) |
 | `Wegmeisterin Frieda` | spawn | 3, 4 (takes 16 oak logs) |
-| `Flugmeister` | spawn | 5 (starts a flight route) |
 | `Gildenbote Kasimir` | spawn, next to the Adventurer's Guild wormhole | 9 |
 | `Alter Hase` | next to Wärter Otto | skips the tutorial |
+
+Step 5 also uses the EliteMobs Flugmeister (not a Citizens NPC), see section 5.
 
 ## 1. Remove the old Questgeber
 
@@ -53,26 +54,13 @@ Stand next to the wormhole into the Adventurer's Guild:
 /npc lookclose
 ```
 
-## 5. Flugmeister
+## 5. Flugmeister (EliteMobs, no Citizens commands)
 
-The flight NPC already exists: on right-click it runs `em transport start flightmaster_01` as the player. Step 5 completes on the same right-click, so the NPC needs no extra command for the quest, but its name must be exactly `Flugmeister`. Check it and rename it if needed:
+The Flugmeister is an EliteMobs NPC (`interactionType: TRANSPORT`, `plugins/EliteMobs/npcs/`, not tracked) that flies players along the route `flightmaster_01`. Quests can't detect a click on an EliteMobs NPC, so step 5 completes when the player lands: within 2 blocks of the route's last waypoint (-41.3 / 72.4 / -22.8 in `IrrenhausTest`), which is about 5 blocks above the spawn ground, so walking there doesn't count.
 
-```
-/npc list
-/npc select <id of the flight NPC>
-/npc rename Flugmeister
-/npc command
-```
-
-`/npc command` should list `em transport start flightmaster_01`, run as the player on right-click. If the NPC is missing on this server, create it at the spawn with its flight command in one go:
-
-```
-/npc create Flugmeister
-/npc lookclose
-/npc command add -r -p em transport start flightmaster_01
-```
-
-The route `flightmaster_01` (`plugins/EliteMobs/transport_routes/flightmaster_01.yml`) must exist on the server. The quest doesn't care where it flies; it can be changed later without touching the tutorial.
+- Nothing to set up for the quest as long as the Flugmeister and the route exist on this server.
+- **When the route's last waypoint changes**, update `x`, `y`, `z` in `tutorial-05-flugroute.yml` to match, or step 5 can no longer be completed.
+- The old Citizens NPC `Flightmaster` (it ran `em transport start flightmaster_01`) isn't needed for the tutorial; remove it if it still exists.
 
 ## 6. Alter Hase (skip)
 
@@ -116,7 +104,7 @@ Check the result with `/npc command`. It should list these 15 commands in this o
 /npc list
 ```
 
-The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Flugmeister`, `Gildenbote Kasimir` and `Alter Hase`.
+The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Gildenbote Kasimir` and `Alter Hase`.
 
 Play through once with your own account:
 
@@ -126,7 +114,7 @@ Play through once with your own account:
 
 - Right-click Otto: step 2 starts, and the sidebar shows "Ziel: /quests".
 - Each finished step starts the next one by itself.
-- Step 5: right-clicking the Flugmeister completes the step and starts the flight. Test this with a normal player account too, because the flight command runs with the player's own permissions.
+- Step 5: fly with the Flugmeister until the landing; the step completes as you drop from the last waypoint. Walking or jumping to that spot must not complete it.
 - Right-clicking Alter Hase during the tutorial stops it.
 - After the finale, Alter Hase refuses (missing permission).
 

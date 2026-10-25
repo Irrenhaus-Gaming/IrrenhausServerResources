@@ -1,29 +1,37 @@
 # Tutorial step 5/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# The Flugmeister is an EliteMobs transport NPC, which Quests can't detect. The step completes
+# where route flightmaster_01 drops the player: its last waypoint (-41.3 / 72.4 / -22.8), about
+# 5 blocks above the spawn ground (y 67), so walking or jumping there does not count.
+# Update x/y/z when the route's last waypoint changes.
 tasks:
-  talk:
-    type: "citizens_interact"
-    npc-name: "Flugmeister"
+  landing:
+    type: "position"
+    world: "IrrenhausTest"
+    x: -42
+    y: 72
+    z: -23
+    distance-padding: 2
 display:
   name: "&6Tutorial 5/13 • Flugrouten"
   lore-normal:
-  - "&7Rechtsklicke den &fFlugmeister &7am Spawn"
-  - "&7und nutze eine &fFlugroute&7."
+  - "&7Sprich mit dem &fFlugmeister &7am Spawn"
+  - "&7und fliege eine &fFlugroute &7bis zum Ende."
   lore-started:
-  - "&7Rechtsklicke den &fFlugmeister &7am Spawn"
-  - "&7und nutze eine &fFlugroute&7."
+  - "&7Sprich mit dem &fFlugmeister &7am Spawn"
+  - "&7und fliege eine &fFlugroute &7bis zum Ende."
   type: "FEATHER"
 startstring:
 - "&7Frieda: &f„Zu Fuß ist die Welt groß. Der Flugmeister bringt dich schneller ans Ziel!“"
-- "&7Rechtsklicke den &fFlugmeister &7am Spawn, um eine &fFlugroute &7zu starten."
+- "&7Rechtsklicke den &fFlugmeister &7am Spawn und fliege eine &fFlugroute &7bis zur Landung."
 - "&7Flugrouten verbinden den Spawn mit wichtigen Orten der Welt."
 rewards:
 - "minecraft:give {player} minecraft:cooked_beef 8"
 - "quests a moddata start {player} tutorial-06-sethome"
 rewardstring:
-- "&7Guten Flug! Beim Flugmeister kannst du jederzeit wieder abheben."
+- "&7Gut gelandet! Beim Flugmeister kannst du jederzeit wieder abheben."
 - "&a+ 8 Steaks"
 placeholders:
-  description: "Nutze eine Flugroute beim Flugmeister"
+  description: "Fliege eine Flugroute mit dem Flugmeister"
   progress: '0'
   max: '1'
   target: "Flugmeister"
