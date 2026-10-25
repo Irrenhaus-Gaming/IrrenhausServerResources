@@ -75,11 +75,11 @@ options:
   task-type-exclusions: []
   # Titles for the GUIs
   guinames:
-    quests-category: "Quests Categories"
+    quests-category: "Quest-Kategorien"
     quests-menu: "Quests"
-    quests-started-menu: "Started Quests"
-    daily-quests: "Daily Quests"
-    quest-cancel: "Cancel Quest"
+    quests-started-menu: "Gestartete Quests"
+    daily-quests: "Tägliche Quests"
+    quest-cancel: "Quest abbrechen"
   # See https://quests.leonardobishop.com/configuration/basic-options.html#sounds
   sounds:
     quest-start: "ENTITY_PLAYER_LEVELUP:2:3"
@@ -288,17 +288,17 @@ global-quest-display:
 #      - "..."
     append-not-started:
       - ""
-      - "&eLeft Click &7to start this quest."
+      - "&eLinksklick&7, um diese Quest zu starten."
     append-started:
       - ""
-      - "&aYou have started this quest."
-      - "&ePress Q &7to track this quest."
-      - "&eRight Click &7to cancel this quest."
+      - "&aDu hast diese Quest gestartet."
+      - "&eQ drücken&7, um diese Quest zu verfolgen."
+      - "&eRechtsklick&7, um diese Quest abzubrechen."
     append-tracked:
       - ""
-      - "&aYou are &etracking &athis quest."
-      - "&ePress Q &7to stop tracking this quest."
-      - "&eRight Click &7to cancel this quest."
+      - "&aDu &everfolgst &adiese Quest."
+      - "&eQ drücken&7, um die Verfolgung zu beenden."
+      - "&eRechtsklick&7, um diese Quest abzubrechen."
 
 
 # -----------------------------------------------------------
@@ -324,76 +324,76 @@ gui:
   back-button:
     enabled: true
     slot: 45
-    name: "&cReturn"
+    name: "&cZurück"
     lore:
-      - "&7Return to the categories menu."
+      - "&7Zurück zur Kategorienübersicht."
     type: "ARROW"
   page-prev:
     enabled: true
     slot: 48
-    name: "&7Previous Page"
+    name: "&7Vorherige Seite"
     lore:
-      - "&7Switch the page to page &c{prevpage}."
+      - "&7Zu Seite &c{prevpage} &7wechseln."
     type: "FEATHER"
   page-next:
     enabled: true
     slot: 50
-    name: "&7Next Page"
+    name: "&7Nächste Seite"
     lore:
-      - "&7Switch the page to page &c{nextpage}."
+      - "&7Zu Seite &c{nextpage} &7wechseln."
     type: "FEATHER"
   page-desc:
     enabled: true
     slot: 49
-    name: "&7Page &c{page}"
+    name: "&7Seite &c{page}"
     lore:
-      - "&7You are currently viewing page &c{page}."
+      - "&7Du bist gerade auf Seite &c{page}&7."
     type: "PAPER"
   quest-locked-display:
-    name: "&c&lQuest Locked"
+    name: "&c&lQuest gesperrt"
     lore:
-      - "&7You have not completed the requirements"
-      - "&7for this quest (&c{quest}&7)."
+      - "&7Du hast die Voraussetzungen für diese"
+      - "&7Quest (&c{quest}&7) noch nicht erfüllt."
       - ""
-      - "&7Requires: &c{requirements}"
-      - "&7to be completed to unlock."
+      - "&7Benötigt: &c{requirements}"
+      - "&7muss abgeschlossen sein."
     type: "RED_STAINED_GLASS_PANE"
   quest-permission-display:
-    name: "&6&lNo Permission"
+    name: "&6&lKeine Berechtigung"
     lore:
-      - "&7You do not have permission for this"
-      - "&7quest (&6{quest}&7)."
+      - "&7Du hast keine Berechtigung für diese"
+      - "&7Quest (&6{quest}&7)."
     type: "BROWN_STAINED_GLASS_PANE"
   quest-cooldown-display:
-    name: "&e&lQuest On Cooldown"
+    name: "&e&lQuest in Abklingzeit"
     lore:
-      - "&7You have recently completed this quest"
-      - "&7(&e{quest}&7) and you must"
-      - "&7wait another &e{time} &7to unlock again."
+      - "&7Du hast diese Quest (&e{quest}&7)"
+      - "&7erst kürzlich abgeschlossen und musst"
+      - "&7noch &e{time} &7warten."
     type: "ORANGE_STAINED_GLASS_PANE"
   quest-completed-display:
-    name: "&a&lQuest Complete"
+    name: "&a&lQuest abgeschlossen"
     lore:
-      - "&7You have completed this quest"
-      - "&7(&a{quest}&7) and cannot."
-      - "&7repeat it."
+      - "&7Du hast diese Quest (&a{quest}&7)"
+      - "&7abgeschlossen und kannst sie"
+      - "&7nicht wiederholen."
     type: "GREEN_STAINED_GLASS_PANE"
   no-started-quests:
-    name: "&c&lNo Started Quests"
+    name: "&c&lKeine gestarteten Quests"
     lore:
-      - "&7Go start some!"
+      - "&7Starte doch eine!"
     type: "FEATHER"
   quest-cancel-yes:
-    name: "&a&lConfirm Cancel"
+    name: "&a&lAbbruch bestätigen"
     lore:
-      - "&7Confirm you wish to cancel"
-      - "&7this quest and lose all"
-      - "&7progress."
+      - "&7Bestätige, dass du diese Quest"
+      - "&7abbrechen und deinen gesamten"
+      - "&7Fortschritt verlieren willst."
     type: "GREEN_STAINED_GLASS_PANE"
   quest-cancel-no:
-    name: "&c&lAbort Cancel"
+    name: "&c&lNicht abbrechen"
     lore:
-      - "&7Return to the quest menu."
+      - "&7Zurück zum Questmenü."
     type: "RED_STAINED_GLASS_PANE"
   quest-cancel-background:
     type: "GRAY_STAINED_GLASS_PANE"
@@ -467,40 +467,40 @@ gui:
 # -----------------------------------------------------------
 titles:
   quest-start:
-    title: "&cQuest Started"
+    title: "&cQuest gestartet"
     subtitle: "&7{quest}"
   quest-complete:
-    title: "&cQuest Complete"
+    title: "&cQuest abgeschlossen"
     subtitle: "&7{quest}"
 
 messages:
   time-format: "{hours}h {minutes}m"
-  quest-start: "&7Quest &c{quest} &7started!"
-  quest-complete: "&7Quest &c{quest} &7completed!"
-  quest-cancel: "&7Quest &c{quest} &7cancelled!"
-  quest-expire: "&7Quest &c{quest} &7has expired."
-  quest-track: "&7Tracking quest &c{quest}&7."
-  quest-track-stop: "&7No longer tracking quest &c{quest}&7."
-  quest-random-none: "&cYou have no quests which you can start."
-  quest-start-limit: "&7Players are limited to &c{limit} &7started quests at a time."
-  quest-start-disabled: "&7You cannot repeat this quest."
-  quest-start-locked: "&7You have not unlocked this quest yet."
-  quest-start-cooldown: "&7You have recently completed this quest. You have to wait &c{time} &7until you are able to restart it."
-  quest-start-started: "&7You have already started this quest."
-  quest-start-permission: "&7You do not have permission to start this quest."
-  quest-category-permission: "&7You do not have permission to view this category."
-  quest-category-quest-permission: "&7You do not have permission to start this quest since it is in a category you do not have permission to view."
-  quest-cancel-notstarted: "&7You have not started this quest."
-  quest-cancel-notcancellable: "&7You cannot cancel this quest."
+  quest-start: "&7Quest &c{quest} &7gestartet!"
+  quest-complete: "&7Quest &c{quest} &7abgeschlossen!"
+  quest-cancel: "&7Quest &c{quest} &7abgebrochen!"
+  quest-expire: "&7Quest &c{quest} &7ist abgelaufen."
+  quest-track: "&7Du verfolgst jetzt die Quest &c{quest}&7."
+  quest-track-stop: "&7Du verfolgst die Quest &c{quest} &7nicht mehr."
+  quest-random-none: "&cEs gibt keine Quest, die du starten kannst."
+  quest-start-limit: "&7Du kannst höchstens &c{limit} &7Quests gleichzeitig gestartet haben."
+  quest-start-disabled: "&7Du kannst diese Quest nicht wiederholen."
+  quest-start-locked: "&7Du hast diese Quest noch nicht freigeschaltet."
+  quest-start-cooldown: "&7Du hast diese Quest erst kürzlich abgeschlossen. Du musst noch &c{time} &7warten, bevor du sie erneut starten kannst."
+  quest-start-started: "&7Du hast diese Quest bereits gestartet."
+  quest-start-permission: "&7Du hast keine Berechtigung, diese Quest zu starten."
+  quest-category-permission: "&7Du hast keine Berechtigung, diese Kategorie anzusehen."
+  quest-category-quest-permission: "&7Du kannst diese Quest nicht starten, weil du keine Berechtigung für ihre Kategorie hast."
+  quest-cancel-notstarted: "&7Du hast diese Quest nicht gestartet."
+  quest-cancel-notcancellable: "&7Diese Quest kann nicht abgebrochen werden."
   quest-updater: "&cQuests > &7A new version &c{newver} &7was found on Spigot (your version: &c{oldver}&7). Please update me! <3 - Link: {link}"
-  command-data-not-loaded: "&4Your quests progress file has not been loaded; you cannot use quests. If this issue persists, contact an admin."
-  command-sub-doesntexist: "&7The specified subcommand '&c{sub}' &7does not exist."
-  command-no-permission: "&7You do not have permission to use this command."
-  command-quest-cancel-specify: "&7You must specify a quest to cancel."
-  command-quest-start-doesntexist: "&7The specified quest '&c{quest}&7' does not exist."
-  command-quest-general-doesntexist: "&7The specified quest '&c{quest}&7' does not exist."
-  command-category-open-disabled: "&7Categories are disabled."
-  command-category-open-doesntexist: "&7The specified category '&c{category}&7' does not exist."
+  command-data-not-loaded: "&4Dein Quest-Fortschritt wurde noch nicht geladen, Quests sind gerade nicht nutzbar. Wenn das Problem bleibt, melde dich bei einem Admin."
+  command-sub-doesntexist: "&7Der Unterbefehl '&c{sub}&7' existiert nicht."
+  command-no-permission: "&7Du hast keine Berechtigung für diesen Befehl."
+  command-quest-cancel-specify: "&7Gib an, welche Quest du abbrechen willst."
+  command-quest-start-doesntexist: "&7Die Quest '&c{quest}&7' existiert nicht."
+  command-quest-general-doesntexist: "&7Die Quest '&c{quest}&7' existiert nicht."
+  command-category-open-disabled: "&7Kategorien sind deaktiviert."
+  command-category-open-doesntexist: "&7Die Kategorie '&c{category}&7' existiert nicht."
   command-quest-admin-playernotfound: "&7Player '&c{player}&7' could not be found."
   command-quest-openquests-admin-success: "&7Opened Quest GUI for player &c{player}&7."
   command-quest-openstarted-admin-success: "&7Opened started Quest GUI for player &c{player}&7."
@@ -526,16 +526,16 @@ messages:
   command-quest-admin-random-success: "&7Successfully started random quest '&c{quest}&7' for player &c{player}&7."
   command-quest-admin-random-category-none: "&7Player &c{player}&7 has no quests in category '&c{category}&7' which they can start."
   command-quest-admin-random-category-success: "&7Successfully started random quest '&c{quest}&7' from category '&c{category}&7' for player &c{player}&7."
-  ui-placeholder-completed-true: "true"
-  ui-placeholder-completed-false: "false"
-  ui-placeholder-truncated: " +{amount} more"
-  ui-placeholder-no-time-limit: "No time limit"
+  ui-placeholder-completed-true: "ja"
+  ui-placeholder-completed-false: "nein"
+  ui-placeholder-truncated: " +{amount} weitere"
+  ui-placeholder-no-time-limit: "Kein Zeitlimit"
   placeholderapi-true: "true"
   placeholderapi-false: "false"
-  placeholderapi-no-tracked-quest: "No tracked quest"
-  placeholderapi-quest-not-started: "Quest not started"
-  placeholderapi-no-time-limit: "No time limit"
-  placeholderapi-data-not-loaded: "Data not loaded"
+  placeholderapi-no-tracked-quest: "Keine Quest verfolgt"
+  placeholderapi-quest-not-started: "Quest nicht gestartet"
+  placeholderapi-no-time-limit: "Kein Zeitlimit"
+  placeholderapi-data-not-loaded: "Daten nicht geladen"
 
 
 # -----------------------------------------------------------
