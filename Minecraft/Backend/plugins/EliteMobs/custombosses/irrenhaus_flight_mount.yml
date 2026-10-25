@@ -1,0 +1,29 @@
+isEnabled: true
+# A small base entity carries the FreeMinecraftModels dragon: the rider sits on the pig's seat (~0.87 blocks),
+# which keeps the EliteMobs combat label above the rider. Larger seats push the label into the rider's view.
+# Model: Loy's dragon (CC0), https://github.com/SL0ANE/Loy-s-Goodies (models/generic-model/creatures/211029_dragon.bbmodel),
+# adapted as a mount; see FreeMinecraftModels/models/irrenhaus_flight_dragon.source.md.
+entityType: PIG
+customModel: irrenhaus_flight_dragon
+name: ''
+level: '1'
+silent: true
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+dropsSkillXP: false
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+classLoot: false
+eliteScript:
+  HideSeat:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - amplifier: 0
+      potionEffectType: INVISIBILITY
+      duration: 2147483647
+      action: POTION_EFFECT
+      Target:
+        targetType: SELF
