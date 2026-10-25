@@ -222,23 +222,23 @@ conditions:
     type: AND
     conditions:
     - "%quests_tracked%!="
-    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked%!=Keine Quest verfolgt"
     - "%quests_tracked_completed%=true"
   sb-npcquest-timelimit:
     type: AND
     conditions:
     - "%quests_tracked%!="
-    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked%!=Keine Quest verfolgt"
     - "%quests_tracked_completed%=false"
     - "%quests_tracked_p:target%!="
     - "%quests_tracked_p:target%!<-not a valid placeholder"
-    - "%quests_tracked_timeleft%!=No time limit"
+    - "%quests_tracked_timeleft%!=Kein Zeitlimit"
 
   sb-npcquest-notimelimit:
     type: AND
     conditions:
     - "%quests_tracked%!="
-    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked%!=Keine Quest verfolgt"
     - "%quests_tracked_completed%=false"
     - "%quests_tracked_p:target%!="
     - "%quests_tracked_p:target%!<-not a valid placeholder"
@@ -247,21 +247,21 @@ conditions:
     type: AND
     conditions:
     - "%quests_tracked%!="
-    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked%!=Keine Quest verfolgt"
     - "%quests_tracked_completed%=false"
-    - "%quests_tracked_timeleft%!=No time limit"
+    - "%quests_tracked_timeleft%!=Kein Zeitlimit"
 
   sb-quest-notimelimit:
     type: AND
     conditions:
     - "%quests_tracked%!="
-    - "%quests_tracked%!=No tracked quest"
+    - "%quests_tracked%!=Keine Quest verfolgt"
     - "%quests_tracked_completed%=false"
     
   q-bereit:
     conditions:
       - "%quests_tracked%!="
-      - "%quests_tracked%!=No tracked quest"
+      - "%quests_tracked%!=Keine Quest verfolgt"
     type: AND
 
   # EliteMobs hat Vorrang, wenn keine normale Quest aktiv ist
