@@ -181,3 +181,7 @@ Minecraft/**/nightbreak-changelogs.yml
 __pycache__/
 *.pyc
 .pytest_cache/
+Minecraft/Backend/plugins/FastAsyncWorldEdit/history
+Minecraft/Backend/plugins/EliteMobs/patrol-state.yml
+Minecraft/Backend/plugins/FreeMinecraftModels/nightbreak-changelogs.yml
+Minecraft/Backend/plugins/nightcore/lang
