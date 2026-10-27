@@ -1,0 +1,32 @@
+mode: COSMETIC
+maxEquippedPets: 0
+petsInvulnerableToPlayers: true
+petsDiePermanently: false
+wildGenerationChance: 0.01
+wildSpawnIntervalTicks: 400
+wildSpawnChunkChance: 0.01
+wildPetCapPerPlayer: 6
+tamedMessage: '&aYou tamed a $pet&a! It follows you now. &f/fmm pets &amanages your
+  pets.'
+tameFailedMessage: '&7The $pet &7eats it, but is not tamed yet.'
+stayMessage: '&7Your $pet &7stays here.'
+followMessage: '&7Your $pet &7follows you again.'
+menuTitle: '&2Your pets'
+noPetsMessage: '&7You have no pets yet. Tame a wild creature by feeding it its favorite
+  food.'
+equippedMessage: '&a$pet &ais with you.'
+unequippedMessage: '&7$pet &7went home.'
+maxEquippedMessage: '&cYou can only have $amount pets with you at once.'
+breedingCooldownMessage: '&7Your $pet &7is not ready to breed again yet.'
+bornMessage: '&aA $pet &awas born!'
+migrations:
+  enabled: true
+  chancePerNight: 0.15
+  minFlockSize: 8
+  maxFlockSize: 14
+  altitude: 28.0
+  speed: 0.15
+  durationSeconds: 90.0
+  viewDistance: 160
+  maxActiveFlocks: 3
+  species: []
