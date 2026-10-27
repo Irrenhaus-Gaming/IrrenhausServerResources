@@ -44,6 +44,7 @@ PROFILE_KEYS = {
     "source": str, "platform": str, "java_image": str, "server_jar": str, "accept_eula": bool,
     "memory": str, "boot_timeout_seconds": int, "settle_seconds": int,
 }
+OWNED_KEY_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 
 
 @dataclass(frozen=True)
@@ -60,6 +61,7 @@ class Target:
     memory: str
     boot_timeout_seconds: int
     settle_seconds: int
+    server_owned: tuple[tuple[str, tuple[str, ...]], ...] = ()  # (path glob, top-level keys) from targets.yml
 
     @property
     def environment(self) -> str:
@@ -100,7 +102,14 @@ def load_layout() -> Layout:
                 problems.append(f"{name}: missing '{key}'")
             elif not isinstance(spec[key], typ) or (typ is int and isinstance(spec[key], bool)):
                 problems.append(f"{name}: '{key}' must be {typ.__name__}")
-        unknown = set(spec) - set(PROFILE_KEYS) - {extra_key}
+        owned = spec.get("server_owned", {})
+        if not isinstance(owned, dict) or not all(
+            isinstance(glob, str) and glob and isinstance(keys, list) and keys
+            and all(isinstance(k, str) and OWNED_KEY_RE.match(k) for k in keys)
+            for glob, keys in owned.items()
+        ):
+            problems.append(f"{name}: 'server_owned' must map path globs to non-empty lists of top-level keys")
+        unknown = set(spec) - set(PROFILE_KEYS) - {extra_key, "server_owned"}
         if unknown:
             problems.append(f"{name}: unknown keys {sorted(unknown)}")
         if spec.get("platform") not in PLATFORMS:
@@ -138,7 +147,8 @@ def get_target(environment: str, layout: Layout | None = None) -> Target:
             f"'{layout.backend_prefix}<Name>' ({layout.listed_prefix}<Name> servers are only listed in velocity.toml)"
         )
     spec = layout.profiles[profile]
-    return Target(name=environment, profile=profile, server_name=server_name,
+    owned = tuple((glob, tuple(keys)) for glob, keys in spec.get("server_owned", {}).items())
+    return Target(name=environment, profile=profile, server_name=server_name, server_owned=owned,
                   **{k: spec[k] for k in PROFILE_KEYS})
 
 

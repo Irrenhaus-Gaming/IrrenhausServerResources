@@ -12,6 +12,10 @@
 #   server_jar         glob for the server jar in the AMP instance root; must match exactly one file
 #   accept_eula        the Paper boot test writes eula=true only if this is true (Mojang EULA)
 #   memory             -Xmx for the boot test
+#   server_owned       optional: path glob (fnmatch, relative to source) -> top-level YAML keys whose
+#                      value belongs to the server once the file exists there (e.g. a hologram moved
+#                      with /dh movehere). Deploys keep the server's value, drift checks ignore it and
+#                      pull keeps the repo's value, which is only the default for a first install.
 
 proxy:
   environment: mc-proxy
@@ -34,5 +38,7 @@ backend:
   memory: 4G
   boot_timeout_seconds: 900
   settle_seconds: 30
+  server_owned:
+    "plugins/DecentHolograms/holograms/*.yml": [location, facing]   # /dh movehere, /dh setfacing
 
 listed_server_prefix: mc-server-

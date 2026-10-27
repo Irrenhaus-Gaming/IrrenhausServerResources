@@ -15,6 +15,7 @@ from .config import (
 from .blocks import expand_blocks, verify_blocks
 from .errors import McDeployError, fail_if
 from .knobs import KNOB_KINDS, knob_values
+from .owned import owned_keys, strip_owned, with_values_from
 from .placeholders import TOKEN_RE, find_tokens, mask, render_file, substitute, token_text
 from .remote import RemoteBase, SftpRemote, verify_instance
 from .scan import scan_text
@@ -25,6 +26,23 @@ MANIFEST = ".irrenhaus-deploy.json"
 
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def manifest_hash(data: bytes, keys: tuple[str, ...]) -> str:
+    """Hash recorded in the manifest: server-owned values do not count."""
+    return sha256(strip_owned(data, keys))
+
+
+def deployed_unchanged(remote_data: bytes, data: bytes, expected: str | None,
+                       old_keys: tuple[str, ...], keys: tuple[str, ...]) -> bool:
+    """Is the server file still what the last deploy wrote, apart from server-owned values?"""
+    if expected is None:
+        return False
+    if manifest_hash(remote_data, old_keys) == expected:
+        return True
+    # A manifest written before these keys were server-owned holds the hash of the whole file, and
+    # the server may since have changed just those values (a hologram moved in game).
+    return bool(keys) and not old_keys and sha256(with_values_from(remote_data, data, keys)) == expected
 
 
 def target_placeholders(target: Target) -> dict[str, str]:
@@ -172,14 +190,17 @@ def masked_diff(rel: str, remote_text: str, repo_text: str, masker: Masker) -> l
 
 
 def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], masker: Masker,
-                adopt: bool = False, full: bool = False) -> tuple[dict, list[str]]:
-    """Compare server files with the last deploy manifest. Returns (manifest, changed files).
+                adopt: bool = False, full: bool = False) -> tuple[dict, dict[str, bytes]]:
+    """Compare server files with the last deploy manifest. Returns (manifest, files to upload).
 
     Incremental by default: the manifest holds the hash of every file as last deployed, so only
     files whose rendered content differs from it (changed config or changed secret) are read
     from the server, drift-checked and uploaded. Untouched files are never overwritten, so a
     server-side edit to them is preserved (bring it in with the sync workflow). The first
     deploy (no manifest), adopt and full=True compare every managed file.
+
+    Server-owned keys (targets.yml `server_owned`) are left out of every comparison, and an
+    upload keeps the server's value for them.
 
     adopt: one-time takeover of a server that was never deployed to (no manifest yet), e.g. a
     fresh AMP instance full of generated defaults. Differing files are replaced instead of
@@ -200,10 +221,13 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
             raise McDeployError(f"{target.name}: server manifest {MANIFEST} is corrupt ({exc}); fix or remove it manually") from None
     drifted: list[str] = []
     diff_lines: list[str] = []
-    changed: list[str] = []
+    uploads: dict[str, bytes] = {}
+    replaced: dict[str, bytes] = {}  # drifted files, uploaded only with adopt
+    keys_for = {rel: owned_keys(target, rel) for rel in rendered}
+    owned_before = manifest.get("owned", {})
     incremental = raw_manifest is not None and not adopt and not full
     if incremental:
-        candidates = {rel: d for rel, d in rendered.items() if manifest["files"].get(rel) != sha256(d)}
+        candidates = {rel: d for rel, d in rendered.items() if manifest["files"].get(rel) != manifest_hash(d, keys_for[rel])}
         print(f"{target.name}: incremental deploy, {len(candidates)} of {len(rendered)} managed files differ "
               f"from the last deploy ({str(manifest.get('commit', '?'))[:12]}); only those are checked and uploaded")
     else:
@@ -213,24 +237,24 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
     remote_files = remote.read_many(list(candidates))
     for rel, data in candidates.items():
         remote_data = remote_files[rel]
-        new_hash = sha256(data)
+        keys = keys_for[rel]
         if remote_data is None:
             if rel in manifest["files"]:
                 drifted.append(rel)
                 diff_lines.append(f"--- {rel}: deployed earlier but now missing on the server")
             else:
-                changed.append(rel)
+                uploads[rel] = data
             continue
-        remote_hash = sha256(remote_data)
-        expected = manifest["files"].get(rel, new_hash)
-        if remote_hash == new_hash:
+        upload = with_values_from(data, remote_data, keys)
+        if upload == remote_data:
             continue  # already up to date (e.g. an earlier deploy stopped before writing the manifest)
-        if remote_hash != expected:
+        if deployed_unchanged(remote_data, data, manifest["files"].get(rel), tuple(owned_before.get(rel, ())), keys):
+            uploads[rel] = upload
+        else:
             drifted.append(rel)
+            replaced[rel] = upload
             repo_text = (target.source_dir / rel).read_bytes().decode("utf-8", errors="replace")
             diff_lines += masked_diff(rel, remote_data.decode("utf-8", errors="replace"), repo_text, masker)
-        else:
-            changed.append(rel)
     if drifted and adopt:
         OUTPUTS.add_summary(
             f"### {target.name}: adopting the server, {len(drifted)} existing file(s) are replaced\n"
@@ -239,7 +263,7 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
         )
         print("\n".join(diff_lines))
         print(f"{target.name}: adopt: replacing {len(drifted)} existing file(s) that differ from the repo")
-        return manifest, changed + drifted
+        return manifest, {**uploads, **replaced}
     if drifted:
         OUTPUTS.add_summary(
             f"### {target.name}: deploy aborted, server files changed since the last deploy\n"
@@ -254,7 +278,7 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
             f"{target.name}: {len(drifted)} managed file(s) changed on the server since the last deploy "
             f"(diff above, values masked). Nothing was uploaded:\n" + "\n".join(f"  - {r}" for r in drifted)
         )
-    return manifest, changed
+    return manifest, uploads
 
 
 def git_commit() -> str:
@@ -289,21 +313,26 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
             raise
     try:
         masker = Masker(names, resolved, load_mask_scopes(), load_expansions())
-        manifest, changed = check_drift(target, remote, rendered, masker, adopt, full)
+        manifest, uploads = check_drift(target, remote, rendered, masker, adopt, full)
+        changed = list(uploads)
         print(f"{target.name}: {len(rendered)} managed files, {len(changed)} to upload")
         for rel in changed:
             print(f"  upload {rel}")
         if dry_run:
             OUTPUTS.add_summary(f"### {target.name}: dry run, no drift, {len(changed)} file(s) would be uploaded")
             return
+        keys_for = {rel: owned_keys(target, rel) for rel in rendered}
         new_manifest = {
             "deployed_at": datetime.now(timezone.utc).isoformat(),
             "commit": git_commit() if own_remote else "test",
-            "files": {rel: sha256(data) for rel, data in rendered.items()},
+            "files": {rel: manifest_hash(data, keys_for[rel]) for rel, data in rendered.items()},
+            # Files hashed without their server-owned keys, and which keys those were.
+            "owned": {rel: list(keys) for rel, keys in keys_for.items() if keys},
         }
-        if changed:
-            remote.write_atomic({rel: rendered[rel] for rel in changed})
-        if changed or new_manifest["files"] != manifest.get("files"):
+        if uploads:
+            remote.write_atomic(uploads)
+        if (uploads or new_manifest["files"] != manifest.get("files")
+                or new_manifest["owned"] != manifest.get("owned", {})):
             remote.write_atomic({MANIFEST: (json.dumps(new_manifest, indent=2, sort_keys=True) + "\n").encode()})
         OUTPUTS.add_summary(
             f"### {target.name}: deployed {len(changed)} file(s)\n" + "\n".join(f"- `{r}`" for r in changed)

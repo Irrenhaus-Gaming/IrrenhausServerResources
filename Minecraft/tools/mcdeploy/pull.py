@@ -9,6 +9,7 @@ from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files
 from .deploy import Masker, load_expansions, load_mask_scopes, render_text, resolve_values, target_placeholders
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
+from .owned import owned_keys, with_values_from
 from .remote import SftpRemote, verify_instance
 from .scan import filter_allowed, load_scan_allowlist, scan_text
 
@@ -94,8 +95,12 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
                     f"{rel}:{f.line}: unmasked possible secret ({f.reason}, key '{f.key}') - add a placeholder "
                     f"in the repo first or allowlist it"
                 )
-            if not local.is_file() or local.read_bytes() != masked.encode("utf-8"):
-                updates[rel] = masked.encode("utf-8")
+            pulled = masked.encode("utf-8")
+            if local.is_file():
+                # Server-owned values stay on the server; the repo keeps its default for new installs.
+                pulled = with_values_from(pulled, local.read_bytes(), owned_keys(target, rel))
+            if not local.is_file() or local.read_bytes() != pulled:
+                updates[rel] = pulled
     finally:
         remote.close()
     fail_if(problems, f"{target.name}: sync-back refused, nothing was written:")

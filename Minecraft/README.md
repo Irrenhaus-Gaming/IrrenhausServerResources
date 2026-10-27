@@ -63,6 +63,8 @@ Consequences:
 
 **First deploy to a new server:** a fresh instance already contains default files (`ops.json`, `spigot.yml`, `config/paper-global.yml`, …). They differ from the repo, so the normal deploy stops on drift. Run **Actions → Minecraft config → Run workflow** with that environment in `targets` and **`adopt`** checked (locally `mc deploy <env> --adopt`). The differing files are replaced and the masked diff is still printed. This only works while the server has no deploy manifest; after the first deploy, drift is always an error again.
 
+**Server-owned values:** some values belong to the server once a file exists there, e.g. a hologram's position and facing set in game with `/dh movehere` / `/dh setfacing`. `server_owned` in `targets.yml` lists them as path glob → top-level YAML keys. A deploy uploads the repo's file but keeps the server's value for those keys, a change to them on the server is not drift, and the sync-back keeps the repo's value. The repo value is only the default for a server that doesn't have the file yet.
+
 If a deploy aborts because of drift, run **Actions → Minecraft sync from server** for that environment. It opens a PR with the server's changes, secrets masked. Merge it (or edit it), and the next deploy goes through.
 
 ## Secrets in the workflows
