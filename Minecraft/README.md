@@ -89,9 +89,9 @@ Files that are secrets as a whole (`forwarding.secret`, `floodgate/key.pem`, `vo
 
 Change a multiplier or color in `knobs.yml`, and the next deploy uploads every quest that changed. Reload Quests in game afterwards (`/q a reload`). ItsMyConfig is not installed: lint rejects `%itsmyconfig_…%`, `<p:…>` and `"$<…` in configs.
 
-### Values the server generates
+### Server name
 
-`__KEEP_<NAME>__` (the only placeholder on its line) keeps a value the server created itself, e.g. ExcellentEconomy's `MySQL.ServerId`, which must differ on every backend. A deploy reads it from the same line in the server's current file. If the server doesn't have the file yet, it gets a new UUID. Boot tests and `mc render` use a dummy value.
+`__SERVER_NAME__` is the `<Name>` of the backend's `mc-backend-<Name>` environment, the same name velocity.toml lists it under. Use it wherever a plugin needs an id that differs on every backend: nightcore's and ExcellentEconomy's `MySQL.ServerId`, HuskHomes' `server.yml`, LuckPerms' `server`. It is not secret, needs no schema entry or test value, and may stay unquoted (names are letters, digits, `_` and `-`). Backend only: lint rejects it under `Proxy/`.
 
 ## Local use (Windows, Docker Desktop running)
 
