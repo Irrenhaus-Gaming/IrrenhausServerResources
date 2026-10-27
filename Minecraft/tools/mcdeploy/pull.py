@@ -6,7 +6,9 @@ import re
 
 from .blocks import entries_from_server
 from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files
-from .deploy import Masker, load_expansions, load_mask_scopes, render_text, resolve_values, target_placeholders
+from .deploy import (
+    Masker, load_expansions, load_mask_scopes, render_text, resolve_values, same_content, target_placeholders,
+)
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
 from .owned import owned_keys, with_values_from
@@ -77,7 +79,15 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
             except McDeployError as exc:
                 problems.append(str(exc))
                 continue
-            masker = Masker({n: k for n, k in names.items() if n in resolved}, resolved, scopes, expansions)
+            if local.is_file():
+                try:
+                    unchanged = same_content(rel, data, render_text(rel, repo_text, resolved, expansions).encode("utf-8"),
+                                             owned_keys(target, rel))
+                except McDeployError:
+                    unchanged = False  # compared the normal way below
+                if unchanged:
+                    continue  # only the plugin's layout (or a server-owned value) differs from the repo
+            masker =Masker({n: k for n, k in names.items() if n in resolved}, resolved, scopes, expansions)
             masked = requote(masker.apply(rel, text, repo_text), fmt, frozenset(repo_text.splitlines()))
             # Masking must be lossless: rendering the masked text gives the server's document back.
             try:

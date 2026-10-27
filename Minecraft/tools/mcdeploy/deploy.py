@@ -14,6 +14,7 @@ from .config import (
 )
 from .blocks import expand_blocks, verify_blocks
 from .errors import McDeployError, fail_if
+from .formats import detect_format, parse
 from .knobs import KNOB_KINDS, knob_values
 from .owned import owned_keys, strip_owned, with_values_from
 from .placeholders import TOKEN_RE, find_tokens, mask, render_file, substitute, token_text
@@ -33,13 +34,49 @@ def manifest_hash(data: bytes, keys: tuple[str, ...]) -> str:
     return sha256(strip_owned(data, keys))
 
 
-def deployed_unchanged(remote_data: bytes, data: bytes, expected: str | None,
+def _canonical(value):
+    """JSON-ready form of a parsed document: mapping order and key types no longer matter."""
+    if isinstance(value, dict):
+        return {"map": sorted([repr(k), _canonical(v)] for k, v in value.items())}
+    if isinstance(value, list):
+        return [_canonical(v) for v in value]
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    return repr(value)  # dates and other YAML scalars
+
+
+def content_hash(rel: str, data: bytes, keys: tuple[str, ...]) -> str | None:
+    """Hash of the parsed document without its server-owned top-level keys, or None for text and
+    unparseable files. A plugin that re-saves a file in its own layout (line folding, key order,
+    quoting, dropped comments) keeps this hash; any changed value changes it."""
+    fmt = detect_format(rel)
+    if fmt == "text":
+        return None
+    try:
+        doc = parse(fmt, data.decode("utf-8"))
+    except (UnicodeDecodeError, McDeployError):
+        return None
+    docs = doc if fmt == "yaml" else [doc]
+    docs = [{k: v for k, v in d.items() if k not in keys} if isinstance(d, dict) else d for d in docs]
+    return sha256(json.dumps(_canonical(docs), ensure_ascii=False).encode("utf-8"))
+
+
+def same_content(rel: str, a: bytes, b: bytes, keys: tuple[str, ...]) -> bool:
+    if a == b:
+        return True
+    ha = content_hash(rel, a, keys)
+    return ha is not None and ha == content_hash(rel, b, keys)
+
+
+def deployed_unchanged(rel: str, remote_data: bytes, data: bytes, expected: str | None, expected_content: str | None,
                        old_keys: tuple[str, ...], keys: tuple[str, ...]) -> bool:
-    """Is the server file still what the last deploy wrote, apart from server-owned values?"""
+    """Is the server file still what the last deploy wrote, apart from server-owned values and layout?"""
     if expected is None:
         return False
     if manifest_hash(remote_data, old_keys) == expected:
         return True
+    if expected_content is not None and content_hash(rel, remote_data, old_keys) == expected_content:
+        return True  # re-saved by its plugin in another layout, same values
     # A manifest written before these keys were server-owned holds the hash of the whole file, and
     # the server may since have changed just those values (a hologram moved in game).
     return bool(keys) and not old_keys and sha256(with_values_from(remote_data, data, keys)) == expected
@@ -246,9 +283,12 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
                 uploads[rel] = data
             continue
         upload = with_values_from(data, remote_data, keys)
-        if upload == remote_data:
-            continue  # already up to date (e.g. an earlier deploy stopped before writing the manifest)
-        if deployed_unchanged(remote_data, data, manifest["files"].get(rel), tuple(owned_before.get(rel, ())), keys):
+        if same_content(rel, upload, remote_data, keys):
+            # Already up to date, possibly in the plugin's own layout (e.g. an earlier deploy stopped
+            # before writing the manifest, or the repo was reformatted). The server's file stays.
+            continue
+        if deployed_unchanged(rel, remote_data, data, manifest["files"].get(rel), manifest.get("content", {}).get(rel),
+                              tuple(owned_before.get(rel, ())), keys):
             uploads[rel] = upload
         else:
             drifted.append(rel)
@@ -322,17 +362,29 @@ def run_deploy(target: Target, dry_run: bool, remote: RemoteBase | None = None, 
             OUTPUTS.add_summary(f"### {target.name}: dry run, no drift, {len(changed)} file(s) would be uploaded")
             return
         keys_for = {rel: owned_keys(target, rel) for rel in rendered}
+        files = {rel: manifest_hash(data, keys_for[rel]) for rel, data in rendered.items()}
+        old_content = manifest.get("content", {})
+        content: dict[str, str] = {}
+        for rel, data in rendered.items():
+            # Parsing is the slow part: reuse the value of files that did not change since the last deploy.
+            unchanged = manifest["files"].get(rel) == files[rel] and manifest.get("owned", {}).get(rel, []) == list(keys_for[rel])
+            value = old_content.get(rel) if unchanged and rel in old_content else content_hash(rel, data, keys_for[rel])
+            if value is not None:
+                content[rel] = value
         new_manifest = {
             "deployed_at": datetime.now(timezone.utc).isoformat(),
             "commit": git_commit() if own_remote else "test",
-            "files": {rel: manifest_hash(data, keys_for[rel]) for rel, data in rendered.items()},
+            "files": files,
             # Files hashed without their server-owned keys, and which keys those were.
             "owned": {rel: list(keys) for rel, keys in keys_for.items() if keys},
+            # Hash of each parsed file (content_hash), so a plugin re-saving it in its own layout is not drift.
+            "content": content,
         }
         if uploads:
             remote.write_atomic(uploads)
         if (uploads or new_manifest["files"] != manifest.get("files")
-                or new_manifest["owned"] != manifest.get("owned", {})):
+                or new_manifest["owned"] != manifest.get("owned", {})
+                or new_manifest["content"] != old_content):
             remote.write_atomic({MANIFEST: (json.dumps(new_manifest, indent=2, sort_keys=True) + "\n").encode()})
         OUTPUTS.add_summary(
             f"### {target.name}: deployed {len(changed)} file(s)\n" + "\n".join(f"- `{r}`" for r in changed)
