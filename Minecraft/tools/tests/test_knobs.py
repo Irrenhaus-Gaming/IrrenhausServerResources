@@ -1,12 +1,17 @@
 import pytest
 
 import mcdeploy.config as config
+from mcdeploy.config import Target
 from mcdeploy.deploy import Masker, render_text, resolve_values
 from mcdeploy.errors import McDeployError
 from mcdeploy.formats import parse
 from mcdeploy.knobs import knob_values, load_knobs
 from mcdeploy.placeholders import find_tokens
 
+TARGET = Target(
+    name="mc-backend-Test", profile="backend", server_name="Test", source="Backend", platform="paper",
+    java_image="x", server_jar="*.jar", accept_eula=True, memory="1G", boot_timeout_seconds=1, settle_seconds=0,
+)
 KNOBS = {
     "style": {"PRIMARY": "&e", "TEXT": "&f"},
     "rewards": {
@@ -84,9 +89,9 @@ def test_masker_restores_knob_lines_but_never_replaces_knob_values_globally():
 def test_resolve_values_needs_secrets_but_computes_knobs(monkeypatch):
     monkeypatch.setattr("mcdeploy.deploy.knob_values", lambda names: knob_values(names, load_knobs(KNOBS)))
     names = {"DB_PW": "secret", "PRIMARY": "style"}
-    assert resolve_values(names, {"DB_PW": "x"}, "t") == {"DB_PW": "x", "PRIMARY": "&e"}
+    assert resolve_values(TARGET, names, {"DB_PW": "x"}, "t") == {"DB_PW": "x", "PRIMARY": "&e"}
     with pytest.raises(McDeployError, match="DB_PW"):
-        resolve_values(names, {}, "t")
+        resolve_values(TARGET, names, {}, "t")
 
 
 def test_lowercase_knob_token_is_malformed():

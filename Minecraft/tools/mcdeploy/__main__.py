@@ -47,7 +47,7 @@ def cmd_render(args) -> None:
     else:
         values = deploy_values()
     names = deploy.target_placeholders(target)
-    rendered = deploy.render_target(target, deploy.resolve_values(names, values, target.name))
+    rendered = deploy.render_target(target, deploy.resolve_values(target, names, values, target.name))
     if out.exists():
         shutil.rmtree(out)
     for rel, data in rendered.items():

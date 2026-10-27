@@ -383,7 +383,7 @@ def run_boot_test(target: Target, jars_from: str) -> None:
         )
     test_values = load_test_values()
     names = target_placeholders(target)
-    values = resolve_values(names, test_values, f"{target.name} boot test (test-values.env)")
+    values = resolve_values(target, names, test_values, f"{target.name} boot test (test-values.env)")
     values.update(_list_values_from_real_names(names))
     stack = require_values(["TEST_MYSQL_ROOT_PASSWORD", "TEST_MYSQL_DATABASES"], test_values, "the test MySQL")
     databases = [d.strip() for d in stack["TEST_MYSQL_DATABASES"].split(",") if d.strip()]

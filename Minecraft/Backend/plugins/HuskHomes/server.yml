@@ -6,4 +6,4 @@
 # ┣╸ If you join it using /server alpha, then set it to 'alpha' (case-sensitive)
 # ┗╸ You only need to touch this if you're using cross-server mode.
 
-name: Test
+name: __SERVER_NAME__

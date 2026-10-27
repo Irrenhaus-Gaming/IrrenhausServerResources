@@ -13,10 +13,10 @@ from .blocks import expand_blocks
 from .workflowcheck import check_workflows
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
-from .keep import KEEP_KIND, keep_lines
 from .knobs import KNOB_KINDS, knob_values, load_knobs
 from .placeholders import find_tokens
 from .scan import filter_allowed, load_scan_allowlist, scan_text
+from .serverinfo import SERVER_KIND, check_server_tokens
 
 # Second line of defence behind .gitignore: these must never be tracked, even with `git add -f`.
 # (.zip is only ignored, not forbidden: the ResourcePackManager blueprint template is a tracked zip.)
@@ -65,7 +65,7 @@ def run_lint() -> None:
     knobs: dict[str, str] = {}           # knob name -> kind (style/reward)
     file_count = 0
 
-    for source in layout.sources():
+    for source, profile in layout.sources().items():
         files = source_files(source)
         if not files:
             problems.append(f"no managed files under Minecraft/{source}")
@@ -77,11 +77,12 @@ def run_lint() -> None:
             text = None if is_binary else data.decode("utf-8", errors="strict") if _is_utf8(data) else None
             if text is not None:
                 uses, token_problems = find_tokens(full_rel, text)
+                token_problems += check_server_tokens(uses, profile)
                 for u in uses:
                     if u.kind in KNOB_KINDS:
                         knobs[u.name] = u.kind
                         continue
-                    if u.kind == KEEP_KIND:
+                    if u.kind == SERVER_KIND:
                         continue
                     used.setdefault(u.name, set()).add(source)
                     kinds.setdefault(u.name, set()).add(u.kind)
@@ -98,10 +99,6 @@ def run_lint() -> None:
                 problems.append(f"{full_rel}: not valid UTF-8")
                 continue
             problems += token_problems
-            try:
-                keep_lines(full_rel, text)
-            except McDeployError as exc:
-                problems.append(str(exc))
             for lineno, line in enumerate(text.splitlines(), 1):
                 if ITSMYCONFIG_RE.search(line):
                     problems.append(f"{full_rel}:{lineno}: ItsMyConfig syntax; use __STYLE_/__REWARD_ knobs (knobs.yml) instead")

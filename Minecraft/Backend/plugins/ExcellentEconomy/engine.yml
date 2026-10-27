@@ -28,7 +28,7 @@ Database:
   Table_Prefix: excellenteconomy
   MySQL:
     # Custom identifier of this server instance used in data syncing.
-    ServerId: __KEEP_ECO_SERVER_ID__
+    ServerId: __SERVER_NAME__
     # Database user name.
     Username: "__SECRET_MC_DB_USERNAME__"
     # Database password.

@@ -1,4 +1,4 @@
-"""Placeholder tokens (__SECRET_NAME__ / __VAR_NAME__, knobs: __STYLE_NAME__ / __REWARD_NAME__, __KEEP_NAME__) and
+"""Placeholder tokens (__SECRET_NAME__ / __VAR_NAME__, knobs: __STYLE_NAME__ / __REWARD_NAME__, __SERVER_NAME__) and
 rendering them into real values.
 
 Rendering is plain text substitution so comments and formatting survive. Each value is escaped
@@ -13,9 +13,9 @@ from dataclasses import dataclass
 from .errors import McDeployError
 from .formats import bare_value_ok, detect_format, parse, walk_compare
 
-TOKEN_RE = re.compile(r"__(SECRET|VAR|STYLE|REWARD|KEEP)_([A-Z0-9]+(?:_[A-Z0-9]+)*)__")
+TOKEN_RE = re.compile(r"__(SECRET|VAR|STYLE|REWARD|SERVER)_([A-Z0-9]+(?:_[A-Z0-9]+)*)__")
 # Anything that looks like an attempted token but does not match TOKEN_RE is a typo.
-TOKEN_LIKE_RE = re.compile(r"__(?:SECRET|VAR|STYLE|REWARD|KEEP)_")
+TOKEN_LIKE_RE = re.compile(r"__(?:SECRET|VAR|STYLE|REWARD|SERVER)_")
 CONTROL_RE = re.compile(r"[\x00-\x1f\x7f]")
 
 
@@ -23,7 +23,7 @@ CONTROL_RE = re.compile(r"[\x00-\x1f\x7f]")
 class TokenUse:
     path: str
     line: int
-    kind: str  # "secret", "var", a knob kind ("style", "reward") or "keep"
+    kind: str  # "secret", "var", a knob kind ("style", "reward") or "server"
     name: str
 
 
