@@ -65,6 +65,8 @@ Consequences:
 
 **Server-owned values:** some values belong to the server once a file exists there, e.g. a hologram's position and facing set in game with `/dh movehere` / `/dh setfacing`, or a display's `location` (position, yaw and pitch) set with `/dh d movehere` / `/dh d set-facing`. `server_owned` in `targets.yml` lists them as path glob → top-level YAML keys. A deploy uploads the repo's file but keeps the server's value for those keys, a change to them on the server is not drift, and the sync-back keeps the repo's value. The repo value is only the default for a server that doesn't have the file yet.
 
+**Repo-only files:** `repo_only` in `targets.yml` lists path globs of files that are tracked and linted but never deployed, boot-tested, drift-checked or pulled, such as the credits and licenses of third-party models (`*.source.md` beside them). Deploys never delete remote files, so a copy deployed before a file became repo-only has to be removed from the server by hand.
+
 If a deploy aborts because of drift, run **Actions → Minecraft sync from server** for that environment. It opens a PR with the server's changes, secrets masked. Merge it (or edit it), and the next deploy goes through.
 
 ## Secrets in the workflows

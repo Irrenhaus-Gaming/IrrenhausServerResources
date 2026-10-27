@@ -188,3 +188,36 @@ def test_adopt_is_refused_once_a_manifest_exists(env):
     with pytest.raises(McDeployError, match="only for a server that was never deployed to"):
         deploy.run_deploy(target, dry_run=False, remote=remote, values={"DB_PW": "hunter2!"}, adopt=True)
     assert (server / FILE).read_text() == "edited on the server\n"
+
+
+def test_repo_only_files_are_not_managed(monkeypatch):
+    files = ["plugins/FMM/models/pet.bbmodel", "plugins/FMM/models/pet.source.md", "plugins/Plug/config.yml"]
+    monkeypatch.setattr(config, "source_files", lambda source, include_untracked=True: files)
+    target = Target(
+        name="mc-backend-Test", profile="backend", server_name="Test", source="Backend", platform="paper",
+        java_image="x", server_jar="*.jar", accept_eula=True, memory="1G", boot_timeout_seconds=1, settle_seconds=0,
+        repo_only=("*.source.md",),
+    )
+    assert config.managed_files(target) == ["plugins/FMM/models/pet.bbmodel", "plugins/Plug/config.yml"]
+
+
+def test_repo_only_must_be_a_list_of_globs(tmp_path, monkeypatch):
+    mc_dir = tmp_path / "Minecraft"
+    for d in ("Proxy", "Backend"):
+        (mc_dir / d).mkdir(parents=True)
+    profile = ("  source: {src}\n  platform: paper\n  java_image: x\n  server_jar: x\n  accept_eula: true\n"
+               "  memory: 1G\n  boot_timeout_seconds: 1\n  settle_seconds: 0\n")
+    (mc_dir / "targets.yml").write_text(
+        "proxy:\n  environment: mc-proxy\n" + profile.format(src="Proxy")
+        + "backend:\n  environment_prefix: mc-backend-\n" + profile.format(src="Backend")
+        + "  repo_only: \"*.source.md\"\nlisted_server_prefix: mc-server-\n"
+    )
+    monkeypatch.setattr(config, "MC_DIR", mc_dir)
+    monkeypatch.setattr(config, "TARGETS_FILE", mc_dir / "targets.yml")
+    with pytest.raises(McDeployError, match="repo_only"):
+        config.load_layout()
+
+
+def test_model_credits_stay_in_the_repo():
+    target = config.get_target("mc-backend-Test")
+    assert "*.source.md" in target.repo_only

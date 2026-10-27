@@ -33,6 +33,9 @@ Minecraft/Backend/plugins/FreeMinecraftModels/enchantments
 Minecraft/Backend/plugins/FreeMinecraftModels/models/*
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_flight_dragon.bbmodel
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_flight_dragon.source.md
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.pet.yml
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.source.md
 Minecraft/Backend/plugins/FreeMinecraftModels/output
 Minecraft/Backend/plugins/FreeMinecraftModels/recipes
 Minecraft/Backend/plugins/FreeMinecraftModels/resource_pack

@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 from dataclasses import dataclass, field
+from fnmatch import fnmatchcase
 from pathlib import Path
 
 from ruamel.yaml import YAML
@@ -62,6 +63,7 @@ class Target:
     boot_timeout_seconds: int
     settle_seconds: int
     server_owned: tuple[tuple[str, tuple[str, ...]], ...] = ()  # (path glob, top-level keys) from targets.yml
+    repo_only: tuple[str, ...] = ()  # path globs from targets.yml: tracked and linted, never deployed
 
     @property
     def environment(self) -> str:
@@ -109,7 +111,10 @@ def load_layout() -> Layout:
             for glob, keys in owned.items()
         ):
             problems.append(f"{name}: 'server_owned' must map path globs to non-empty lists of top-level keys")
-        unknown = set(spec) - set(PROFILE_KEYS) - {extra_key, "server_owned"}
+        repo_only = spec.get("repo_only", [])
+        if not isinstance(repo_only, list) or not all(isinstance(glob, str) and glob for glob in repo_only):
+            problems.append(f"{name}: 'repo_only' must be a list of path globs")
+        unknown = set(spec) - set(PROFILE_KEYS) - {extra_key, "server_owned", "repo_only"}
         if unknown:
             problems.append(f"{name}: unknown keys {sorted(unknown)}")
         if spec.get("platform") not in PLATFORMS:
@@ -149,7 +154,7 @@ def get_target(environment: str, layout: Layout | None = None) -> Target:
     spec = layout.profiles[profile]
     owned = tuple((glob, tuple(keys)) for glob, keys in spec.get("server_owned", {}).items())
     return Target(name=environment, profile=profile, server_name=server_name, server_owned=owned,
-                  **{k: spec[k] for k in PROFILE_KEYS})
+                  repo_only=tuple(spec.get("repo_only", [])), **{k: spec[k] for k in PROFILE_KEYS})
 
 
 @dataclass(frozen=True)
@@ -320,8 +325,9 @@ def source_files(source: str, include_untracked: bool = True) -> list[str]:
 
 
 def managed_files(target: Target, include_untracked: bool = True) -> list[str]:
-    """Repo-relative paths (inside the target's source dir) that this target deploys."""
-    return source_files(target.source, include_untracked)
+    """Repo-relative paths (inside the target's source dir) that this target deploys; `repo_only` files stay here."""
+    return [rel for rel in source_files(target.source, include_untracked)
+            if not any(fnmatchcase(rel, glob) for glob in target.repo_only)]
 
 
 def assert_clean_worktree(target: Target) -> None:

@@ -1,0 +1,40 @@
+# Ice wolf pet. The species id is stored in every owned pet: never rename it.
+isEnabled: true
+species: wolfu
+model: irrenhaus_pet_wolfu
+name: '&bWolfu'
+body: WOLF
+scale: 1.0
+health: 20
+icon: BONE
+locomotion: GROUNDED
+tamingFood:
+  - BONE
+breedingFood:
+  - COD
+  - SALMON
+tameChance: 0.333
+babyScale: 0.5
+follow:
+  distance: 5
+  teleportDistance: 24
+  speed: 1.0
+# Only used in CREATURES mode (pets.yml).
+wildSpawn:
+  enabled: true
+  weight: 10
+  placement: GROUND
+  cap: 2
+  environments:
+    - NORMAL
+  biomes:
+    - minecraft:snowy_plains
+    - minecraft:snowy_taiga
+    - minecraft:grove
+    - minecraft:ice_spikes
+    - minecraft:snowy_slopes
+behaviors:
+  - stay
+  - follow_owner
+  - wander
+  - idle_look

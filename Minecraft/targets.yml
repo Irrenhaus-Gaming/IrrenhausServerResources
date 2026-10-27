@@ -16,6 +16,8 @@
 #                      value belongs to the server once the file exists there (e.g. a hologram moved
 #                      with /dh movehere). Deploys keep the server's value, drift checks ignore it and
 #                      pull keeps the repo's value, which is only the default for a first install.
+#   repo_only          optional: path globs (fnmatch, relative to source) of files that are tracked and
+#                      linted but never deployed, boot-tested, drift-checked or pulled (e.g. model credits).
 
 proxy:
   environment: mc-proxy
@@ -41,5 +43,7 @@ backend:
   server_owned:
     "plugins/DecentHolograms/holograms/*.yml": [location, facing]   # /dh movehere, /dh setfacing
     "plugins/DecentHolograms/displays/*.yml": [location]            # /dh d movehere, /dh d set-facing (yaw/pitch live in location)
+  repo_only:
+    - "*.source.md"   # credits and licenses of third-party models, e.g. FreeMinecraftModels/models/*.source.md
 
 listed_server_prefix: mc-server-
