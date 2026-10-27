@@ -1,0 +1,7 @@
+Data:
+  Table-Name: user_data
+  # When enabled, loads and caches all user datas on startup.
+  Load-All-Users: false
+  Save-Interval: 900
+  CacheTime:
+    Duration: 3600
