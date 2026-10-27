@@ -49,7 +49,9 @@ Transfer_Min_Amount: -1.0
 Exchange:
   # Controls whether this currency can be exchanged for other ones.
   Allowed: false
-  Rates: {}
+  Rates:
+    mystery_coins: 5
+    magic_coins: 10
 Leaderboard:
   # Controls whether this currency can have a leaderboard.
   # [*] Requires the Tops module to be enabled.
