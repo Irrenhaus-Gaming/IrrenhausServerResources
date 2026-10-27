@@ -43,9 +43,9 @@ database:
 # General settings
 general:
   # The maximum homes a user can create. Override with the huskhomes.max_homes.<number> permission.
-  max_homes: 10
+  max_homes: 1
   # The maximum public homes a user can create. Override with the huskhomes.max_public_homes.<number> permission.
-  max_public_homes: 10
+  max_public_homes: 1
   # What character to use between owner usernames and home names when specifying a home or public home.
   # (e.g. the '.' in: /phome username.home_name). Change if you're using '.' as the Bedrock user prefix.
   home_delimiter: .
@@ -192,11 +192,11 @@ economy:
     MAKE_HOME_PUBLIC: 50.0
     RANDOM_TELEPORT: 25.0
   # Specify how many homes players can set for free, before they need to pay for more slots
-  free_home_slots: 5
+  free_home_slots: 1
 # Plan hook settings. Docs: https://william278.net/docs/huskhomes/plan-hook
 plan:
   # Hook into Player Analytics to provide HuskHomes statistics in your web dashboard.
-  enabled: true
+  enabled: false
 # LuckPerms hook settings. Docs: https://william278.net/docs/huskhomes/luckperms-hook
 luckperms:
   # Hook into LuckPerms for more accurate numerical permission calculations
@@ -210,4 +210,12 @@ map_hook:
   # Show warps on the web map
   show_warps: true
 # List of commands to disable (e.g. ['/home', '/warp'] to disable /home and /warp)
-disabled_commands: []
+disabled_commands: [
+  '/tpa',
+  '/tpahere',
+  '/tpaccept',
+  '/tpdecline',
+  '/tpignore',
+  '/rtp',
+  '/back'
+]
