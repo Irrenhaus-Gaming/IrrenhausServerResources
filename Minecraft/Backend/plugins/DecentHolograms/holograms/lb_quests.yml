@@ -1,0 +1,128 @@
+location: IrrenhausTest:0.0:0.0:0.0
+enabled: true
+display-range: 48
+update-range: 48
+update-interval: 20
+facing: 0.0
+down-origin: false
+pages:
+- lines:
+  - content: '#SMALLHEAD: PLAYER_HEAD (%ajlb_lb_quests_completed_1_alltime_skin%)'
+    height: 0.6
+  - content: '__STYLE_SECONDARY__&lAbgeschlossene Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__« Gesamt »'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#1 __STYLE_TEXT__%ajlb_lb_quests_completed_1_alltime_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_1_alltime_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#2 __STYLE_TEXT__%ajlb_lb_quests_completed_2_alltime_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_2_alltime_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#3 __STYLE_TEXT__%ajlb_lb_quests_completed_3_alltime_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_3_alltime_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#4 __STYLE_TEXT__%ajlb_lb_quests_completed_4_alltime_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_4_alltime_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#5 __STYLE_TEXT__%ajlb_lb_quests_completed_5_alltime_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_5_alltime_value% Quests'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_DARK__Du: __STYLE_PRIMARY__#%ajlb_position_quests_completed_alltime% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_value_quests_completed_alltime% Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__Klick für anderen Zeitraum'
+    height: 0.3
+  actions:
+    RIGHT:
+    - NEXT_PAGE
+    LEFT:
+    - PREV_PAGE
+- lines:
+  - content: '#SMALLHEAD: PLAYER_HEAD (%ajlb_lb_quests_completed_1_monthly_skin%)'
+    height: 0.6
+  - content: '__STYLE_SECONDARY__&lAbgeschlossene Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__« Monat »'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#1 __STYLE_TEXT__%ajlb_lb_quests_completed_1_monthly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_1_monthly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#2 __STYLE_TEXT__%ajlb_lb_quests_completed_2_monthly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_2_monthly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#3 __STYLE_TEXT__%ajlb_lb_quests_completed_3_monthly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_3_monthly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#4 __STYLE_TEXT__%ajlb_lb_quests_completed_4_monthly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_4_monthly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#5 __STYLE_TEXT__%ajlb_lb_quests_completed_5_monthly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_5_monthly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_DARK__Du: __STYLE_PRIMARY__#%ajlb_position_quests_completed_monthly% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_value_quests_completed_monthly% Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__Klick für anderen Zeitraum'
+    height: 0.3
+  actions:
+    RIGHT:
+    - NEXT_PAGE
+    LEFT:
+    - PREV_PAGE
+- lines:
+  - content: '#SMALLHEAD: PLAYER_HEAD (%ajlb_lb_quests_completed_1_weekly_skin%)'
+    height: 0.6
+  - content: '__STYLE_SECONDARY__&lAbgeschlossene Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__« Woche »'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#1 __STYLE_TEXT__%ajlb_lb_quests_completed_1_weekly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_1_weekly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#2 __STYLE_TEXT__%ajlb_lb_quests_completed_2_weekly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_2_weekly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#3 __STYLE_TEXT__%ajlb_lb_quests_completed_3_weekly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_3_weekly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#4 __STYLE_TEXT__%ajlb_lb_quests_completed_4_weekly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_4_weekly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#5 __STYLE_TEXT__%ajlb_lb_quests_completed_5_weekly_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_5_weekly_value% Quests'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_DARK__Du: __STYLE_PRIMARY__#%ajlb_position_quests_completed_weekly% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_value_quests_completed_weekly% Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__Klick für anderen Zeitraum'
+    height: 0.3
+  actions:
+    RIGHT:
+    - NEXT_PAGE
+    LEFT:
+    - PREV_PAGE
+- lines:
+  - content: '#SMALLHEAD: PLAYER_HEAD (%ajlb_lb_quests_completed_1_daily_skin%)'
+    height: 0.6
+  - content: '__STYLE_SECONDARY__&lAbgeschlossene Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__« Heute »'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#1 __STYLE_TEXT__%ajlb_lb_quests_completed_1_daily_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_1_daily_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#2 __STYLE_TEXT__%ajlb_lb_quests_completed_2_daily_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_2_daily_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#3 __STYLE_TEXT__%ajlb_lb_quests_completed_3_daily_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_3_daily_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#4 __STYLE_TEXT__%ajlb_lb_quests_completed_4_daily_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_4_daily_value% Quests'
+    height: 0.3
+  - content: '__STYLE_PRIMARY__#5 __STYLE_TEXT__%ajlb_lb_quests_completed_5_daily_name% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_lb_quests_completed_5_daily_value% Quests'
+    height: 0.3
+  - content: '__STYLE_DARKEST__&m                    '
+    height: 0.3
+  - content: '__STYLE_DARK__Du: __STYLE_PRIMARY__#%ajlb_position_quests_completed_daily% __STYLE_DARK__- __STYLE_PRIMARY__%ajlb_value_quests_completed_daily% Quests'
+    height: 0.3
+  - content: '__STYLE_DARK__Klick für anderen Zeitraum'
+    height: 0.3
+  actions:
+    RIGHT:
+    - NEXT_PAGE
+    LEFT:
+    - PREV_PAGE
