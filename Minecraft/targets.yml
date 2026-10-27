@@ -40,5 +40,6 @@ backend:
   settle_seconds: 30
   server_owned:
     "plugins/DecentHolograms/holograms/*.yml": [location, facing]   # /dh movehere, /dh setfacing
+    "plugins/DecentHolograms/displays/*.yml": [location]            # /dh d movehere, /dh d set-facing (yaw/pitch live in location)
 
 listed_server_prefix: mc-server-

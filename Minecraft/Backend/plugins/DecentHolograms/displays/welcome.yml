@@ -1,0 +1,66 @@
+type: TEXT
+location:
+  world: IrrenhausTest
+  x: 0
+  y: 0
+  z: 0
+  yaw: 0
+  pitch: 0
+settings:
+  enabled: true
+  display-range: 48.0
+  update-interval: 20
+attributes:
+  shadow-strength:
+    value-type: float
+    value: 1.0
+  line-width:
+    value-type: integer
+    value: 300
+  shadow-radius:
+    value-type: float
+    value: 0.0
+  scale:
+    value-type: vector3f
+    value:
+      x: 1.0
+      y: 1.0
+      z: 1.0
+  billboard:
+    value-type: billboard_constraints
+    value: FIXED
+  background-color:
+    value-type: rgba
+    value:
+      red: 24
+      green: 40
+      blue: 32
+      alpha: 220
+  text-shadow:
+    value-type: boolean
+    value: true
+  translation:
+    value-type: vector3f
+    value:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  see-through:
+    value-type: boolean
+    value: false
+  alignment:
+    value-type: text_alignment
+    value: CENTER
+  text-opacity:
+    value-type: integer
+    value: 255
+pages:
+- lines:
+  - '__STYLE_SECONDARY__&lWillkommen im Irrenhaus!'
+  - '__STYLE_TEXT__Hallo __STYLE_PRIMARY__{player}__STYLE_TEXT__, schön, dass du da bist.'
+  - ''
+  - '__STYLE_PRIMARY__/spawn __STYLE_DARK__- zurück zum Spawn'
+  - '__STYLE_PRIMARY__/sethome __STYLE_DARK__und __STYLE_PRIMARY__/home __STYLE_DARK__- dein Zuhause'
+  - '__STYLE_PRIMARY__/quests __STYLE_DARK__- Quests und Belohnungen'
+  - ''
+  - '__STYLE_DARK__Viel Spaß beim Spielen!'

@@ -49,6 +49,12 @@ def test_with_values_from_takes_only_owned_blocks():
     assert with_values_from(data, server, KEYS) == moved(rendered()).encode()
 
 
+def test_display_location_block_comes_from_server():
+    repo = b"type: TEXT\nlocation:\n  world: w\n  x: 0\n  yaw: 0\nsettings:\n  enabled: true\n"
+    server = b"type: TEXT\nlocation:\n  world: w\n  x: -23.5\n  yaw: 90.0\nsettings:\n  enabled: false\n"
+    assert with_values_from(repo, server, ("location",)) == server.replace(b"enabled: false", b"enabled: true")
+
+
 def test_key_that_occurs_twice_is_not_owned():
     data = b"location: a\nlocation: b\n"
     assert strip_owned(data, KEYS) == data
