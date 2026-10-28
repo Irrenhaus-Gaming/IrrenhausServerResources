@@ -273,7 +273,7 @@ hopper:
   disable-move-event: false
   ignore-occluding-blocks: false
 lootables:
-  auto-replenish: false
+  auto-replenish: true
   max-refills: -1
   refresh-max: 2d
   refresh-min: 12h
