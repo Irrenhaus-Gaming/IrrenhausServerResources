@@ -94,8 +94,8 @@ hopper:
   stack_per_transfer: 5
 
 hologram:
-  # Floating text above spawners.
-  enabled: false
+  # Floating text above spawners. Lines: hologram.lines in language/de_DE/items.yml.
+  enabled: true
 
   # Offset from the centre of the spawner block.
   offset_x: 0.5
