@@ -89,6 +89,7 @@ categories:
       - "*_head"
       - "*_skull"
       - nether_star
+      - "spawner_*"
 
   - name: combat
     title: Ausrüstung

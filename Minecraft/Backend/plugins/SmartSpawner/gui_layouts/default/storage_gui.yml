@@ -1,0 +1,111 @@
+# Storage GUI Layout Configuration
+# Slot positions: 1-9 corresponds to inventory slots 46-54 (bottom row)
+# Valid materials: https://jd.papermc.io/paper/1.21.8/org/bukkit/Material.html
+#
+# Format:
+#   slot_X:                    # X = slot number (1-9)
+#     material: MATERIAL_NAME  # Material to display (use PLAYER_HEAD for spawner mob head)
+#     custom_texture: "..."    # Optional: Custom texture hash for PLAYER_HEAD (similar to spawner_mobs.yml)
+#     enabled: true/false      # Show/hide button
+#     info_button: true        # Optional: Mark as spawner mob-head info button (shows loot list)
+#     click:
+#       action: "action"
+#       sound: ui.button.click
+#       sound_success: entity.item.pickup
+#       sound_fail: block.note_block.pling
+#     if:                      # Optional: conditional actions
+#       condition_name:
+#         click:
+#           action: "action"
+#     cooldown: "5s"           # Optional: Per-player cooldown; omitted by default
+#
+# Conditions:
+#   sell_integration: When sell/shop integration is enabled
+#   no_sell_integration: When sell/shop integration is disabled
+#
+# Actions:
+#   previous_page: Go to previous page
+#   next_page: Go to next page
+#   sort_items: Sort items in storage
+#   open_filter: Open filter configuration
+#   sell_all: Sell all items (no exp collection)
+#   sell_and_exp: Sell all items and collect exp
+#   collect_exp: Collect stored experience only
+#   return_main: Return to main menu
+#   take_all: Take all items from current page
+#   drop_page: Drop all items from current page
+#   none: Display only, no action (use with info_button: true for mob-head display)
+
+
+# Previous page button
+slot_1:
+  material: SPECTRAL_ARROW
+  enabled: true
+  click:
+    action: "previous_page"
+    sound: ui.button.click
+
+# Item sort button
+slot_3:
+  material: CAULDRON
+  enabled: true
+  click:
+    action: "sort_items"
+    sound_success:
+      name: ui.button.click
+      pitch: 1.2
+    sound_fail: block.note_block.pling
+
+# Item filter button
+slot_4:
+  material: HOPPER
+  enabled: true
+  click:
+    action: "open_filter"
+    sound: ui.button.click
+
+# Multi-purpose button (sell with integration, return without)
+slot_5:
+  material: GOLD_INGOT
+  enabled: true
+  if:
+    sell_integration:
+      click:
+        action: "sell_all"
+        sound: ui.button.click
+        sound_success: block.note_block.bell
+        sound_fail: block.note_block.pling
+    no_sell_integration:
+      material: RED_STAINED_GLASS_PANE
+      click:
+        action: "return_main"
+        sound: ui.button.click
+
+# Take all items button
+slot_6:
+  material: BUNDLE
+  enabled: true
+  click:
+    action: "take_all"
+    sound_success: entity.item.pickup
+    sound_fail: block.note_block.pling
+
+# Drop page button
+slot_7:
+  material: DROPPER
+  enabled: true
+  click:
+    action: "drop_page"
+    sound_success:
+      name: entity.item.pickup
+      volume: 0.8
+      pitch: 0.8
+    sound_fail: block.note_block.pling
+
+# Next page button
+slot_9:
+  material: SPECTRAL_ARROW
+  enabled: true
+  click:
+    action: "next_page"
+    sound: ui.button.click

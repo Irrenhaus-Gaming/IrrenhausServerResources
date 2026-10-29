@@ -21,9 +21,17 @@ The EconomyShopGUI files under `Backend/plugins/EconomyShopGUI/sections/` and `s
 - **Not offered:**
   - Unpriced items (no value, no priceable recipe) are not in the shop at all.
   - `exclude` items are never priced.
-  - `held_back` items are priced but neither bought nor sold, and neither is anything crafted from them (elytra, netherite, shulker boxes, totems, spawners…). The endgame offer will be decided later.
+  - `held_back` items are priced but neither bought nor sold, and neither is anything crafted from them (elytra, netherite, shulker boxes, totems…). The endgame offer will be decided later.
   - Enchanted books are excluded so villager trading halls matter.
 - **Bundles:** Moneten have no decimals, so cheap items are traded in bundles (`stack-size` up to the item's max stack). The bundle size keeps the rounding small; prices are per bundle.
+
+## Spawners (SmartSpawner)
+
+- **Bought here:** the `spawner_*` entries under `custom:` in `items.yml`. EconomyShopGUI hands them out as SmartSpawner spawners (`spawner-provider: SMART_SPAWNER`). Class `none`: the shop never buys a spawner back. Dungeon spawners can also be mined with Silk Touch.
+- **Loot is sold at these prices:** SmartSpawner's sell button asks EconomyShopGUI for each item's sell price per item (sell / stack-size). `sell_integration.yml` must stay on `SHOP_ONLY` with custom prices off, otherwise SmartSpawner falls back to its own price list whenever the shop pays nothing.
+- **Income cap:** lint computes what one spawner of every type earns per hour while a player is in range: `3600 / delay × (min_mobs + max_mobs) / 2 × Σ chance × average amount × sell per item`. It fails above `shop.spawner_income_cap` in `knobs.yml`. A stack of N spawners (up to `max_stack_size`) earns N times that.
+- **Over the cap:** lower the chances of that mob's sellable loot in `spawner_mobs.yml` (the trimmed mobs carry a comment with their factor). Don't raise the cap or a sell price to make a spawner fit.
+- `mc shop-report` lists every spawner's income and the payback time of the ones sold here. Item spawners (`spawner_items.yml`) are not allowed.
 
 ## Changing prices
 

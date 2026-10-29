@@ -44,3 +44,4 @@ shop:
     farm: 0.15        # renewable, but needs a player working
     mined: 0.3        # mined or found by hand, not farmable
     none: 0           # the shop never buys it back
+  spawner_income_cap: 50  # Moneten/h one SmartSpawner spawner may earn by selling its loot here (lint)

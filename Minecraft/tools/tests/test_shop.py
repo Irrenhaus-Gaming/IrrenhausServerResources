@@ -12,7 +12,7 @@ from mcdeploy.errors import McDeployError
 from mcdeploy.formats import parse
 from mcdeploy.remote import LocalRemote
 from mcdeploy.shop import layout as shop_layout
-from mcdeploy.shop import pricing, vanilla
+from mcdeploy.shop import pricing, spawners, vanilla
 
 LOCK = {
     "version": "26.3",
@@ -39,6 +39,7 @@ SHOP_KNOBS = {"shop": {
     "multiplier": 1, "markup": 2, "craft_factor": 1.05,
     "rarity": {"common": 1, "uncommon": 1.15, "rare": 1.3, "epic": 1.5},
     "sell_ratio": {"auto": 0.05, "farm": 0.15, "mined": 0.3, "none": 0},
+    "spawner_income_cap": 50,
 }}
 ITEMS = {
     "exclude": ["bedrock"],
@@ -369,3 +370,73 @@ def test_lint_check_reports_rule_breaks(repo):
     assert shop.check() == []
     write_yaml(config.MC_DIR / "shop/items.yml", {**ITEMS, "values": {**ITEMS["values"], "mined": {"diamond": 500, "stone": 20}}})
     assert any("arbitrage" in p for p in shop.check())
+
+
+# ---------------------------------------------------------------- SmartSpawner income
+
+SS_CONFIG = {"spawner_properties": {"default": {"min_mobs": 1, "max_mobs": 3, "delay": "40s", "max_stack_size": 400}}}
+SS_SELL = {"enabled": True, "price_source_mode": "SHOP_ONLY", "shop_integration": {"enabled": True},
+           "custom_prices": {"enabled": False}}
+SS_MOBS = {
+    "zombie": {"experience": 5, "loot": {1: {"item": "OAK_LOG", "amount": "0-2", "chance": 10.0}}},
+    "golem": {"experience": 0, "loot": {1: {"item": "IRON_INGOT", "amount": "3-5", "chance": 1.0}}},
+    "bat": {"experience": 0},
+    "custom_spawners": None,
+}
+
+
+@pytest.mark.parametrize("text, seconds", [("25s", 25), ("5m", 300), ("1h_30m", 5400), ("1d_2h_30m_15s", 95415)])
+def test_smartspawner_time_format(text, seconds):
+    assert spawners.parse_time(text) == seconds
+
+
+@pytest.mark.parametrize("text", ["25", "", "0s", "5x"])
+def test_smartspawner_time_format_rejects(text):
+    with pytest.raises(McDeployError):
+        spawners.parse_time(text)
+
+
+def test_loot_counts_by_base_material():
+    assert spawners.material('tipped_arrow[potion_contents={potion:"minecraft:poison"}]') == "tipped_arrow"
+    assert spawners.material("minecraft:IRON_INGOT") == "iron_ingot"
+
+
+def test_spawner_income_per_hour():
+    p, _ = prices()
+    rate = spawners.load_rate(SS_CONFIG)
+    assert rate.mobs_per_hour == 180 and rate.max_stack == 400
+    paid = spawners.unit_sell(p)
+    inc = spawners.income("golem", {"loot": {1: {"item": "IRON_INGOT", "amount": "3-5", "chance": 50.0}}}, rate, paid)
+    assert inc.per_hour == Decimal(180) * Decimal("0.5") * 4 * paid["iron_ingot"]
+    assert inc.top_item == "iron_ingot"
+    # held back or unknown items earn nothing: the shop has no entry for them
+    assert spawners.income("x", {"loot": {1: {"item": "ELYTRA"}}}, rate, paid).per_hour == 0
+
+
+@pytest.fixture()
+def spawner_repo(repo):
+    plugin = config.MC_DIR / spawners.PLUGIN
+    for name, data in (("config.yml", SS_CONFIG), ("sell_integration.yml", SS_SELL),
+                       ("spawner_mobs.yml", SS_MOBS), ("spawner_items.yml", {"custom_spawners": None})):
+        write_yaml(plugin / name, data)
+    return plugin
+
+
+def test_spawner_check_passes_and_reports(spawner_repo):
+    assert shop.check() == []
+    report = shop.report()
+    assert "## SmartSpawner income" in report and "| golem |" in report and "bat" in report
+
+
+@pytest.mark.parametrize("change, message", [
+    (("spawner_mobs.yml", {**SS_MOBS, "golem": {"loot": {1: {"item": "IRON_INGOT", "amount": "3-5"}}}}),
+     r"golem: earns .* over shop.spawner_income_cap 50 \(mostly iron_ingot\)"),
+    (("sell_integration.yml", {**SS_SELL, "price_source_mode": "SHOP_PRIORITY"}), "must be SHOP_ONLY"),
+    (("sell_integration.yml", {**SS_SELL, "custom_prices": {"enabled": True}}), "custom_prices.enabled must be false"),
+    (("spawner_items.yml", {"diamond": {"loot": {}}, "custom_spawners": None}), "remove diamond"),
+    (("config.yml", {"spawner_properties": {"default": {"delay": "40"}}}), "not a SmartSpawner time"),
+])
+def test_spawner_check_failures(spawner_repo, change, message):
+    name, data = change
+    write_yaml(spawner_repo / name, data)
+    assert any(__import__("re").search(message, p) for p in shop.check()), shop.check()

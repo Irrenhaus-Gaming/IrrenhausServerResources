@@ -103,7 +103,6 @@ held_back:
   - "*_nautilus_armor"
   - "chainmail_*"
   - bell
-  - "spawner_*"             # custom spawner entries below
 
 values:
   auto:
@@ -382,10 +381,13 @@ values:
     snow_block: 2
 
 # Shop entries that are not a plain vanilla item: an item plus EconomyShopGUI data (spawnertype,
-# potiontypes, enchantments, instrument). Never used to price recipes. Held back via "spawner_*".
+# potiontypes, enchantments, instrument). Never used to price recipes.
+# Spawners become SmartSpawner spawners (EconomyShopGUI spawner-provider SMART_SPAWNER). Class none:
+# the shop never buys one back. Their money income is capped by shop.spawner_income_cap, so the price
+# pays for loot and XP, not for profit; mc shop-report lists each one's payback time.
 custom:
-  spawner_zombie: {material: spawner, value: 150000, class: none, esg: {spawnertype: ZOMBIE}}
-  spawner_skeleton: {material: spawner, value: 150000, class: none, esg: {spawnertype: SKELETON}}
-  spawner_spider: {material: spawner, value: 150000, class: none, esg: {spawnertype: SPIDER}}
-  spawner_blaze: {material: spawner, value: 400000, class: none, esg: {spawnertype: BLAZE}}
-  spawner_iron_golem: {material: spawner, value: 1000000, class: none, esg: {spawnertype: IRON_GOLEM}}
+  spawner_zombie: {material: spawner, value: 7500, class: none, esg: {spawnertype: ZOMBIE}}
+  spawner_skeleton: {material: spawner, value: 10000, class: none, esg: {spawnertype: SKELETON}}
+  spawner_spider: {material: spawner, value: 10000, class: none, esg: {spawnertype: SPIDER}}
+  spawner_blaze: {material: spawner, value: 20000, class: none, esg: {spawnertype: BLAZE}}
+  spawner_iron_golem: {material: spawner, value: 40000, class: none, esg: {spawnertype: IRON_GOLEM}}

@@ -1,0 +1,30 @@
+# SmartSpawner sell integration
+# Full guide: https://docs.smartspawner.site/docs/configuration
+# Everything here applies on /ss reload.
+
+enabled: true
+
+# Paid in ExcellentEconomy's Moneten (currencies/moneten.yml).
+currency: EXCELLENTECONOMY
+excellenteconomy_currency: moneten
+
+# SHOP_ONLY: every sell price comes from the generated EconomyShopGUI shop (Minecraft/shop/), so the
+# shop's anti-farm sell classes apply to spawner loot too. The other modes fall back to the custom
+# prices below whenever the shop pays nothing, which would let spawners sell held-back items.
+# mc lint enforces SHOP_ONLY with custom prices off.
+price_source_mode: SHOP_ONLY
+
+shop_integration:
+  enabled: true
+  # auto, EconomyShopGUI, EconomyShopGUI-Premium, ShopGUIPlus or zShop. auto: SmartSpawner enables
+  # before EconomyShopGUI, so a named plugin always fails first and falls back to auto-detection anyway.
+  preferred_plugin: auto
+
+custom_prices:
+  enabled: false
+
+  # Price for items with no entry below. 0.0 stops them being sold.
+  default_price: 0.0
+
+  # Sell price per material, in currency units. Left empty: prices come from the shop only.
+  prices: {}

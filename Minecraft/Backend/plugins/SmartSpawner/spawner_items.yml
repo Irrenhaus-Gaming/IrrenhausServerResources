@@ -1,0 +1,16 @@
+# Item spawners: which items can be an Item Spawner, and what each one produces.
+# Full guide: https://docs.smartspawner.site/docs/spawner-items
+
+# None: an item spawner makes its item out of nothing (diamonds, totems, nether stars), which no
+# shop price can balance. mc lint fails when one is defined here.
+
+# Extra spawners for an item, each with its own loot. Anything left out except loot comes from that item's spawner.
+custom_spawners:
+#  rich_diamond:
+#    item: DIAMOND
+#    display_name: Rich Diamond
+#    loot:
+#      1:
+#        item: DIAMOND_BLOCK
+#        amount: 1-1
+#        chance: 10.0

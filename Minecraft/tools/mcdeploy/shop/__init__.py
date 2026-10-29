@@ -11,6 +11,7 @@ from .. import config
 from ..config import Target
 from ..errors import McDeployError
 from ..formats import parse
+from . import spawners
 from .layout import load_layout, place, render_files
 from .pricing import Price, _matches, check_prices, load_items, load_shop_knobs, price_all, shop_dir
 from .vanilla import LOCK_NAME, load_lock
@@ -51,11 +52,13 @@ def generated_files(target: Target) -> dict[str, str]:
 
 
 def check() -> list[str]:
-    """Lint: the source is valid, the prices keep the rules, and every generated file parses."""
+    """Lint: the source is valid, the prices keep the rules, every generated file parses, and no
+    SmartSpawner spawner earns more than the cap at these prices."""
     if not (shop_dir() / "items.yml").is_file():
         return []
     try:
-        files, _, _, problems = build()
+        files, _, prices, problems = build()
+        problems += spawners.check(prices, load_shop_knobs())
     except McDeployError as exc:
         return [str(exc)]
     for rel, text in files.items():
@@ -88,6 +91,7 @@ def report() -> str:
         out.append("")
     held = sorted(p.key for p in prices.values() if not p.offered)
     out += ["## Priced but held back (not in the shop)", "", ", ".join(held) or "none", ""]
+    out += spawners.report(prices, load_shop_knobs())
     if problems:
         out += ["## Rule problems", "", *[f"- {p}" for p in problems], ""]
     return "\n".join(out)

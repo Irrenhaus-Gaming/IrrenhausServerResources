@@ -44,6 +44,7 @@ class ShopKnobs:
     craft_factor: Decimal
     rarity: dict
     sell_ratio: dict
+    spawner_income_cap: Decimal  # Moneten/h one SmartSpawner spawner may earn (spawners.py)
 
 
 @dataclass
@@ -88,10 +89,10 @@ def load_shop_knobs(data=None) -> ShopKnobs:
     if not isinstance(raw, dict):
         raise McDeployError("knobs.yml: 'shop' section is missing")
     problems: list[str] = []
-    unknown = set(raw) - {"multiplier", "markup", "craft_factor", "rarity", "sell_ratio"}
+    unknown = set(raw) - {"multiplier", "markup", "craft_factor", "rarity", "sell_ratio", "spawner_income_cap"}
     if unknown:
         problems.append(f"shop: unknown keys {sorted(unknown)}")
-    nums = {k: _dec(raw.get(k)) for k in ("multiplier", "markup", "craft_factor")}
+    nums = {k: _dec(raw.get(k)) for k in ("multiplier", "markup", "craft_factor", "spawner_income_cap")}
     for k, v in nums.items():
         if v is None or v <= 0:
             problems.append(f"shop.{k} must be a number > 0")
@@ -114,7 +115,7 @@ def load_shop_knobs(data=None) -> ShopKnobs:
         if v is None or not Decimal(0) <= v <= MAX_SELL_RATIO:
             problems.append(f"shop.sell_ratio.{k} must be between 0 and {MAX_SELL_RATIO}")
     fail_if(problems, "knobs.yml shop section is invalid:")
-    return ShopKnobs(nums["multiplier"], nums["markup"], nums["craft_factor"], rarity, ratio)
+    return ShopKnobs(nums["multiplier"], nums["markup"], nums["craft_factor"], rarity, ratio, nums["spawner_income_cap"])
 
 
 def _globs(data: dict, key: str, problems: list[str]) -> list[str]:

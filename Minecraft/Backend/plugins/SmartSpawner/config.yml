@@ -1,0 +1,160 @@
+# SmartSpawner configuration
+# Full guide: https://docs.smartspawner.site/docs/configuration
+# Time format: 20s, 5m, 1h, or 1d_2h_30m_15s. Units: s m h d w mo y.
+# Most settings apply on /ss reload. Ones marked RESTART need a full server restart.
+
+# Language folder under language/. Bundled: en_US, es_ES, tr_TR, vi_VN, zh_CN.
+# de_DE is our own translation (tracked in the repo, prices in Moneten).
+language: de_DE
+
+# true shows messages and GUIs in each player's client language when a folder for it exists, false uses language for everyone.
+# Spawner items, holograms and the console always use language.
+language_auto_detect: false
+
+# GUI layout folder under gui_layouts/. Bundled: default, DonutSMP, DonutSMP_v2. Also sets the GUI text style.
+gui_layout: default
+
+spawner_properties:
+  default:
+    # Mobs generated per cycle, rolled between the two values.
+    # Rate and loot are capped together: mc lint fails when a spawner type earns more than
+    # shop.spawner_income_cap (Minecraft/knobs.yml) per hour at shop prices. See mc shop-report.
+    min_mobs: 1
+    max_mobs: 3
+
+    # Player distance in blocks that keeps the spawner running.
+    range: 16
+
+    # Time between generation cycles.
+    delay: 40s
+
+    # Storage size. Each page holds 45 slots.
+    max_storage_pages: 1
+    max_stored_exp: 1000
+    max_stack_size: 400
+
+    # Sneak to stack every held spawner onto one at once. Off stacks one at a time.
+    sneak_stack: true
+
+    # Sneak to place a whole held stack as one spawner. Off places one at a time.
+    sneak_place: true
+
+    # Let players repair held items with the XP stored in a spawner.
+    allow_exp_mending: true
+    protect_from_explosions: true
+
+spawner_break:
+  enabled: true
+
+  # Put broken spawners straight into the inventory instead of dropping them.
+  direct_to_inventory: false
+
+  required_tools:
+    - IRON_PICKAXE
+    - GOLDEN_PICKAXE
+    - DIAMOND_PICKAXE
+    - NETHERITE_PICKAXE
+
+  # Durability taken off the tool per spawner broken.
+  durability_loss: 1
+
+  # Sneak to break up to 64 spawners off a stack at once. Off breaks one at a time.
+  sneak_break: true
+
+  # Sell the storage and claim the XP when the last spawner of a stack is removed.
+  # Needs sell integration and the smartspawner.sellall permission.
+  sell_and_xp_break: true
+
+  silk_touch:
+    required: true
+    level: 1
+
+natural_spawner:
+  # Whether dungeon spawners can be broken and collected (with Silk Touch, see spawner_break).
+  breakable: true
+
+  # Off makes them drop a vanilla spawner instead of a smart one.
+  convert_to_smart_spawner: true
+
+  # Drop chance per type, 0.0 to 100.0. "default" covers every type, entity names override it.
+  # Types left out fall back to 100.0.
+  # drop_chance:
+  #   default: 80.0
+  #   ZOMBIE: 75.0
+
+  # Whether natural spawners still spawn mobs.
+  spawn_mobs: true
+  protect_from_explosions: false
+
+hopper:
+  enabled: false
+  # Time between collection checks.
+  check_delay: 3s
+  # Item stacks moved per collection. Maximum 5.
+  stack_per_transfer: 5
+
+hologram:
+  # Floating text above spawners.
+  enabled: false
+
+  # Offset from the centre of the spawner block.
+  offset_x: 0.5
+  offset_y: 1.6
+  offset_z: 0.5
+
+  # CENTER, LEFT or RIGHT.
+  alignment: CENTER
+  shadowed_text: true
+  # Visible through blocks.
+  see_through: false
+  transparent_background: false
+
+particle:
+  spawner_stack: true
+  spawner_activate: true
+  spawner_generate_loot: true
+
+database:
+  # RESTART: every setting here except autosave-interval.
+  # Backend: SQLITE or MYSQL. A config still set to YAML switches to SQLITE on startup and imports
+  # spawners_data.yml once.
+  type: MYSQL
+
+  # Prefix for this plugin's tables. Letters, digits and underscore. Existing tables are renamed
+  # automatically if you change it.
+  table-prefix: sspawner_
+
+  # How often unsaved spawner changes are written to the database. Minimum 30s.
+  autosave-interval: 3m
+
+  # SQLite: file name inside the plugin folder.
+  sqlite-file: spawners.db
+
+  # MySQL/MariaDB only. Default port: 3306.
+  host: "__SECRET_MC_DB_HOST__"
+  port: __SECRET_MC_DB_PORT__
+  database: smartspawner
+  username: "__SECRET_MC_DB_USERNAME__"
+  password: "__SECRET_MC_DB_PASSWORD__"
+  pool-size: 10
+
+  # A name unique to this server, used when several servers share one MySQL database.
+  server-name: __SERVER_NAME__
+
+  # Add a server picker to /ss list showing spawners from every server in the shared database.
+  # MYSQL only.
+  sync-across-servers: false
+
+  # Import spawners_data.yml on startup, and spawners.db as well when switching to MYSQL.
+  # Imported files get a .migrated suffix so they are never read twice.
+  migrate-from-local: true
+
+performance:
+  loot_generation:
+    # true switches very large batches to an average-based calculation, which keeps big stacks
+    # smooth. false always rolls each mob exactly, closest to vanilla but heavier on CPU.
+    approximate_loot: true
+
+    # How long to stay exact before approximating. Lower is cheaper, higher is more precise.
+    # Recommended: 1000-10000.
+    approximation_threshold: 1000

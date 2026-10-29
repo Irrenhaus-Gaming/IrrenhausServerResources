@@ -215,7 +215,8 @@ currency-formats:
 # SPAWNERLEGACY = The premium version of SpawnerMeta with more features/customize-ability
 # SMART_SPAWNER = A spawner provider which supports stacking spawners
 # PURPUR = Build in spawner provider in Purpur servers
-spawner-provider: AUTO
+# SMARTSPAWNER, not SMART_SPAWNER as listed above: 7.3.3 rejects that name (checked in the jar)
+spawner-provider: SMARTSPAWNER
 # NOTE: When there is no spawner provider set, the default will be used
 
 

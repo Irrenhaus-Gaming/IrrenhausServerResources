@@ -1,0 +1,54 @@
+# Sell Confirmation GUI Layout Configuration
+# Slot positions: 1-27 (3 rows of 9 slots each)
+# Valid materials: https://jd.papermc.io/paper/1.21.8/org/bukkit/Material.html
+#
+# Format:
+#   slot_X:                    # X = slot number (1-27)
+#     material: MATERIAL_NAME  # Material to display
+#     enabled: true/false      # Show/hide button
+#     info_button: true/false  # Optional: Mark as spawner info button (display only)
+#     click:
+#       action: "action"
+#       sound: ui.button.click
+#       sound_success: block.note_block.bell
+#       sound_fail: block.note_block.pling
+#     cooldown: "5s"           # Optional: Per-player cooldown; omitted by default
+#
+# Actions:
+#   cancel: Close confirmation and return to previous GUI
+#   confirm: Confirm and sell all items
+#   none: Display only, not clickable (no action when clicked)
+#
+# Multiple buttons can use same slot
+# You can add multiple cancel/confirm buttons by using different slot numbers
+
+# Skip sell confirmation GUI when selling items
+# When enabled: Clicking sell will immediately sell all items without confirmation
+# When disabled: Clicking sell will show a confirmation GUI first (default behavior)
+skip_sell_confirmation: false
+
+
+# Cancel button
+slot_11:
+  material: RED_STAINED_GLASS_PANE
+  enabled: true
+  click:
+    action: "cancel"
+    sound: ui.button.click
+
+# Spawner info display (not clickable)
+slot_14:
+  material: PLAYER_HEAD
+  enabled: true
+  info_button: true
+  click:
+    action: "none"
+
+# Confirm button
+slot_17:
+  material: LIME_STAINED_GLASS_PANE
+  enabled: true
+  click:
+    action: "confirm"
+    sound_success: block.note_block.bell
+    sound_fail: block.note_block.pling

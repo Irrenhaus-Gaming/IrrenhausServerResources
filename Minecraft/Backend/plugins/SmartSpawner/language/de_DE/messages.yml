@@ -1,0 +1,305 @@
+# SmartSpawner messages (German, our own translation of en_US; prices in Moneten)
+# Full guide: https://docs.smartspawner.site/docs/language
+# Colours: MiniMessage (<red>, <#5DB5F1>, <gradient:#5DB5F1:#FFFFFF>) or legacy (&c, &#5DB5F1).
+# Each message can use message, title, subtitle, action_bar and sound. enabled: false mutes it.
+
+prefix: '<#3498db>SᴍᴀʀᴛSᴘᴀᴡɴᴇʀ <dark_gray>⏩ <reset>'
+
+# {key}
+missing_key:
+  message: '<#ff4444>Fehlender Text: <white>{key}'
+
+general:
+  inventory_full:
+    message: '<#ff4444>Dein Inventar ist voll.'
+  click_too_fast:
+    message: '<#ff4444>Du klickst zu schnell.'
+    sound: block.note_block.bass
+  action_in_progress:
+    message: '<#f0c857>Es läuft bereits eine Aktion. Bitte warte kurz.'
+    action_bar: '<#f0c857>Aktion läuft. Bitte warte kurz.'
+  action_failed:
+    message: '<#ff4444>Die Aktion ist fehlgeschlagen. Bitte versuche es erneut.'
+    action_bar: '<#ff4444>Die Aktion ist fehlgeschlagen. Bitte versuche es erneut.'
+  # {time}
+  action_not_ready:
+    message: '<#f0c857>Das geht noch nicht. Versuche es in <white>{time}<#f0c857> erneut.'
+    sound: block.note_block.bass
+
+spawner:
+  activated:
+    message: 'Der Spawner wurde<green> aktiviert. <reset>Du kannst jetzt Drops und EP einsammeln.'
+    sound: block.beacon.activate
+  # {entity}
+  entity_changed:
+    message: 'Der Spawner erzeugt jetzt <yellow>{entity}<white>.'
+    action_bar: '<white>Der Spawner erzeugt jetzt <yellow>{entity}<white>.'
+    sound: entity.player.levelup
+
+storage:
+  empty:
+    message: '<#ff4444>Das Spawner-Lager ist leer.'
+  in_use:
+    message: '<#ff4444>Ein anderer Spieler hat dieses Spawner-Lager gerade geöffnet.'
+    action_bar: '<#ff4444>Das Lager wird gerade von einem anderen Spieler benutzt.'
+
+# {exp} {exp_mending}
+exp:
+  none:
+    message: '<#ff4444>Es sind keine EP vorhanden.'
+  collected:
+    message: 'Du hast <green>{exp} <white>EP eingesammelt.'
+    action_bar: '<green>+{exp} EP'
+  collected_mending:
+    message: 'Du hast <green>{exp} <white>EP eingesammelt. <red>{exp_mending} <white>davon gingen in Reparatur.'
+    action_bar: '<green>+{exp} EP <white>| <red>-{exp_mending} für Reparatur'
+
+stack:
+  different_type:
+    message: '<#ff4444>Nur Spawner derselben Art lassen sich stapeln.'
+    action_bar: '<#ff4444>Die Spawner müssen dieselbe Art haben.'
+    sound: block.note_block.pling
+  # {max}
+  full:
+    action_bar: '<#ff4444>Maximale Stapelgröße: <white>{max}'
+    sound: block.note_block.pling
+  # {amount}
+  success:
+    action_bar: '<green>Du hast <white>{amount} <green>Spawner gestapelt.'
+    sound: entity.player.levelup
+
+break:
+  no_permission:
+    message: '<#ff4444>Du darfst diesen Spawner nicht abbauen.'
+    sound: entity.villager.no
+  silk_touch_required:
+    message: '<#ff4444>Du brauchst Behutsamkeit, um diesen Spawner abzubauen.'
+    action_bar: '<#ff4444>Du brauchst Behutsamkeit.'
+    sound: item.shield.block
+  wrong_tool:
+    message: '<#ff4444>Mit diesem Werkzeug kannst du keinen Spawner abbauen.'
+    action_bar: '<#ff4444>Falsches Werkzeug für Spawner.'
+    sound: item.shield.block
+  no_drop:
+    message: '<#ff4444>Kein Glück diesmal - der Spawner ist nicht gedroppt.'
+    action_bar: '<#ff4444>Der Spawner ist nicht gedroppt.'
+    sound: block.note_block.pling
+  sneak_blocked:
+    message: '<#ff4444>Bei diesem Spawner kannst du nicht den ganzen Stapel auf einmal abbauen.'
+    action_bar: '<#ff4444>Ganzer Stapel nicht möglich.'
+    sound: block.note_block.pling
+
+# {amount} {price} {exp} {exp_mending}
+sell:
+  nothing_to_sell:
+    message: '<#ff4444>Es gibt nichts, was sich verkaufen lässt.'
+  success:
+    message: 'Du hast <yellow>{amount} <white>Items für <green>{price} Moneten<white> verkauft.'
+    action_bar: '<green>+{price} Moneten'
+  success_with_exp:
+    message: 'Du hast <yellow>{amount} <white>Items für <green>{price} Moneten<white> verkauft und <green>{exp} <white>EP eingesammelt.'
+    action_bar: '<green>+{price} Moneten <white>| <green>+{exp} EP'
+  success_with_exp_mending:
+    message: 'Du hast <yellow>{amount} <white>Items für <green>{price} Moneten<white> verkauft und <green>{exp} <white>EP eingesammelt <white>(<red>{exp_mending} <white>für Reparatur).'
+    action_bar: '<green>+{price} Moneten <white>| <green>+{exp} EP <white>(<red>-{exp_mending} Reparatur)'
+
+command:
+  player_only:
+    message: '<#ff4444>Diesen Befehl können nur Spieler benutzen.'
+    sound: block.note_block.bass
+  no_permission:
+    message: '<#ff4444>Dazu hast du keine Berechtigung.'
+    sound: block.note_block.pling
+
+  list:
+    no_spawners_found:
+      message: '<#ff4444>Keine Spawner gefunden.'
+      sound: block.note_block.pling
+    teleported_to_spawner:
+      message: 'Du wurdest zum Spawner teleportiert.'
+      sound: entity.enderman.teleport
+    teleport_failed:
+      message: '<#ff4444>Teleport zum Spawner nicht möglich.'
+      sound: entity.enderman.teleport
+    spawner_removed:
+      message: '<white>Der Spawner wurde <#ff4444>entfernt<white>.'
+      sound: entity.item.break
+
+  # {value} {max} {property} {old_value} {new_value} {world} {x} {y} {z}
+  set:
+    usage:
+      message: 'Benutzung: <#3498db>/ss set <stack_size|range|delay> \<Wert> [Welt x y z]'
+      sound: block.note_block.hat
+    invalid:
+      message: '<#ff4444>Ungültiger Wert oder keine SmartSpawner-Position.'
+      sound: block.note_block.pling
+    stack_size_exceeds_max:
+      message: '<#ff4444>Stapelgröße <white>{value} <#ff4444>ist größer als das Maximum dieses Spawners: <white>{max}'
+      sound: block.note_block.pling
+    location_required:
+      message: '<#f0c857>Die Konsole muss eine Position angeben: <#3498db>/ss set <stack_size|range|delay> \<Wert> \<Welt> \<x> \<y> \<z>'
+      sound: block.note_block.pling
+    success:
+      message: '<green>{property} <white>von <yellow>{old_value} <white>auf <green>{new_value} <white>gesetzt bei <#3498db>{world} {x} {y} {z}<white>.'
+      sound: entity.experience_orb.pickup
+
+  # {percent} {count} {radius}
+  near:
+    bossbar:
+      analyzing: 'Suche Spawner in der Nähe... {percent}%'
+      found: '{count} Spawner im Umkreis von {radius} Blöcken gefunden.'
+      not_found: 'Keine Spawner im Umkreis von {radius} Blöcken.'
+    view_gui:
+      button: ' [Im Menü ansehen]'
+      hover: 'Klicke, um die {count} gefundenen Spawner anzusehen.'
+    scan_start:
+      message: 'Suche Spawner im Umkreis von <yellow>{radius} <white>Blöcken...'
+      sound: block.note_block.hat
+    scan_found:
+      message: '<green>{count} <white>Spawner im Umkreis von <yellow>{radius} <white>Blöcken gefunden. Markierungen bleiben <yellow>30s<white>.'
+      sound: entity.experience_orb.pickup
+    scan_none:
+      message: '<#ff4444>Keine Spawner im Umkreis von <white>{radius} <#ff4444>Blöcken.'
+      sound: block.note_block.pling
+    scan_cancelled:
+      message: '<#f0c857>Suche abgebrochen, Markierungen entfernt.'
+      sound: block.note_block.bass
+    no_active_scan:
+      message: '<#ff4444>Du hast keine laufende Suche.'
+      sound: block.note_block.bass
+    highlights_expired:
+      message: '<#888888>Die Spawner-Markierungen sind abgelaufen.'
+
+  # {amount} {entity} {player}
+  give:
+    player_not_found:
+      message: '<#ff4444>Spieler nicht gefunden.'
+      sound: block.note_block.pling
+    invalid_mob_type:
+      message: '<#ff4444>Ungültiger Mob-Typ oder Spawner-Name.'
+      sound: block.note_block.pling
+    invalid_item_type:
+      message: '<#ff4444>Ungültiger Item-Typ.'
+      sound: block.note_block.pling
+    invalid_item_spawner:
+      message: '<#ff4444>Ungültiger Item-Spawner-Name.'
+      sound: block.note_block.pling
+    inventory_full:
+      message: '<#ff4444>Einige Spawner wurden fallen gelassen, weil das Inventar voll ist.'
+      sound: block.note_block.pling
+    spawner_received:
+      message: 'Du hast <green>{amount} {entity}<white>-Spawner erhalten.'
+      sound: entity.experience_orb.pickup
+    spawner_given:
+      message: '<green>{amount} {entity}<white>-Spawner an <#3498db>{player} <white>gegeben.'
+      sound: entity.experience_orb.pickup
+
+  hologram:
+    enabled:
+      message: 'Hologramme sind für alle Spawner <green>an<white>.'
+      sound: entity.experience_orb.pickup
+    disabled:
+      message: 'Hologramme sind für alle Spawner <#ff4444>aus<white>.'
+      sound: block.note_block.bass
+    cleared:
+      message: '<green>Alle Hologramme <white>wurden entfernt.'
+      sound: entity.experience_orb.pickup
+    clear_error:
+      message: '<#ff4444>Hologramme konnten nicht entfernt werden.'
+      sound: block.note_block.pling
+
+  # {count}
+  clear:
+    usage:
+      message: 'Benutzung: <#3498db>/ss clear <holograms|ghost_spawners>'
+      sound: block.note_block.hat
+    ghost_check_start:
+      message: 'Suche nach Geister-Spawnern...'
+      sound: block.note_block.hat
+    ghost_cleared:
+      message: '<green>{count} <white>Geister-Spawner entfernt.'
+      sound: entity.experience_orb.pickup
+    ghost_none_found:
+      message: '<#ff4444>Keine Geister-Spawner gefunden.'
+      sound: entity.experience_orb.pickup
+
+  prices:
+    not_available:
+      message: '<#ff4444>Verkaufen ist nicht verfügbar. Bitte die Wirtschafts-Einstellungen prüfen.'
+      sound: block.note_block.pling
+    no_priceable_items:
+      message: '<#ff4444>Keine Items mit Preis gefunden.'
+      sound: block.note_block.pling
+
+  reload:
+    start:
+      message: '<#f0c857>Plugin wird neu geladen... Bitte warten.'
+    success:
+      message: '<#3498db>SmartSpawner<white> wurde neu geladen.'
+      sound: entity.experience_orb.pickup
+    error:
+      message: '<#ff4444>SmartSpawner konnte nicht neu geladen werden. Details stehen in der Konsole.'
+      sound: block.note_block.pling
+
+  # {current} {available} {value} {old_value} {new_value}
+  language:
+    current:
+      message: 'Aktuelle Sprache: <green>{current} <#888888>| <white>Verfügbar: {available}'
+      sound: block.note_block.hat
+    invalid:
+      message: '<#ff4444>Unbekannte Sprache: <white>{value}<#ff4444>. Möglich: <white>{available}'
+      sound: block.note_block.pling
+    already_set:
+      message: '<#f0c857>Die Sprache ist bereits <white>{value}<#f0c857>.'
+      sound: block.note_block.hat
+    success:
+      message: 'Sprache von <yellow>{old_value} <white>auf <green>{new_value}<white> geändert.'
+      sound: entity.experience_orb.pickup
+    error:
+      message: '<#ff4444>Die Sprache konnte nicht geändert werden. Details stehen in der Konsole.'
+      sound: block.note_block.pling
+
+  # {current} {available} {value} {old_value} {new_value}
+  gui_layout:
+    current:
+      message: 'Aktuelles Layout: <green>{current} <#888888>| <white>Verfügbar: {available}'
+      sound: block.note_block.hat
+    invalid:
+      message: '<#ff4444>Unbekanntes Layout: <white>{value}<#ff4444>. Möglich: <white>{available}'
+      sound: block.note_block.pling
+    already_set:
+      message: '<#f0c857>Das Layout ist bereits <white>{value}<#f0c857>.'
+      sound: block.note_block.hat
+    success:
+      message: 'Layout von <yellow>{old_value} <white>auf <green>{new_value}<white> geändert.'
+      sound: entity.experience_orb.pickup
+    error:
+      message: '<#ff4444>Das Layout konnte nicht geändert werden. Details stehen in der Konsole.'
+      sound: block.note_block.pling
+
+  # {name} {label}
+  editloot:
+    usage:
+      message: 'Benutzung: <#37eb9a>/ss editloot <Spawner-Name><white>. Beispiel: <#37eb9a>/ss editloot blaze_spawner'
+      sound: block.note_block.hat
+    unknown_entry:
+      message: '<#ff4444>Kein Spawner namens <white>{name}<#ff4444>. Tab-Vervollständigung zeigt gültige Namen.'
+      sound: block.note_block.bass
+    entry_missing:
+      message: '<#ff4444>Dieser Eintrag steht nicht mehr in der Datei.'
+      sound: block.note_block.bass
+    loot_added:
+      message: '<#37eb9a>Loot-Eintrag <white>{label}<#37eb9a> hinzugefügt.'
+      sound: entity.experience_orb.pickup
+    loot_saved:
+      message: '<#37eb9a>Loot-Eintrag <white>{label}<#37eb9a> gespeichert.'
+      sound: entity.experience_orb.pickup
+    loot_replaced:
+      message: '<#37eb9a>Item von <white>{label}<#37eb9a> ersetzt.'
+      sound: entity.experience_orb.pickup
+    loot_deleted:
+      message: '<#ff6b6b>Loot-Eintrag <white>{label}<#ff6b6b> entfernt.'
+      sound: entity.item.pickup
+    capture_empty:
+      message: '<#ff4444>Lege zuerst ein Item in den mittleren Slot.'
+      sound: block.note_block.bass

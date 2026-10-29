@@ -199,3 +199,7 @@ Minecraft/Backend/plugins/EconomyShopGUI/ExampleShop.yml
 # Generated at render time from Minecraft/shop/ (mcdeploy refuses them in the repo)
 Minecraft/Backend/plugins/EconomyShopGUI/sections
 Minecraft/Backend/plugins/EconomyShopGUI/shops
+# SmartSpawner: bundled languages are plugin-written; de_DE is our own translation (config.yml language)
+Minecraft/Backend/plugins/SmartSpawner/language/*
+!Minecraft/Backend/plugins/SmartSpawner/language/de_DE/
+Minecraft/Backend/plugins/SmartSpawner/logs
