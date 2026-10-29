@@ -191,10 +191,11 @@ currency-formats:
     singular: Point
     plural: Points
     friendly: Points
+  # ExcellentEconomy's "moneten" through Vault. Not %currency-symbol%: that is the locale's (de-DE -> €)
   vault:
-    singular: '%currency-symbol%'
-    plural: '%currency-symbol%'
-    friendly: money
+    singular: 'Moneten'
+    plural: 'Moneten'
+    friendly: 'Moneten'
 
 
 #--------------------------------------------SpawnerProvider--------------------------------------------
@@ -697,8 +698,11 @@ display-lore-layout:
     - '%translations-time-requirement-lore%'
   # One of the following lore is displayed on shop items with buy prices based on the items state
   buy-prices:
+    # Written out instead of %translations-left-click-buy%: lang-de.yml (7.3.3) wraps that line in literal quotes
     normal:
-    - '%translations-left-click-buy%'
+    - ''
+    - ' &a&lKaufpreis'
+    - ' &a■ &f%buyPrice%'
     disabled:
     - '%translations-item-cannot-be-bought%'
     undefined:
