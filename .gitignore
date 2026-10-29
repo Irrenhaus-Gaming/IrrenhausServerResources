@@ -191,3 +191,11 @@ Minecraft/Backend/plugins/nightcore/lang
 Minecraft/Backend/plugins/BetterStructures/spawn_pools/tommy.yml
 Minecraft/Backend/plugins/DecentHolograms/lang.yml
 Minecraft/Backend/plugins/FreeMinecraftModels/pet_behaviors
+Minecraft/Backend/plugins/EconomyShopGUI/LanguageFiles
+Minecraft/Backend/plugins/EconomyShopGUI/cache
+Minecraft/Backend/plugins/EconomyShopGUI/transaction-log.txt
+Minecraft/Backend/plugins/EconomyShopGUI/ExampleSection.yml
+Minecraft/Backend/plugins/EconomyShopGUI/ExampleShop.yml
+# Generated at render time from Minecraft/shop/ (mcdeploy refuses them in the repo)
+Minecraft/Backend/plugins/EconomyShopGUI/sections
+Minecraft/Backend/plugins/EconomyShopGUI/shops

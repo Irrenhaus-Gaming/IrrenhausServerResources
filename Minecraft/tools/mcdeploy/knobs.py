@@ -25,7 +25,7 @@ def load_knobs(data=None) -> dict:
     problems: list[str] = []
     if not isinstance(data, dict):
         raise McDeployError("knobs.yml must be a mapping")
-    unknown = set(data) - {"style", "rewards"}
+    unknown = set(data) - {"style", "rewards", "shop"}
     if unknown:
         problems.append(f"unknown top-level keys {sorted(unknown)}")
     style = data.get("style") or {}
@@ -58,7 +58,8 @@ def load_knobs(data=None) -> dict:
             if field != "amount" and field not in style:
                 problems.append(f"rewards {kind}: text refers to {{{field}}}, which is not a style name")
     fail_if(problems, "knobs.yml is invalid:")
-    return {"style": style, "rewards": rewards}
+    # `shop` is validated by mcdeploy.shop (it has its own invariants).
+    return {"style": style, "rewards": rewards, "shop": data.get("shop")}
 
 
 def reward_amount(base: str, multiplier) -> int:

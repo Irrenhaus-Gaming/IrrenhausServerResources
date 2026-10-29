@@ -11,7 +11,7 @@ import time
 import sys
 from pathlib import Path
 
-from . import boottest, ci, convert, deploy, lint, pull, servers
+from . import boottest, ci, convert, deploy, lint, pull, servers, shop
 from .config import OUT_DIR, OUTPUTS, REPO_ROOT, deploy_values, get_target, git_files, load_test_values, require_values
 from .errors import McDeployError
 from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint, verify_instance
@@ -54,6 +54,38 @@ def cmd_render(args) -> None:
         (out / rel).parent.mkdir(parents=True, exist_ok=True)
         (out / rel).write_bytes(data)
     print(f"rendered {len(rendered)} files to {out}")
+
+
+def cmd_shop_report(args) -> None:
+    text = shop.report()
+    out = Path(args.out).resolve() if args.out else OUT_DIR / "shop-report.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text, encoding="utf-8")
+    if args.summary:
+        OUTPUTS.add_summary("<details><summary>Shop prices</summary>\n\n" + text + "\n</details>")
+    print(f"shop report written to {out}")
+
+
+def cmd_shop_audit(args) -> None:
+    target = get_target(args.target)
+    if args.jars_from == "remote":
+        values = deploy_values()
+        remote = SftpRemote(values)
+        try:
+            verify_instance(target, remote, values)
+            boottest.fetch_jars(target, remote)
+        finally:
+            remote.close()
+    old = shop.vanilla.load_lock() if shop.vanilla.lock_path().is_file() else {"items": {}, "recipes": {}}
+    lock, version = shop.vanilla.generate_from_jar(target)
+    shop.vanilla.lock_path().write_text(shop.vanilla.dump_lock(lock), encoding="utf-8", newline="\n")
+    added = sorted(set(lock["items"]) - set(old["items"]))
+    removed = sorted(set(old["items"]) - set(lock["items"]))
+    rarity = sorted(n for n in set(lock["items"]) & set(old["items"]) if lock["items"][n] != old["items"][n])
+    print(f"vanilla.lock.yml: {len(lock['items'])} items, {len(lock['recipes'])} recipes (server {version})")
+    for label, names in (("new items", added), ("removed items", removed), ("rarity/stack changed", rarity)):
+        print(f"{label} ({len(names)}): {', '.join(names) or '-'}")
+    print(f"items without a price (not in the shop): {', '.join(shop.unpriced()) or '-'}")
 
 
 def cmd_probe(args) -> None:
@@ -159,6 +191,13 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("convert-apply", help="(one-time) mask the reviewed plan")
     p.add_argument("--plan", required=True)
     p.add_argument("--values", required=True)
+    p = sub.add_parser("shop-report", help="price table of the generated EconomyShopGUI shop")
+    p.add_argument("--out", help="file to write (default .cache/out/shop-report.md)")
+    p.add_argument("--summary", action="store_true", help="also add it to the GitHub step summary")
+    p = sub.add_parser("shop-audit", help="refresh Minecraft/shop/vanilla.lock.yml from a target's server jar")
+    p.add_argument("target")
+    p.add_argument("--jars-from", choices=["remote", "cache"], default="cache",
+                   help="remote: download jars from the server first (needs AMP_SFTP_*); cache: reuse .cache/jars")
     p = sub.add_parser("unit-tests", help="run the mcdeploy unit tests")
 
     args = parser.parse_args(argv)
@@ -204,6 +243,10 @@ def main(argv: list[str] | None = None) -> int:
             convert.run_convert_scan(Path(args.out))
         elif args.command == "convert-apply":
             convert.run_convert_apply(Path(args.plan), Path(args.values))
+        elif args.command == "shop-report":
+            cmd_shop_report(args)
+        elif args.command == "shop-audit":
+            cmd_shop_audit(args)
         elif args.command == "unit-tests":
             import pytest
             return pytest.main(["-q", str(Path(__file__).resolve().parent.parent / "tests")])

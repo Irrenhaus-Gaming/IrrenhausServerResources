@@ -9,8 +9,8 @@ import subprocess
 from datetime import datetime, timezone
 
 from .config import (
-    OUTPUTS, REPO_ROOT, Target, assert_clean_worktree, deploy_values, load_schema,
-    managed_files, require_values,
+    OUTPUTS, REPO_ROOT, Target, assert_clean_worktree, deploy_values, generated_files, load_schema,
+    managed_files, read_source, require_values,
 )
 from .blocks import expand_blocks, verify_blocks
 from .errors import McDeployError, fail_if
@@ -87,8 +87,9 @@ def target_placeholders(target: Target) -> dict[str, str]:
     knobs against knobs.yml; server tokens need no declaration)."""
     schema = load_schema()
     names: dict[str, str] = {}
+    generated = generated_files(target)
     for rel in managed_files(target):
-        data = (target.source_dir / rel).read_bytes()
+        data = read_source(target, rel, generated)
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
@@ -193,8 +194,9 @@ def render_target(target: Target, values: dict[str, str]) -> dict[str, bytes]:
     rendered: dict[str, bytes] = {}
     problems: list[str] = []
     expansions = load_expansions()
+    generated = generated_files(target)
     for rel in managed_files(target):
-        data = (target.source_dir / rel).read_bytes()
+        data = read_source(target, rel, generated)
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
@@ -260,6 +262,8 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
     diff_lines: list[str] = []
     uploads: dict[str, bytes] = {}
     replaced: dict[str, bytes] = {}  # drifted files, uploaded only with adopt
+    generated = generated_files(target)
+    taken_over: list[str] = []
     keys_for = {rel: owned_keys(target, rel) for rel in rendered}
     owned_before = manifest.get("owned", {})
     incremental = raw_manifest is not None and not adopt and not full
@@ -290,11 +294,22 @@ def check_drift(target: Target, remote: RemoteBase, rendered: dict[str, bytes], 
         if deployed_unchanged(rel, remote_data, data, manifest["files"].get(rel), manifest.get("content", {}).get(rel),
                               tuple(owned_before.get(rel, ())), keys):
             uploads[rel] = upload
+        elif rel in generated and rel not in manifest["files"]:
+            # Never deployed before, so the server's copy is the plugin's stock file: a generated
+            # file replaces it. Once deployed, a server-side edit is drift like everywhere else.
+            uploads[rel] = upload
+            taken_over.append(rel)
         else:
             drifted.append(rel)
             replaced[rel] = upload
-            repo_text = (target.source_dir / rel).read_bytes().decode("utf-8", errors="replace")
+            repo_text = read_source(target, rel, generated).decode("utf-8", errors="replace")
             diff_lines += masked_diff(rel, remote_data.decode("utf-8", errors="replace"), repo_text, masker)
+    if taken_over:
+        OUTPUTS.add_summary(
+            f"### {target.name}: {len(taken_over)} generated file(s) replace server files never deployed before\n"
+            + "\n".join(f"- `{r}`" for r in sorted(taken_over))
+        )
+        print(f"{target.name}: {len(taken_over)} generated file(s) replace the plugin's own files on the server")
     if drifted and adopt:
         OUTPUTS.add_summary(
             f"### {target.name}: adopting the server, {len(drifted)} existing file(s) are replaced\n"

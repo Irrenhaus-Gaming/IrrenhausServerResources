@@ -193,6 +193,7 @@ def test_adopt_is_refused_once_a_manifest_exists(env):
 def test_repo_only_files_are_not_managed(monkeypatch):
     files = ["plugins/FMM/models/pet.bbmodel", "plugins/FMM/models/pet.source.md", "plugins/Plug/config.yml"]
     monkeypatch.setattr(config, "source_files", lambda source, include_untracked=True: files)
+    monkeypatch.setattr(config, "generated_files", lambda target: {})
     target = Target(
         name="mc-backend-Test", profile="backend", server_name="Test", source="Backend", platform="paper",
         java_image="x", server_jar="*.jar", accept_eula=True, memory="1G", boot_timeout_seconds=1, settle_seconds=0,

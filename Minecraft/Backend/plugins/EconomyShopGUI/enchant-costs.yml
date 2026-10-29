@@ -1,0 +1,135 @@
+# This file lets you configure the price additions for enchantments on sold items
+# These prices or percents are additional on top of the sell price of a shop item per enchantment
+
+# The default price additions below aim for a 100 - 150 percent on top of the base sell price for max enchanted items
+
+# For example:
+# A diamond sword with max enchantments (sharpness, looting, knockback, unbreaking, fire aspect, sweeping edge and mending)
+# has a additional price percent of about 150% on top of the base sell price of the shop item (Note that the shop item has NO enchantments)
+# Example base sell price is $2500, then a max enchanted sword will sell for $6250
+
+# Similar for a max enchanted chestplate which will have a additional price of about 90% (Note that the shop item has NO enchantments)
+# Example base sell price is $950, then this max enchanted chestplate sells for $1805
+
+# If a shop item has for example sharpness 3 already on it, then if the item sold has sharpness 5
+# the level multiplier is only calculated 2 times instead of 5
+
+enchants:
+  aqua_affinity:
+    percent: 5
+  bane_of_arthropods:
+    percent: 8.5
+    level-multiplier: 0.5
+  blast_protection:
+    percent: 7
+    level-multiplier: 0.45
+  breach:
+    percent: 10
+    level-multiplier: 0.65
+  channeling:
+    percent: 10
+  density:
+    percent: 10
+    level-multiplier: 0.65
+  depth_strider:
+    percent: 8.5
+    level-multiplier: 0.45
+  efficiency:
+    percent: 10
+    level-multiplier: 0.65
+  feather_falling:
+    percent: 8.5
+    level-multiplier: 0.5
+  fire_aspect:
+    percent: 8.5
+    level-multiplier: 0.45
+  fire_protection:
+    percent: 7
+    level-multiplier: 0.45
+  flame:
+    percent: 8.5
+  fortune:
+    percent: 14
+    level-multiplier: 0.65
+  frost_walker:
+    percent: 7
+    level-multiplier: 0.45
+  impaling:
+    percent: 8.5
+    level-multiplier: 0.65
+  infinity:
+    percent: 13
+  knockback:
+    percent: 5
+    level-multiplier: 0.45
+  looting:
+    percent: 12
+    level-multiplier: 0.65
+  loyalty:
+    percent: 8.5
+    level-multiplier: 0.5
+  luck_of_the_sea:
+    percent: 7
+    level-multiplier: 0.45
+  lure:
+    percent: 7
+    level-multiplier: 0.45
+  mending:
+    percent: 15
+  multishot:
+    percent: 8.5
+  piercing:
+    percent: 7
+    level-multiplier: 0.45
+  power:
+    percent: 10
+    level-multiplier: 0.65
+  projectile_protection:
+    percent: 7
+    level-multiplier: 0.45
+  protection:
+    percent: 10
+    level-multiplier: 0.65
+  punch:
+    percent: 5
+    level-multiplier: 0.45
+  quick_charge:
+    percent: 7
+    level-multiplier: 0.45
+  respiration:
+    percent: 7
+    level-multiplier: 0.45
+  riptide:
+    percent: 8.5
+    level-multiplier: 0.5
+  sharpness:
+    percent: 12
+    level-multiplier: 0.65
+  silk_touch:
+    percent: 15
+  smite:
+    percent: 8.5
+    level-multiplier: 0.5
+  soul_speed:
+    percent: 7
+    level-multiplier: 0.45
+  sweeping_edge:
+    percent: 8.5
+    level-multiplier: 0.5
+  swift_sneak:
+    percent: 7
+    level-multiplier: 0.45
+  thorns:
+    percent: 8.5
+    level-multiplier: 0.5
+  unbreaking:
+    percent: 12
+    level-multiplier: 0.65
+  wind_burst:
+    percent: 13
+    level-multiplier: 0.65
+
+  #binding_curse:
+  #  percent: 0
+  #vanishing_curse:
+  #  percent: 0

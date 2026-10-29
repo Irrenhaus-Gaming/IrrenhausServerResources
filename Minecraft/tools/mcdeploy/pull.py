@@ -5,9 +5,10 @@ import json
 import re
 
 from .blocks import entries_from_server
-from .config import OUTPUTS, Target, deploy_values, load_schema, managed_files
+from .config import OUTPUTS, Target, deploy_values, generated_files, load_schema, managed_files
 from .deploy import (
-    Masker, load_expansions, load_mask_scopes, render_text, resolve_values, same_content, target_placeholders,
+    MANIFEST, Masker, content_hash, load_expansions, load_mask_scopes, manifest_hash, render_text, resolve_values,
+    same_content, target_placeholders,
 )
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
@@ -44,7 +45,12 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
     scopes = load_mask_scopes()
     allow = load_scan_allowlist()
     listed: list[str] = []
-    paths = managed_files(target, include_untracked=False) + [p.strip("/") for p in extra_paths]
+    generated = generated_files(target)
+    extra = [p.strip("/") for p in extra_paths]
+    refused = [p for p in extra if p in generated]
+    fail_if([f"{p}: generated from Minecraft/shop/ at render time, never stored in the repo" for p in refused],
+            f"{target.name}: --add cannot import these files:")
+    paths = managed_files(target, include_untracked=False) + extra
     remote = SftpRemote(values)
     try:
         verify_instance(target, remote, values)
@@ -55,8 +61,21 @@ def run_pull(target: Target, extra_paths: list[str]) -> None:
     updates: dict[str, bytes] = {}
     try:
         remote_files = remote.read_many(paths)
+        deployed = json.loads(remote.read(MANIFEST) or b"{}") if generated else {}
         for rel in paths:
             data = remote_files[rel]
+            if rel in generated:
+                # Built from Minecraft/shop/, never written into the repo. Not deployed yet: the next
+                # deploy creates it or replaces the plugin's stock file. Deployed and edited since:
+                # the edit has to be made in Minecraft/shop/ instead.
+                keys = owned_keys(target, rel)
+                expected = deployed.get("files", {}).get(rel)
+                edited = (data is not None and expected is not None and manifest_hash(data, keys) != expected
+                          and content_hash(rel, data, keys) != deployed.get("content", {}).get(rel))
+                if edited:
+                    problems.append(f"{rel}: changed on the server, but it is generated from Minecraft/shop/; "
+                                    f"make the change there (the next deploy then replaces the server's copy)")
+                continue
             if data is None:
                 problems.append(f"{rel}: missing on the server")
                 continue

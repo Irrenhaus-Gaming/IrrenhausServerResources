@@ -22,3 +22,25 @@ rewards:
   XP:               # vanilla experience points
     multiplier: 1
     text: "&#F15BB5{amount}◎"
+
+# EconomyShopGUI admin shop (generated from Minecraft/shop/, see its README). Every item has a value V:
+# the fair price between players, per item. The shop sells above it and buys far below it, so trading
+# with another player is always better than trading with the shop.
+#   buy  = V * markup * rarity[item rarity] * multiplier   (rounded up)
+#   sell = V * sell_ratio[class] * multiplier               (rounded down; crafted items never sell
+#                                                            for more than their ingredients)
+# Lint enforces markup >= 1.5, every sell ratio <= 0.35, and buy >= 3 * sell for every item.
+shop:
+  multiplier: 1       # scales every shop price at once
+  markup: 2           # shop price = twice the player price
+  craft_factor: 1.05  # a crafted item's value: its ingredients' values * this (work done)
+  rarity:             # vanilla rarity component; a small premium on the buy price only
+    common: 1
+    uncommon: 1.15
+    rare: 1.3
+    epic: 1.5
+  sell_ratio:         # what the shop pays, as a share of V
+    auto: 0.05        # fully AFK-farmable (iron/gold/mob/crop farms, raids): token amounts only
+    farm: 0.15        # renewable, but needs a player working
+    mined: 0.3        # mined or found by hand, not farmable
+    none: 0           # the shop never buys it back

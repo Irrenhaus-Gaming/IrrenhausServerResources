@@ -10,6 +10,7 @@ from .config import (
     source_files,
 )
 from .blocks import expand_blocks
+from . import shop
 from .workflowcheck import check_workflows
 from .errors import McDeployError, fail_if
 from .formats import detect_format, parse
@@ -157,6 +158,7 @@ def run_lint() -> None:
                 problems.append(f"{rel}:{line}: {label} would hide failures; not allowed")
 
     problems += check_workflows()
+    problems += shop.check()
 
     fail_if(problems, f"Lint failed ({len(problems)} problem(s)):")
     OUTPUTS.add_summary(

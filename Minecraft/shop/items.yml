@@ -1,0 +1,391 @@
+# Admin shop price list (EconomyShopGUI). The knobs that turn values into prices are in
+# Minecraft/knobs.yml -> shop; the menu is in layout.yml. See README.md in this folder.
+#
+# A value is the fair price of ONE item between players, in Moneten. Anchors: cobblestone 1,
+# iron ingot 30, diamond 500. Only base items get a value here; everything craftable is priced
+# from its cheapest vanilla recipe (vanilla.lock.yml), so an iron block always costs 9 ingots.
+# Item ids may be globs ("*_concrete"); an exactly named item wins over a glob, a more specific
+# glob (more fixed characters) over a looser one.
+#
+# The group an item is in decides what the shop pays for it (knobs.yml shop.sell_ratio):
+#   auto   anything a farm produces without a player (iron golems, crops with observers, mob
+#          grinders, raids, gold/piglin farms, bone meal, fishing AFK): token sell price only.
+#          Future spawner plugins (SmartSpawner sells loot at shop prices) stay harmless this way.
+#   farm   renewable but a player has to do the work
+#   mined  found or mined by hand
+#   none   the shop sells it but never buys it back (infinite generators, trivial items)
+
+# Never priced, never in the shop (creative-only, technical, unobtainable or broken in a shop).
+exclude:
+  - air
+  - barrier
+  - bedrock
+  - "*command_block*"
+  - debug_stick
+  - jigsaw
+  - knowledge_book
+  - light
+  - structure_block
+  - structure_void
+  - test_block
+  - test_instance_block
+  - end_portal_frame
+  - reinforced_deepslate
+  - budding_amethyst
+  - spawner
+  - trial_spawner
+  - vault
+  - "infested_*"
+  - farmland
+  - dirt_path
+  - petrified_oak_slab
+  - frogspawn
+  - "suspicious_*"
+  - chipped_anvil
+  - damaged_anvil
+  - "*_spawn_egg"           # spawn eggs are decided later (custom entries below can sell them)
+  - "*_map"                 # explorer maps / filled maps: item data the shop cannot set
+  - filled_map
+  - written_book
+  - writable_book
+  - enchanted_book          # no enchanted books: villager trading halls should matter
+  - potion                  # without a potion type these are water bottles at best
+  - splash_potion
+  - lingering_potion
+  - tipped_arrow
+  - firework_star
+  - firework_rocket
+  - player_head
+  - "*fish_bucket"          # buckets of mobs, water, lava and powder snow (milk is fine)
+  - axolotl_bucket
+  - cod_bucket
+  - salmon_bucket
+  - tadpole_bucket
+  - sulfur_cube_bucket
+  - powder_snow_bucket
+  - lava_bucket
+  - water_bucket
+  - "*_golem_statue"
+  - "*copper_golem_statue"
+  - chorus_plant
+  - "*_banner_pattern"      # patterns are loot/rewards
+  - goat_horn               # instrument variants are item data
+
+# Priced (so crafted items get a value), but not in the shop yet: neither bought nor sold.
+# Anything crafted from these is held back too. Endgame goods are decided later.
+held_back:
+  - elytra
+  - nether_star
+  - totem_of_undying
+  - enchanted_golden_apple
+  - dragon_egg
+  - dragon_head
+  - dragon_breath
+  - heavy_core
+  - trident
+  - heart_of_the_sea
+  - shulker_shell
+  - echo_shard
+  - ancient_debris
+  - netherite_scrap
+  - netherite_ingot
+  - "*_smithing_template"
+  - "music_disc_*"
+  - disc_fragment_5
+  - experience_bottle
+  - sniffer_egg
+  - ominous_bottle
+  - ominous_trial_key
+  - trial_key
+  - "*_pottery_sherd"
+  - wither_skeleton_skull
+  - "*_horse_armor"
+  - "*_nautilus_armor"
+  - "chainmail_*"
+  - bell
+  - "spawner_*"             # custom spawner entries below
+
+values:
+  auto:
+    # iron golem / gold / piglin bartering farms
+    iron_ingot: 30
+    raw_iron: 28
+    gold_ingot: 40
+    raw_gold: 38
+    gold_nugget: 4.5
+    poppy: 1
+    # raids, witches, guardians, squid, drowned
+    emerald: 60
+    totem_of_undying: 600
+    redstone: 4
+    glowstone_dust: 4
+    prismarine_shard: 4
+    prismarine_crystals: 6
+    ink_sac: 3
+    glow_ink_sac: 6
+    nautilus_shell: 40
+    # mob grinders and animal farms
+    rotten_flesh: 0.5
+    bone: 3
+    string: 3
+    spider_eye: 3
+    gunpowder: 6
+    arrow: 1
+    ender_pearl: 15
+    blaze_rod: 15
+    slime_ball: 5
+    magma_cream: 8
+    leather: 5
+    feather: 2
+    egg: 1
+    blue_egg: 1
+    brown_egg: 1
+    milk_bucket: 100          # a bucket (94.5) plus milk
+    beef: 4
+    porkchop: 4
+    chicken: 3
+    mutton: 3
+    white_wool: 4
+    honeycomb: 4
+    honey_bottle: 4
+    resin_clump: 3
+    cod: 3
+    salmon: 4
+    tropical_fish: 5
+    pufferfish: 6
+    # crops, bone meal, plants that grow on their own
+    wheat: 2
+    wheat_seeds: 0.5
+    beetroot: 1.5
+    beetroot_seeds: 0.5
+    carrot: 1.5
+    potato: 1.5
+    poisonous_potato: 0.5
+    melon_slice: 1
+    pumpkin: 6
+    carved_pumpkin: 6
+    sugar_cane: 2
+    cactus: 2
+    bamboo: 0.5
+    kelp: 0.5
+    sweet_berries: 1
+    glow_berries: 2
+    cocoa_beans: 2
+    nether_wart: 3
+    moss_block: 2
+    pale_moss_block: 2
+    vine: 1
+    twisting_vines: 2
+    weeping_vines: 2
+    sea_pickle: 3
+    seagrass: 1
+    snowball: 0.5
+    ice: 2
+    dandelion: 1
+    allium: 1
+    azure_bluet: 1
+    blue_orchid: 1
+    cornflower: 1
+    lily_of_the_valley: 1
+    oxeye_daisy: 1
+    "*_tulip": 1
+    sunflower: 2
+    lilac: 2
+    rose_bush: 2
+    peony: 2
+    pink_petals: 1
+    wildflowers: 1
+    short_grass: 0.5
+    tall_grass: 1
+    fern: 0.5
+    large_fern: 1
+    short_dry_grass: 0.5
+    tall_dry_grass: 1
+    bush: 1
+
+  farm:
+    # wood and plants a player harvests
+    "*_log": 4
+    "*_stem": 4               # crimson/warped stems
+    bamboo_block: 4
+    stripped_bamboo_block: 4
+    "*_leaves": 1
+    "*_sapling": 2
+    mangrove_propagule: 2
+    azalea: 3
+    flowering_azalea: 4
+    bee_nest: 20
+    mangrove_roots: 2
+    apple: 4
+    chorus_fruit: 3
+    chorus_flower: 6
+    brown_mushroom: 2
+    red_mushroom: 2
+    brown_mushroom_block: 2
+    red_mushroom_block: 2
+    mushroom_stem: 2
+    shelf_mushroom: 2
+    crimson_fungus: 2
+    warped_fungus: 2
+    crimson_roots: 1
+    warped_roots: 1
+    nether_sprouts: 1
+    crimson_nylium: 3
+    warped_nylium: 3
+    warped_wart_block: 3
+    shroomlight: 6
+    big_dripleaf: 4
+    small_dripleaf: 4
+    hanging_roots: 1
+    glow_lichen: 1
+    pale_hanging_moss: 1
+    pointed_dripstone: 2
+    lily_pad: 2
+    cactus_flower: 3
+    firefly_bush: 4
+    red_shrub: 1
+    torchflower: 10
+    torchflower_seeds: 8
+    pitcher_pod: 10
+    pitcher_plant: 12
+    open_eyeblossom: 3
+    closed_eyeblossom: 3
+    wither_rose: 20
+    dead_bush: 1
+    sulfur_spike: 2
+    # sea
+    "*_coral": 4
+    "*_coral_fan": 4
+    "*_coral_block": 8
+    turtle_scute: 30
+    turtle_egg: 30
+    # mobs that need a player or are hard to farm
+    rabbit: 4
+    rabbit_hide: 3
+    rabbit_foot: 20
+    ghast_tear: 40
+    phantom_membrane: 15
+    armadillo_scute: 8
+    breeze_rod: 20
+    skeleton_skull: 150
+    zombie_head: 150
+    creeper_head: 200
+    piglin_head: 250
+    shulker_shell: 300
+    # blocks a player digs (sand dupers are bugs, not farms)
+    sand: 2
+    red_sand: 2
+    gravel: 2
+    clay_ball: 2
+    mud: 2
+    soul_sand: 2
+    soul_soil: 2
+    obsidian: 20
+    crying_obsidian: 15
+    amethyst_shard: 6
+    "small_amethyst_bud": 2
+    "medium_amethyst_bud": 3
+    "large_amethyst_bud": 4
+    amethyst_cluster: 6
+    cobweb: 5
+    "*_froglight": 10
+    sculk: 2
+    sculk_vein: 1
+    sculk_sensor: 40
+    sculk_catalyst: 80
+    sculk_shrieker: 100
+    quartz: 8
+    flint: 2
+    # copper ages on its own; worth what the copper block costs
+    exposed_copper: 50
+    weathered_copper: 50
+    oxidized_copper: 50
+
+  mined:
+    coal: 6
+    raw_copper: 4
+    copper_ingot: 5
+    lapis_lazuli: 8
+    diamond: 500
+    ancient_debris: 2500
+    netherite_upgrade_smithing_template: 5000
+    "*_smithing_template": 800
+    echo_shard: 300
+    heart_of_the_sea: 1500
+    trident: 1500
+    elytra: 25000
+    nether_star: 15000
+    enchanted_golden_apple: 12000
+    dragon_egg: 100000
+    dragon_head: 20000
+    dragon_breath: 200
+    heavy_core: 15000
+    wither_skeleton_skull: 3000
+    sniffer_egg: 1500
+    "music_disc_*": 500
+    disc_fragment_5: 60
+    experience_bottle: 15
+    ominous_bottle: 100
+    trial_key: 80
+    ominous_trial_key: 400
+    "*_pottery_sherd": 100
+    bell: 300
+    "*_horse_armor": 400
+    "*_nautilus_armor": 400
+    "chainmail_*": 200
+    wet_sponge: 150
+    gilded_blackstone: 60
+    spore_blossom: 20
+    mycelium: 10
+    podzol: 4
+    rooted_dirt: 3
+    end_stone: 2
+    calcite: 2
+    tuff: 1.5
+    cinnabar: 2
+    "dead_*_coral": 2
+    "dead_*_coral_fan": 2
+    "dead_*_coral_block": 3
+    # silk-touched ores: the ore is worth a bit more than what it smelts into
+    coal_ore: 10
+    deepslate_coal_ore: 11
+    copper_ore: 8
+    deepslate_copper_ore: 9
+    iron_ore: 45
+    deepslate_iron_ore: 50
+    gold_ore: 60
+    deepslate_gold_ore: 65
+    nether_gold_ore: 10
+    redstone_ore: 15
+    deepslate_redstone_ore: 17
+    lapis_ore: 30
+    deepslate_lapis_ore: 33
+    diamond_ore: 700
+    deepslate_diamond_ore: 750
+    emerald_ore: 300
+    deepslate_emerald_ore: 330
+    nether_quartz_ore: 12
+
+  none:
+    # infinite generators (cobblestone/basalt/stone gens, lava farms) and digging filler
+    cobblestone: 1
+    cobbled_deepslate: 1
+    netherrack: 0.5
+    basalt: 1
+    blackstone: 1
+    granite: 1
+    diorite: 1
+    andesite: 1
+    dirt: 1
+    grass_block: 2
+    "*_concrete": 3
+    snow_block: 2
+
+# Shop entries that are not a plain vanilla item: an item plus EconomyShopGUI data (spawnertype,
+# potiontypes, enchantments, instrument). Never used to price recipes. Held back via "spawner_*".
+custom:
+  spawner_zombie: {material: spawner, value: 150000, class: none, esg: {spawnertype: ZOMBIE}}
+  spawner_skeleton: {material: spawner, value: 150000, class: none, esg: {spawnertype: SKELETON}}
+  spawner_spider: {material: spawner, value: 150000, class: none, esg: {spawnertype: SPIDER}}
+  spawner_blaze: {material: spawner, value: 400000, class: none, esg: {spawnertype: BLAZE}}
+  spawner_iron_golem: {material: spawner, value: 1000000, class: none, esg: {spawnertype: IRON_GOLEM}}

@@ -1,0 +1,261 @@
+# Admin shop menu (EconomyShopGUI). Prices come from items.yml; see README.md in this folder.
+#
+# categories: the main menu buttons (slot 0-44). A category either lists items itself (match/rest)
+# or has up to 5 subs, shown as one row of buttons. Every offered item goes to the FIRST leaf, in
+# the order of this file, with a matching glob; the leaf with rest: true takes everything else.
+# Inside a leaf, items are sorted by the glob that matched, then by id; 28 items per page.
+# name = the plugin's section name (file name); it must stay unique. Titles are MiniMessage/&-codes.
+
+categories:
+  - name: resources
+    title: Rohstoffe
+    color: "<#7FD4FF>"
+    icon: iron_ingot
+    slot: 15
+    match:
+      - coal
+      - charcoal
+      - "raw_*"
+      - "*_ingot"
+      - "*_nugget"
+      - "*_scrap"
+      - ancient_debris
+      - diamond
+      - emerald
+      - lapis_lazuli
+      - redstone
+      - quartz
+      - amethyst_shard
+      - glowstone_dust
+      - echo_shard
+      - flint
+      - resin_clump
+      - sulfur
+      - potent_sulfur
+      - "*_ore"
+      - coal_block
+      - iron_block
+      - gold_block
+      - copper_block
+      - diamond_block
+      - emerald_block
+      - lapis_block
+      - redstone_block
+      - netherite_block
+
+  - name: mobs
+    title: Mob-Drops
+    color: "<#B5E655>"
+    icon: bone
+    slot: 29
+    match:
+      - rotten_flesh
+      - bone
+      - string
+      - spider_eye
+      - fermented_spider_eye
+      - gunpowder
+      - ender_pearl
+      - ender_eye
+      - blaze_rod
+      - blaze_powder
+      - breeze_rod
+      - wind_charge
+      - slime_ball
+      - magma_cream
+      - ghast_tear
+      - phantom_membrane
+      - leather
+      - rabbit_hide
+      - rabbit_foot
+      - feather
+      - "*egg"
+      - beef
+      - porkchop
+      - chicken
+      - mutton
+      - rabbit
+      - cod
+      - salmon
+      - tropical_fish
+      - pufferfish
+      - "*ink_sac"
+      - "prismarine_shard"
+      - "prismarine_crystals"
+      - "*_scute"
+      - nautilus_shell
+      - shulker_shell
+      - honeycomb
+      - "*_head"
+      - "*_skull"
+      - nether_star
+
+  - name: combat
+    title: Ausrüstung
+    color: "<#FF6B6B>"
+    icon: iron_sword
+    slot: 23
+    subs:
+      - name: tools
+        title: Werkzeuge
+        color: "<#FFD166>"
+        icon: iron_pickaxe
+        match: ["*_pickaxe", "*_axe", "*_shovel", "*_hoe", shears, fishing_rod, "*_on_a_stick", flint_and_steel,
+                brush, "*compass", clock, spyglass, lead, name_tag, "*bundle"]
+      - name: weapons
+        title: Waffen
+        color: "<#FF6B6B>"
+        icon: iron_sword
+        match: ["*_sword", "*_spear", mace, trident, bow, crossbow, arrow, spectral_arrow, shield]
+      - name: armor
+        title: Rüstung
+        color: "<#9AA5B1>"
+        icon: iron_chestplate
+        match: ["*_helmet", "*_chestplate", "*_leggings", "*_boots", wolf_armor, "*_horse_armor",
+                "*_nautilus_armor", "*_harness", saddle, elytra]
+
+  - name: mechanics
+    title: Redstone
+    color: "<#E63946>"
+    icon: redstone
+    slot: 25
+    match: ["redstone_*", repeater, comparator, piston, sticky_piston, observer, dispenser, dropper, hopper,
+            crafter, "*rail", lever, "*_button", "*_pressure_plate", tripwire_hook, target, daylight_detector,
+            note_block, "*minecart", tnt, "*lightning_rod", "*_bulb", "*_door", "*_trapdoor", "*_fence_gate",
+            sculk_sensor, calibrated_sculk_sensor, slime_block, honey_block]
+
+  - name: farming
+    title: Landwirtschaft
+    color: "<#80ED99>"
+    icon: wheat
+    slot: 21
+    subs:
+      - name: food
+        title: Nahrung
+        color: "<#F4A261>"
+        icon: bread
+        match: ["cooked_*", bread, cake, pumpkin_pie, "*_stew", "*_soup", cookie, golden_carrot, golden_apple,
+                enchanted_golden_apple, baked_potato, "dried_kelp*", honey_bottle, sugar, apple, chorus_fruit,
+                popped_chorus_fruit]
+      - name: crops
+        title: Pflanzen
+        color: "<#80ED99>"
+        icon: wheat_seeds
+        match: ["*_seeds", wheat, carrot, potato, poisonous_potato, beetroot, melon, melon_slice, pumpkin,
+                carved_pumpkin, sugar_cane, cactus, bamboo, kelp, "*_berries", cocoa_beans, nether_wart,
+                hay_block, "*_mushroom", "*_fungus", "*_roots", nether_sprouts, "*_sapling", mangrove_propagule,
+                "*azalea", dandelion, golden_dandelion, poppy, blue_orchid, allium, azure_bluet, "*_tulip",
+                oxeye_daisy, cornflower, lily_of_the_valley, wither_rose, "torchflower*", sunflower, lilac,
+                rose_bush, peony, pink_petals, wildflowers, "*eyeblossom", "pitcher_*", cactus_flower,
+                spore_blossom, short_grass, tall_grass, fern, large_fern, dead_bush, bush, "*_dry_grass",
+                firefly_bush, lily_pad, vine, glow_lichen, seagrass, sea_pickle, "*_vines", "*dripleaf",
+                hanging_roots, leaf_litter, red_shrub, shelf_mushroom, chorus_flower, pale_hanging_moss,
+                bone_meal, sulfur_spike]
+
+  - name: decoration
+    title: Dekoration
+    color: "<#C77DFF>"
+    icon: lantern
+    slot: 31
+    subs:
+      - name: dyes
+        title: Farbstoffe
+        color: "<#FF8FAB>"
+        icon: red_dye
+        match: ["*_dye"]
+      - name: utility
+        title: Nützliches
+        color: "<#ADB5BD>"
+        icon: crafting_table
+        match: [crafting_table, "*furnace", smoker, chest, trapped_chest, barrel, ender_chest, "*copper_chest",
+                "*shulker_box", anvil, enchanting_table, brewing_stand, cauldron, composter, loom, cartography_table,
+                fletching_table, smithing_table, stonecutter, grindstone, lectern, beehive, bee_nest, jukebox,
+                beacon, conduit, respawn_anchor, lodestone, "*_boat", "*_raft", bucket, book, paper, glass_bottle,
+                bowl, map, scaffolding, ladder, "*_bed", dried_ghast]
+      - name: decorative
+        title: Dekoration
+        color: "<#C77DFF>"
+        icon: lantern
+        match: ["*_banner", "*candle*", "*lantern*", "*torch*", "*_sign", "*chain", "*_bars", flower_pot,
+                decorated_pot, painting, "*item_frame", armor_stand, "*_shelf", "*_cushion", "*bookshelf",
+                "*campfire", end_rod, "*_fence", glowstone, "*_froglight", shroomlight, bell, "*_carpet",
+                jack_o_lantern, "*_head", "*_skull"]
+
+  - name: building
+    title: Baublöcke
+    color: "<#E9C46A>"
+    icon: bricks
+    slot: 13
+    subs:
+      - name: colored
+        title: Farbige Blöcke
+        color: "<#FF8FAB>"
+        icon: red_wool
+        match: ["*_wool*", "*concrete*", "*glass*", "*terracotta"]
+      - name: natural
+        title: Natur
+        color: "<#52B788>"
+        icon: grass_block
+        match: [dirt, coarse_dirt, grass_block, podzol, mycelium, rooted_dirt, mud, "muddy_*", sand, red_sand,
+                gravel, clay, clay_ball, "snow*", "*ice", "*moss*", "*_leaves", "*_nylium", soul_sand, soul_soil,
+                "*coral*", "*sponge", "sculk*", "*mushroom_block", mushroom_stem, "*_wart_block", "*amethyst*",
+                pointed_dripstone, dripstone_block, honeycomb_block, bone_block, cobweb, obsidian, crying_obsidian,
+                netherrack, end_stone, "*_copper_bars"]
+      - name: wood
+        title: Holz
+        color: "<#BC8A5F>"
+        icon: oak_log
+        match: ["*_log", "*_wood", "*_planks", "stripped_*", "*_stem", "*_hyphae", "bamboo_block", "bamboo_mosaic*",
+                "oak_s*", "spruce_s*", "birch_s*", "jungle_s*", "acacia_s*", "dark_oak_s*", "mangrove_s*",
+                "cherry_s*", "pale_oak_s*", "bamboo_s*", "crimson_s*", "warped_s*", "poplar_s*"]
+      - name: copper
+        title: Kupfer
+        color: "<#E07A5F>"
+        icon: cut_copper
+        match: ["*copper*"]
+      - name: stone
+        title: Stein
+        color: "<#A0A0A0>"
+        icon: stone_bricks
+        match: ["*stone*", "*deepslate*", "*brick*", "*granite*", "*diorite*", "*andesite*", "*tuff*", calcite,
+                "*basalt*", "*quartz*", "*prismarine*", "*purpur*", "*cinnabar*", "*sulfur*", "*resin*",
+                packed_mud, "*_wall", "*_slab", "*_stairs"]
+
+  - name: misc
+    title: Verschiedenes
+    color: "<#DEE2E6>"
+    icon: chest
+    slot: 33
+    rest: true
+
+# Stock EconomyShopGUI sections (as the plugin created them on the server). Deploys never delete
+# server files, so every one not reused above is deployed as a disabled section.
+retired:
+  - building.yml
+  - combat.yml
+  - decoration.yml
+  - farming.yml
+  - magic.yml
+  - misc.yml
+  - mobs.yml
+  - music.yml
+  - resources.yml
+  - storage.yml
+  - Z_EverythingElse.yml
+  - Building/decorative_blocks.yml
+  - Building/natural.yml
+  - Building/stone.yml
+  - Building/wood.yml
+  - Combat/armor.yml
+  - Combat/redstone.yml
+  - Combat/tools.yml
+  - Combat/weapons.yml
+  - Decoration/decorative.yml
+  - Decoration/dyes.yml
+  - Farming/crops.yml
+  - Farming/food.yml
+  - Magic/enchanting.yml
+  - Magic/potions.yml
+  - Mobs/mob_drops.yml
+  - Mobs/spawners.yml
+  - Mobs/spawn_eggs.yml

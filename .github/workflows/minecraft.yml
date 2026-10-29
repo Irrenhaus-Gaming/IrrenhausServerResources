@@ -66,6 +66,8 @@ jobs:
         run: bash ./mc.sh gitleaks --history
       - name: Unit tests
         run: bash ./mc.sh unit-tests
+      - name: Shop price table
+        run: bash ./mc.sh shop-report --summary
 
   plan:
     needs: validate

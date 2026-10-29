@@ -93,6 +93,17 @@ Files that are secrets as a whole (`forwarding.secret`, `floodgate/key.pem`, `vo
 
 Change a multiplier or color in `knobs.yml`, and the next deploy uploads every quest that changed. Reload Quests in game afterwards (`/q a reload`). ItsMyConfig is not installed: lint rejects `%itsmyconfig_…%`, `<p:…>` and `"$<…` in configs.
 
+`knobs.yml` → `shop` also sets the admin shop's prices; see below.
+
+### Generated files: the admin shop
+
+EconomyShopGUI's `sections/` and `shops/` files are built at render time from `shop/` (prices, menu, vanilla item data) and the `shop` knobs. They are never stored under `Backend/`. Deploy, drift check and boot test treat them like any other managed file.
+- A generated file that was never deployed replaces the plugin's stock file on the server without counting as drift.
+- `pull` refuses server-side changes to generated files: make them in `shop/`.
+- `mc shop-report` prints the price table, `mc shop-audit <env>` refreshes the vanilla item data after a Minecraft update.
+
+The rules (shop always worse than trading with players, farm output sells for token amounts) are in [shop/README.md](shop/README.md).
+
 ### Server name
 
 `__SERVER_NAME__` is the `<Name>` of the backend's `mc-backend-<Name>` environment, the same name velocity.toml lists it under. Use it wherever a plugin needs an id that differs on every backend: nightcore's and ExcellentEconomy's `MySQL.ServerId`, HuskHomes' `server.yml`, LuckPerms' `server`. It is not secret, needs no schema entry or test value, and may stay unquoted (names are letters, digits, `_` and `-`). Backend only: lint rejects it under `Proxy/`.
@@ -109,6 +120,8 @@ Change a multiplier or color in `knobs.yml`, and the next deploy uploads every q
 .\mc.ps1 test mc-backend-Test --jars-from remote    # needs .mc-local.env, see below
 .\mc.ps1 test mc-backend-Test                       # reuse jars cached in .cache/jars
 .\mc.ps1 drift mc-backend-Test                      # read-only: what would a deploy change?
+.\mc.ps1 shop-report                                # admin shop prices -> .cache/out/shop-report.md
+.\mc.ps1 shop-audit mc-backend-Test                 # refresh shop/vanilla.lock.yml from the cached server jar
 ```
 
 `.mc-local.env` (git-ignored, repo root) holds the secrets of the server you work with (`MC_SERVER_HOST`, `MC_SERVER_SFTP_PORT`, `AMP_SFTP_HOST_KEY`) and the deploy account (`AMP_SFTP_USER`, `AMP_SFTP_PASSWORD`) as `KEY=value` lines.

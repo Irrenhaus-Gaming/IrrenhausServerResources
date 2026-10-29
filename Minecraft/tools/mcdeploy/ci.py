@@ -15,6 +15,7 @@ from .servers import ServerEnvironments, classify, list_environments
 # Changes here affect every server.
 GLOBAL_PATHS = (
     "Minecraft/targets.yml", "Minecraft/secrets.schema.yml", "Minecraft/secret-scan-allowlist.yml",
+    "Minecraft/knobs.yml", "Minecraft/shop/",
     "Minecraft/test/", "Minecraft/tools/", "mc.sh", ".github/workflows/minecraft.yml",
     ".gitattributes", ".gitignore",
 )

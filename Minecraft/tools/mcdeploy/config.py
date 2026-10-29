@@ -324,10 +324,31 @@ def source_files(source: str, include_untracked: bool = True) -> list[str]:
     return [f[len(prefix):] for f in git_files([prefix], include_untracked)]
 
 
+def generated_files(target: Target) -> dict[str, str]:
+    """Files the target gets that are built at render time instead of stored in the repo
+    (source-relative path -> text): the EconomyShopGUI shop from Minecraft/shop/."""
+    from .shop import generated_files as shop_files
+
+    return shop_files(target)
+
+
 def managed_files(target: Target, include_untracked: bool = True) -> list[str]:
-    """Repo-relative paths (inside the target's source dir) that this target deploys; `repo_only` files stay here."""
-    return [rel for rel in source_files(target.source, include_untracked)
-            if not any(fnmatchcase(rel, glob) for glob in target.repo_only)]
+    """Paths (relative to the target's source dir) that this target deploys: its repo files except
+    `repo_only` ones, plus the generated files."""
+    files = [rel for rel in source_files(target.source, include_untracked)
+             if not any(fnmatchcase(rel, glob) for glob in target.repo_only)]
+    generated = generated_files(target)
+    fail_if([f"Minecraft/{target.source}/{rel}" for rel in sorted(set(files) & set(generated))],
+            "These files are generated at render time and must not exist in the repo (delete them, or gitignore them):")
+    return files + sorted(generated)
+
+
+def read_source(target: Target, rel: str, generated: dict[str, str] | None = None) -> bytes:
+    """Unrendered content of a managed file: the generated text, or the repo file."""
+    generated = generated_files(target) if generated is None else generated
+    if rel in generated:
+        return generated[rel].encode("utf-8")
+    return (target.source_dir / rel).read_bytes()
 
 
 def assert_clean_worktree(target: Target) -> None:
