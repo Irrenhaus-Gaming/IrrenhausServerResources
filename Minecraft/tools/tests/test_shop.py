@@ -220,6 +220,7 @@ def test_pages_hold_28_items():
     (lambda l: l["categories"][2].update(slot=15), "slot 15 is used twice"),
     (lambda l: l["categories"][1]["subs"][1].update(name="stone"), "'stone' is used twice"),
     (lambda l: l["categories"][0].update(icon="nope"), "icon must be a vanilla item"),
+    (lambda l: l["retired"].append("Mobs/misc.yml"), "'misc' clashes with retired Mobs/misc.yml"),
 ])
 def test_layout_validation(change, message):
     data = json.loads(json.dumps(LAYOUT))

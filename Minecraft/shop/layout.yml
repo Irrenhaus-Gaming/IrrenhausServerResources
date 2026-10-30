@@ -221,7 +221,8 @@ categories:
                 "*basalt*", "*quartz*", "*prismarine*", "*purpur*", "*cinnabar*", "*sulfur*", "*resin*",
                 packed_mud, "*_wall", "*_slab", "*_stairs"]
 
-  - name: spawners
+  # Not "spawners": EconomyShopGUI ignores folders, so the retired Mobs/spawners.yml would hide it.
+  - name: spawner
     title: Spawner
     color: "<#C77DFF>"
     icon: spawner
@@ -248,6 +249,7 @@ retired:
   - mobs.yml
   - music.yml
   - resources.yml
+  - spawners.yml  # our first spawner section, hidden by Mobs/spawners.yml (see the spawner category)
   - storage.yml
   - Z_EverythingElse.yml
   - Building/decorative_blocks.yml

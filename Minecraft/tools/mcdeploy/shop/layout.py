@@ -124,6 +124,13 @@ def load_layout(lock: dict, data=None) -> Layout:
         problems.append("layout.yml: exactly one leaf needs rest: true (it takes every item no match covers)")
     if not isinstance(layout.retired, list) or not all(isinstance(r, str) and r.endswith(".yml") for r in layout.retired):
         problems.append("layout.yml: retired must be a list of section file paths like Building/stone.yml")
+    else:
+        # ESG keys sections by file name alone (ConfigManager.loadSections ignores folders), so a
+        # disabled Mobs/spawners.yml and our spawners.yml are the same section and one hides the other.
+        own = {f"{c.name}.yml" for c in categories} | {f"{c.name.capitalize()}/{l.name}.yml" for c in categories for l in c.subs}
+        problems += [f"layout.yml: section name '{r.rsplit('/', 1)[-1][:-4]}' clashes with retired {r}: EconomyShopGUI "
+                     f"ignores folders, so the disabled file hides ours; pick another name"
+                     for r in layout.retired if r not in own and r.rsplit("/", 1)[-1][:-4] in names]
     fail_if(problems, "Minecraft/shop/layout.yml is invalid:")
     return layout
 
