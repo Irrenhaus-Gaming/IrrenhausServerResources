@@ -17,7 +17,8 @@ The EconomyShopGUI files under `Backend/plugins/EconomyShopGUI/sections/` and `s
 - **Crafted items are priced from their recipe.** An item without a value costs its ingredients × `craft_factor` (cheapest vanilla recipe), and sells for exactly what its ingredients would. Crafting never turns farm iron into a better-paying item, and an iron block always costs 9 ingots.
 - **Lint enforces the rules on the rounded prices:**
   - buy ≥ 1.5 × V, sell ≤ 0.35 × V, and buy ≥ 3 × sell;
-  - no vanilla recipe turns shop-bought ingredients into something that sells back for more.
+  - no vanilla recipe turns shop-bought ingredients into something that sells back for more;
+  - no vanilla recipe (smelting included) turns items into something the shop pays more for than for the items themselves (upcraft). Farm output and spawner loot sold by hand therefore earn no more than sold as they are. A crafted item sells for what its ingredients sell for along its cheapest route; an item with its own value needs the same sell class as what it is made of (raw ore is worth its ingot).
 - **Not offered:**
   - Unpriced items (no value, no priceable recipe) are not in the shop at all.
   - `exclude` items are never priced.
@@ -27,9 +28,10 @@ The EconomyShopGUI files under `Backend/plugins/EconomyShopGUI/sections/` and `s
 
 ## Spawners (SmartSpawner)
 
-- **Bought here:** the `spawner_*` entries under `custom:` in `items.yml`. EconomyShopGUI hands them out as SmartSpawner spawners (`spawner-provider: SMART_SPAWNER`). Class `none`: the shop never buys a spawner back. Dungeon spawners can also be mined with Silk Touch.
+- **Bought here:** the `spawner_*` entries under `custom:` in `items.yml`, in the main menu's Spawner button (`layout.yml`). EconomyShopGUI hands them out as SmartSpawner spawners (`spawner-provider: SMART_SPAWNER`). Class `none`: the shop never buys a spawner back. Dungeon spawners can also be mined with Silk Touch.
 - **Loot is sold at these prices:** SmartSpawner's sell button asks EconomyShopGUI for each item's sell price per item (sell / stack-size). `sell_integration.yml` must stay on `SHOP_ONLY` with custom prices off, otherwise SmartSpawner falls back to its own price list whenever the shop pays nothing.
 - **Income cap:** lint computes what one spawner of every type earns per hour while a player is in range: `3600 / delay × (min_mobs + max_mobs) / 2 × Σ chance × average amount × sell per item`. It fails above `shop.spawner_income_cap` in `knobs.yml`. A stack of N spawners (up to `max_stack_size`) earns N times that.
+- **Selling loot by hand** (`/sellall`, the shop menu) pays the same per item as SmartSpawner's sell button, so the cap covers both routes. Crafting or smelting the loot first can't raise it either (upcraft rule above).
 - **Over the cap:** lower the chances of that mob's sellable loot in `spawner_mobs.yml` (the trimmed mobs carry a comment with their factor). Don't raise the cap or a sell price to make a spawner fit.
 - `mc shop-report` lists every spawner's income and the payback time of the ones sold here. Item spawners (`spawner_items.yml`) are not allowed.
 

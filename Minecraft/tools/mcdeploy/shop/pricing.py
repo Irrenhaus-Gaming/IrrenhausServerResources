@@ -35,6 +35,7 @@ MIN_BUNDLE_BUY = 8
 ESG_EXTRA_KEYS = {"spawnertype", "potiontypes", "enchantments", "instrument"}
 ID_RE = re.compile(r"^[a-z0-9_]+$")
 MAX_ROUNDS = 64
+UPCRAFT_TOLERANCE = Decimal("1.001")  # Decimal division noise only
 
 
 @dataclass(frozen=True)
@@ -229,12 +230,18 @@ def derive(lock: dict, source: ItemSource, knobs: ShopKnobs) -> dict[str, Price]
         found = [(alt, prices[alt]) for alt in _alternatives(key, lock) if alt in prices]
         return min(found, key=lambda f: (f[1].value, f[1].sell_unit, f[0])) if found else None
 
+    def lowest_sell(key: str) -> Decimal:
+        return min(prices[alt].sell_unit for alt in _alternatives(key, lock) if alt in prices)
+
     derivable = [n for n in lock["recipes"] if n in items and n not in source.values
                  and not _matches(n, source.exclude)]
     for _ in range(MAX_ROUNDS):
         changed = False
         for name in derivable:
             best = None
+            # A crafted item sells for what its ingredients sell for along the cheapest route, so no
+            # recipe turns farm output into something that sells for more (check_prices: upcraft).
+            sell_low = None
             for recipe in lock["recipes"][name]:
                 parts = []
                 for key, qty in recipe["in"].items():
@@ -250,11 +257,15 @@ def derive(lock: dict, source: ItemSource, knobs: ShopKnobs) -> dict[str, Price]
                     cand = (cost * knobs.craft_factor, sell, used)
                     if best is None or cand[:2] < best[:2]:
                         best = cand
+                    low = sum((lowest_sell(key) * qty for key, qty in recipe["in"].items()), Decimal(0)) / out
+                    sell_low = low if sell_low is None else min(sell_low, low)
             if best is None:
                 continue
             old = prices.get(name)
-            if old is None or best[0] < old.value:
-                prices[name] = Price(name, name, best[0], "crafted", best[1], items[name]["rarity"], recipe=best[2])
+            if old is None or best[0] < old.value or sell_low < old.sell_unit:
+                value = best[0] if old is None else min(best[0], old.value)
+                recipe_used = best[2] if old is None or best[0] < old.value else old.recipe
+                prices[name] = Price(name, name, value, "crafted", sell_low, items[name]["rarity"], recipe=recipe_used)
                 changed = True
         if not changed:
             break
@@ -314,6 +325,29 @@ def check_prices(prices: dict[str, Price], lock: dict, knobs: ShopKnobs) -> list
                 problems.append(f"{p.key}: sells for {p.sell_paid:.2f}/item, above {MAX_SELL_RATIO} * V")
             if p.buy < MIN_SPREAD * p.sell:
                 problems.append(f"{p.key}: buy {p.buy} is less than {MIN_SPREAD} * sell {p.sell}")
+    # Selling farm output (or spawner loot) by hand: no recipe may turn ingredients into something
+    # the shop pays more for than for the ingredients themselves (before bundle rounding).
+    for name, recipes in lock["recipes"].items():
+        product = prices.get(name)
+        if product is None or not product.offered or product.sell < 0:
+            continue
+        for recipe in recipes:
+            paid = Decimal(0)
+            for key, qty in recipe["in"].items():
+                priced = [prices[a] for a in _alternatives(key, lock) if a in prices]
+                if not priced:
+                    break
+                # Unrounded on both sides: an item that cannot be bundled rounds a sell price below 1 down to 0.
+                # An ingredient the shop doesn't trade (held back) is worth nothing when sold.
+                sells = [p.sell_unit for p in priced if p.offered]
+                paid += (min(sells) if sells else Decimal(0)) * qty
+            else:
+                gain = product.sell_unit * recipe["out"]
+                if gain > paid * UPCRAFT_TOLERANCE:
+                    problems.append(
+                        f"{name}: {recipe['out']} crafted from {dict(recipe['in'])} sell for {gain:.3f}, the "
+                        f"ingredients only for {paid:.3f} (upcraft; give {name} no value of its own, or the same "
+                        f"sell class as its ingredients)")
     # Buying the ingredients of any vanilla recipe and selling the result must lose money.
     for name, recipes in lock["recipes"].items():
         product = prices.get(name)

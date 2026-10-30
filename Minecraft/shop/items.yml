@@ -107,11 +107,12 @@ held_back:
 values:
   auto:
     # iron golem / gold / piglin bartering farms
+    # Raw ore is worth its ingot: smelting must not raise the sell price (lint: upcraft). Nuggets have no
+    # value of their own: they derive from the ingot, so both directions of the 9:1 recipe stay even.
     iron_ingot: 30
-    raw_iron: 28
+    raw_iron: 30
     gold_ingot: 40
-    raw_gold: 38
-    gold_nugget: 4.5
+    raw_gold: 40
     poppy: 1
     # raids, witches, guardians, squid, drowned
     emerald: 60
@@ -166,6 +167,8 @@ values:
     sugar_cane: 2
     cactus: 2
     bamboo: 0.5
+    bamboo_block: 4.5         # 9 bamboo; same class, so packing a bamboo farm's output pays nothing extra
+    stripped_bamboo_block: 4.5
     kelp: 0.5
     sweet_berries: 1
     glow_berries: 2
@@ -206,8 +209,6 @@ values:
     # wood and plants a player harvests
     "*_log": 4
     "*_stem": 4               # crimson/warped stems
-    bamboo_block: 4
-    stripped_bamboo_block: 4
     "*_leaves": 1
     "*_sapling": 2
     mangrove_propagule: 2
@@ -302,7 +303,7 @@ values:
 
   mined:
     coal: 6
-    raw_copper: 4
+    raw_copper: 5             # worth its ingot (lint: upcraft)
     copper_ingot: 5
     lapis_lazuli: 8
     diamond: 500

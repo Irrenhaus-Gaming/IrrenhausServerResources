@@ -89,7 +89,6 @@ categories:
       - "*_head"
       - "*_skull"
       - nether_star
-      - "spawner_*"
 
   - name: combat
     title: Ausrüstung
@@ -221,6 +220,14 @@ categories:
         match: ["*stone*", "*deepslate*", "*brick*", "*granite*", "*diorite*", "*andesite*", "*tuff*", calcite,
                 "*basalt*", "*quartz*", "*prismarine*", "*purpur*", "*cinnabar*", "*sulfur*", "*resin*",
                 packed_mud, "*_wall", "*_slab", "*_stairs"]
+
+  - name: spawners
+    title: Spawner
+    color: "<#C77DFF>"
+    icon: spawner
+    slot: 11
+    match:
+      - "spawner_*"
 
   - name: misc
     title: Verschiedenes

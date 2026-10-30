@@ -117,6 +117,26 @@ def test_recipe_arbitrage_is_reported():
     assert any("stone: crafting 1 from shop-bought" in pr for pr in problems)
 
 
+def test_upcrafting_farm_output_is_reported():
+    # iron blocks in a better sell class than the farm iron they are made of
+    items = {**ITEMS, "values": {**ITEMS["values"], "farm": {"*_log": 4, "iron_block": 270}}}
+    p, k = prices(items)
+    problems = pricing.check_prices(p, LOCK, k)
+    assert any(pr.startswith("iron_block: 1 crafted from {'iron_ingot': 9}") and "upcraft" in pr for pr in problems)
+    p, k = prices()
+    assert not [pr for pr in pricing.check_prices(p, LOCK, k) if "upcraft" in pr]
+
+
+def test_crafted_items_sell_like_their_cheapest_route():
+    # sticks from dirt: a worse value route, but dirt sells for nothing, so sticks do too
+    lock = json.loads(json.dumps(LOCK))
+    lock["recipes"]["stick"].append({"out": 1, "in": {"dirt": 4}})
+    p, k = prices(lock=lock)
+    planks = p["oak_planks"].value
+    assert p["stick"].value == planks * 2 / 4 * k.craft_factor
+    assert p["stick"].sell_unit == 0
+
+
 @pytest.mark.parametrize("shop_knobs, message", [
     ({"markup": 1.2}, "markup must be >= 1.5"),
     ({"sell_ratio": {"auto": 0.05, "farm": 0.15, "mined": 0.5, "none": 0}}, "between 0 and 0.35"),
