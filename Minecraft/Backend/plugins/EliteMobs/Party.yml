@@ -13,7 +13,7 @@ dungeonReadyCheckTimeoutSeconds: 30
 lootVoteMaximumLifetimeSeconds: 120
 # Shows the combined party status and tracked quest sidebar while players are in a party.
 # Disabling this keeps parties active and falls back to the normal EliteMobs quest scoreboard.
-sidebarEnabled: true
+sidebarEnabled: false
 # How often the party sidebar alternates between its invite and leave command hints.
 sidebarRotationSeconds: 10
 # Shows a short party invitation hint when a player right-clicks another player.

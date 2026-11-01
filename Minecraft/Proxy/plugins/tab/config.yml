@@ -85,14 +85,29 @@ scoreboard:
   hidden-by-default: false
   delay-on-join-milliseconds: 5000
   scoreboards:
-    # 0) EliteMobs-Quest (allein, oder Phase 2 beim Abwechseln)
-    #    MUSS ganz oben stehen
+    # Abwechseln alle 10s (Animation QuestWechsel): Phase 1 Quest, Phase 2
+    # EliteMobs-Quest, Phase 3 EliteMobs-Party. Fehlt das Board einer Phase,
+    # springt ein vorhandenes ein (siehe em-vorrang / party-vorrang).
+
+    # 0) EliteMobs-Quest - MUSS ganz oben stehen
     elitemobs-quest:
       display-condition: "em-zeigen"
       title: "%condition:em-titel%"
       lines:
         - "%condition:em-zeile1%"
         - "%condition:em-zeile2%"
+
+    # 0b) EliteMobs-Party (max. 5 Mitglieder, Anfuehrer zuerst)
+    #     Leere Mitglieder-Zeilen blendet TAB automatisch aus
+    elitemobs-party:
+      display-condition: "party-zeigen"
+      title: "<#A04468>♥ Elite-Party</#E07A9A> &7%elitemobs_party_size%/%elitemobs_party_max_size%"
+      lines:
+        - "%elitemobs_party_member_1_line%"
+        - "%elitemobs_party_member_2_line%"
+        - "%elitemobs_party_member_3_line%"
+        - "%elitemobs_party_member_4_line%"
+        - "%elitemobs_party_member_5_line%"
 
     # 1) Verfolgte Quest ist abgeschlossen
     quest-completed:
@@ -264,13 +279,58 @@ conditions:
       - "%quests_tracked%!=Keine Quest verfolgt"
     type: AND
 
-  # EliteMobs hat Vorrang, wenn keine normale Quest aktiv ist
-  # ODER die Animation gerade auf Phase 2 steht
+  # In einer EliteMobs-Party? (leer ohne Party; der Text-Check haelt das
+  # Board aus, solange EliteMobs die Party-Platzhalter noch nicht kennt)
+  party-bereit:
+    type: AND
+    conditions:
+      - "%elitemobs_party_member_1%!="
+      - "%elitemobs_party_member_1%!<-elitemobs_party"
+      - "%elitemobs_party_member_1%!<-Uninitialized"
+
+  # EliteMobs-Quest hat Vorrang in Phase 2, in Phase 1 ohne normale Quest
+  # und in Phase 3 ohne Party
   em-vorrang:
     conditions:
-      - "%condition:q-bereit%=false"
       - "%animation:QuestWechsel%=2"
+      - "%condition:em-statt-quest%=true"
+      - "%condition:em-statt-party%=true"
     type: OR
+  em-statt-quest:
+    type: AND
+    conditions:
+      - "%animation:QuestWechsel%=1"
+      - "%condition:q-bereit%=false"
+  em-statt-party:
+    type: AND
+    conditions:
+      - "%animation:QuestWechsel%=3"
+      - "%condition:party-bereit%=false"
+
+  # Party hat Vorrang in Phase 3, in Phase 1 ohne normale Quest
+  # und in Phase 2 ohne EliteMobs-Quest
+  party-vorrang:
+    conditions:
+      - "%animation:QuestWechsel%=3"
+      - "%condition:party-statt-quest%=true"
+      - "%condition:party-statt-em%=true"
+    type: OR
+  party-statt-quest:
+    type: AND
+    conditions:
+      - "%animation:QuestWechsel%=1"
+      - "%condition:q-bereit%=false"
+  party-statt-em:
+    type: AND
+    conditions:
+      - "%animation:QuestWechsel%=2"
+      - "%elitemobs_quest_is_tracking%!=yes"
+
+  party-zeigen:
+    conditions:
+      - "%condition:party-bereit%=true"
+      - "%condition:party-vorrang%=true"
+    type: AND
 
   # EliteMobs-Board anzeigen?
   # (bei "Uninitialized player data!" direkt nach dem Join ist das automatisch false)
