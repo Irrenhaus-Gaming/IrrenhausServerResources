@@ -1,3 +1,8 @@
+autoUpdateTranslations: true
+# Sets if EliteMobs hides Minecraft's 'Named entity ... died' console line for elites and bosses.
+# Minecraft logs that line for every mob with a custom name, and every elite has one, so mob farms flood the console.
+# Other named mobs, such as name-tagged pets, still log. spigot.yml's log-named-deaths turns the line off for every mob.
+hideEliteDeathsFromConsole: true
 # Sets whether Bedrock players get the dialog version of the /em, quest and class menus instead of the inventory version.
 # Only turn this on if your Geyser turns Paper dialogs into Bedrock forms (Geyser 2.8.2 or newer). Needs Minecraft 1.21.6 or newer.
 # Shops and other inventory-only menus stay inventories.

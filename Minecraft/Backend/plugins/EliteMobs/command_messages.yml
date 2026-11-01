@@ -490,12 +490,6 @@ statsAverageThreatMessage: '&7[EM] &2Average threat tier: &a$average'
 npcFeatureComingSoonMessage: '[EliteMobs] This feature is coming soon!'
 # Sets the message sent when a player tries to rename an NPC
 npcCannotRenameMessage: '[EliteMobs] You can''t rename NPCs using name tags!'
-# Sets the message sent when a player interacts with a deprecated NPC (enhancer/refiner/smelter)
-npcFeatureReplacedMessage: '&8[EliteMobs] &cThis feature has been replaced! This NPC
-  should be removed by an admin as soon as possible.'
-# Sets the instructions sent to admins on how to remove a deprecated NPC
-npcRemoveInstructions: '&2To remove this NPC, use the command &6/em remove &2and hit
-  the NPC!'
 # Sets the separator line for loot votes
 lootVoteSeparator: <g:#8B0000:#CC4400:#DAA520>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</g>
 # Sets the loot vote message prefix, before the clickable /em loot command.

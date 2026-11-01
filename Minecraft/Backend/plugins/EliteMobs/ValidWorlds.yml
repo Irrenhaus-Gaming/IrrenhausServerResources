@@ -1,4 +1,13 @@
+# When true, EliteMobs gear goes dormant in the worlds set to false below: its potion effects
+# stop, and its enchantment powers, item sets and staff or wand enchantments do not trigger.
+# Everything comes back in a world set to true. The gear's own damage and armor values still
+# apply, like any item's.
+disableEliteItemPowersInInvalidWorlds: false
 validWorlds:
+  elitemobs_blueprint_conversion: true
+  world: true
+  world_nether: true
+  world_the_end: true
   em_adventurers_guild: true
   IrrenhausTest: true
   IrrenhausTest_nether: true

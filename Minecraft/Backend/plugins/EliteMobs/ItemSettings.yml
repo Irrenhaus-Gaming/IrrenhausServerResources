@@ -1,10 +1,23 @@
+# Sets how many elite coins a full repair costs per item level.
+# A repair costs this value x the item level x the share of durability missing, rounded up.
+# Example: 1.0 makes a half-broken level 100 item cost 50 coins. 0 makes repairs free.
+repairCostPerItemLevel: 1.0
+# Sets the message sent after a player pays for a repair.
+repairPaidMessage: '&8[EliteMobs] &fYou spent $price $currencyName to repair $itemName&f!
+  You now have $currentAmount $currencyName.'
+# Sets the message sent when a player cannot afford a repair.
+repairInsufficientFundsMessage: '&8[EliteMobs] &c$price $currencyName is required
+  to repair $itemName&c, but you only have $currentAmount!'
+# Sets the message sent when a player exchanges old elite scrap for coins in the repair menu.
+scrapExchangedMessage: '&8[EliteMobs] &2Repairs now cost $currencyName. You received
+  $price $currencyName for $amount scrap!'
 # Sets if any EliteMobs loot will drop.
 # Includes Elite Coins, Custom Items, Procedurally Generate Items - everything!
 # Not recommended, makes mmorpg progression impossible.
 doEliteMobsLoot: true
 # Sets if procedurally generated loot will have different colors based on the quality of the item.
 doMMORPGColorsForItems: true
-# Sets if the placement of custom items, like banners or blocks, is prevented.
+# Sets if custom items are kept from being placed, like banners or blocks, or thrown and used up, like Eyes of Ender or bone meal.
 # This is recommended - custom items break when they are placed and can not be recovered!
 preventCustomItemPlacement: true
 # Sets the format for the lore of custom all EliteMobs items!
@@ -126,13 +139,6 @@ eliteItemsDurabilityLossOnlyOnDeath: true
 # Values between 0.0 and 1.0 lower the durability loss and values above 1.0 increase it.
 # Example: 0.5 deals 50% of the durability loss, 2.0 deals 200% of the durability loss.
 eliteItemsDurabilityLossMultiplier: 1.0
-# Sets the message that appears when item scrapping is successful.
-scrapSucceededMessageV2: '&8[EliteMobs] &2Scrapping succeeded $amount times!'
-# Sets message that appears when item scrapping fails.
-scrapFailedMessageV2: '&8[EliteMobs] &cScrapping failed $amount times!'
-# Sets the message that appears when the scrapper has no scrap item configured to produce.
-scrapNotConfiguredMessage: '&cThe scrapper has no scrap item configured — contact
-  an admin.'
 # Sets if elite loot should be placed directly into players' inventories.
 putLootDirectlyIntoPlayerInventory: false
 # Sets maximum level difference players can have before they can no longer loot items that are too low level.
@@ -191,3 +197,58 @@ eliteItemScrollLore:
 - '&fa non-elite item into a level $level'
 - '&felite item!'
 eliteItemModel: elitemobs:elitescroll/elitescroll
+classLootDifficultyNames:
+  # Sets what class loot item names show for $difficulty on NORMAL difficulty loot
+  NORMAL: NORMAL
+  # Sets what class loot item names show for $difficulty on HARD difficulty loot
+  HARD: HARD
+  # Sets what class loot item names show for $difficulty on MYTHIC difficulty loot
+  MYTHIC: MYTHIC
+classLootFamilyNames:
+  # Sets what class loot item names show for $weapon and $item on SWORDS loot
+  SWORDS: Sword
+  # Sets what class loot item names show for $weapon and $item on AXES loot
+  AXES: Axe
+  # Sets what class loot item names show for $weapon and $item on BOWS loot
+  BOWS: Bow
+  # Sets what class loot item names show for $weapon and $item on CROSSBOWS loot
+  CROSSBOWS: Crossbow
+  # Sets what class loot item names show for $weapon and $item on TRIDENTS loot
+  TRIDENTS: Trident
+  # Sets what class loot item names show for $weapon and $item on HOES loot
+  HOES: Scythe
+  # Sets what class loot item names show for $weapon and $item on MACES loot
+  MACES: Mace
+  # Sets what class loot item names show for $weapon and $item on SPEARS loot
+  SPEARS: Spear
+  # Sets what class loot item names show for $weapon and $item on STAVES loot
+  STAVES: Staff
+  # Sets what class loot item names show for $weapon and $item on WANDS loot
+  WANDS: Wand
+  # Sets what class loot item names show for $weapon and $item on DPS_HELMETS loot
+  DPS_HELMETS: DPS Helmet
+  # Sets what class loot item names show for $weapon and $item on DPS_CHESTPLATES loot
+  DPS_CHESTPLATES: DPS Chestplate
+  # Sets what class loot item names show for $weapon and $item on DPS_LEGGINGS loot
+  DPS_LEGGINGS: DPS Leggings
+  # Sets what class loot item names show for $weapon and $item on DPS_BOOTS loot
+  DPS_BOOTS: DPS Boots
+  # Sets what class loot item names show for $weapon and $item on TANK_HELMETS loot
+  TANK_HELMETS: Tank Helmet
+  # Sets what class loot item names show for $weapon and $item on TANK_CHESTPLATES loot
+  TANK_CHESTPLATES: Tank Chestplate
+  # Sets what class loot item names show for $weapon and $item on TANK_LEGGINGS loot
+  TANK_LEGGINGS: Tank Leggings
+  # Sets what class loot item names show for $weapon and $item on TANK_BOOTS loot
+  TANK_BOOTS: Tank Boots
+  # Sets what class loot item names show for $weapon and $item on SHIELDS loot
+  SHIELDS: Shield
+retiredScrapCoinValue:
+  # Sets how many elite coins old elite scrap is worth. Scrap is no longer used for repairs.
+  # The repair and sell menus exchange scrap players still have at these values,
+  # and loot entries that still list elite scrap pay these coins instead.
+  tiny: 5
+  small: 30
+  medium: 80
+  large: 150
+  huge: 225

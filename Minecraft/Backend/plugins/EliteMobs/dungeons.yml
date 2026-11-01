@@ -231,16 +231,16 @@ contentUpdateAccessClick: '&7Click to see how to get access.'
 contentDownloadLegacyMessage: '&4Download this at &9$link &4!'
 # Sets the separator line used in download messages.
 contentDownloadSeparator: <g:#8B0000:#CC4400:#DAA520>▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</g>
-# Sets the first line of the account token prompt.
+# Sets the first line of the server link prompt.
 contentNightbreakPromptLine1: '&eThis content can be downloaded automatically after
   connecting this server.'
-# Sets the second line of the account token prompt.
-# Followed by a clickable nightbreak.io/account link.
+# Sets the second line of the server link prompt.
+# Followed by a clickable /nightbreaklogin command.
 contentNightbreakPromptLine2: '<g:#B8860B:#DAA520>Step 1:</g> &7Get your token at: '
-# Sets the third line of the account token prompt.
+# Sets the third line of the server link prompt.
 contentNightbreakPromptLine3: '<g:#B8860B:#DAA520>Step 2:</g> &7Run: &e/nightbreaklogin
   <your-token>'
-# Sets the fourth line of the account token prompt.
+# Sets the fourth line of the server link prompt.
 # Followed by a clickable content link.
 contentNightbreakPromptLine4: '&8Or download manually at: '
 # Sets the message shown when checking access for content.
@@ -254,7 +254,7 @@ contentAccessFailedLink: '&9https://nightbreak.io/plugin/elitemobs'
 # Sets the message shown when Nightbreak rejects the saved token.
 contentInvalidTokenMessage: '&e[EliteMobs] The saved account token needs to be updated.'
 # Sets the follow-up message shown after an invalid account token.
-# Followed by a clickable nightbreak.io/account link.
+# Followed by a clickable /nightbreaklogin command.
 contentInvalidTokenInstructions: '&7Get a new token here, then run &e/nightbreaklogin
   <token>&7: '
 # Sets the message shown when content has been downloaded and a reload is triggered.

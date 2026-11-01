@@ -1,3 +1,8 @@
+# Display text for the clickable /nightbreaklogin command
+nightbreakLoginDisplay: '&a&n/nightbreaklogin'
+# Hover tooltip for the /nightbreaklogin command
+nightbreakLoginHover: '&7Click to get a link that connects this server to your Nightbreak
+  account'
 # Title shown in the /em initialize menu
 menuTitle: <g:#228B22:#32CD32>EliteMobs</g>
 # Subtitle shown in the /em initialize menu
@@ -35,7 +40,7 @@ recommendedPresetLore4: '&7Works with &fBetterStructures&7.'
 recommendedPresetLore5: '&aClick to select!'
 # Confirmation message sent after selecting recommended preset
 recommendedPresetClickConfirm: <g:#228B22:#32CD32>Recommended installation</g> &7activated!
-# Account token prompt sent after selecting recommended preset
+# Server link prompt sent after selecting recommended preset, followed by a clickable /nightbreaklogin
 recommendedPresetClickNightbreakLogin: '<g:#B8860B:#DAA520>Step 1:</g> &7Connect this
   server: '
 # In-game content management message sent after selecting recommended preset
@@ -63,7 +68,7 @@ contentOnlyPresetLore4: '&7Works with &fBetterStructures&7.'
 contentOnlyPresetLore5: '&eClick to select!'
 # Confirmation message sent after selecting content-only preset
 contentOnlyPresetClickConfirm: <g:#DAA520:#F0C040>Content-only installation</g> &7activated!
-# Account token prompt sent after selecting content-only preset
+# Server link prompt sent after selecting content-only preset, followed by a clickable /nightbreaklogin
 contentOnlyPresetClickNightbreakLogin: '<g:#B8860B:#DAA520>Step 1:</g> &7Connect this
   server: '
 # In-game content management message sent after selecting content-only preset
@@ -120,10 +125,6 @@ loginLanguagePrefix: '&7Language: '
 discordLinkDisplay: '&9&nDiscord'
 # Hover tooltip for the Discord link
 discordLinkHover: '&7Click to join the Discord!'
-# Display text for the clickable account token link
-accountLinkDisplay: '&9&nnightbreak.io/account'
-# Hover tooltip for the account token link
-accountLinkHover: '&7Click to open the account token page'
 # Display text for the clickable content browse link
 contentLinkDisplay: '&9&nnightbreak.io/elitemobs'
 # Hover tooltip for the content browse link

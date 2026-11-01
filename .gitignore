@@ -203,3 +203,4 @@ Minecraft/Backend/plugins/EconomyShopGUI/shops
 Minecraft/Backend/plugins/SmartSpawner/language/*
 !Minecraft/Backend/plugins/SmartSpawner/language/de_DE/
 Minecraft/Backend/plugins/SmartSpawner/logs
+Minecraft/Backend/plugins/EliteMobs/nightbreak-changelogs.yml

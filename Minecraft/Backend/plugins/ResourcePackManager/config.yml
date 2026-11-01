@@ -1,3 +1,9 @@
+# Resource packs to leave out of the Bedrock conversion. Java players still get them.
+# Name them like in priorityOrder: a plugin name (for example ItemsAdder), or the filename of a
+# pack in the mixer folder, with or without .zip. Useful when another plugin already converts
+# a pack for Bedrock, or to keep the Bedrock pack smaller. Where a left-out pack replaced
+# another pack's model or texture, Bedrock shows the other pack's version.
+bedrockExcludedPacks: []
 # Sets the list, from highest priority (top) to lowest priority (bottom), in which the resource packs will automatically resolve merge conflicts.
 # The defaults use plugin names. If you manually added your own resource pack in the mixer folder to be merged in, add its exact filename, including .zip in the name
 priorityOrder:
