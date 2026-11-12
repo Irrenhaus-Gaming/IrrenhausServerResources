@@ -145,6 +145,8 @@ def cmd_probe(args) -> None:
 def cmd_play(args) -> None:
     if args.play_command == "start":
         play.play_start(get_target(args.target), args.jars_from, args.player)
+    elif args.play_command == "status":
+        play.play_status()
     elif args.play_command == "stop":
         play.play_stop()
     elif args.play_command == "console":
@@ -246,6 +248,7 @@ def main(argv: list[str] | None = None) -> int:
     q.add_argument("target")
     q.add_argument("--jars-from", choices=["remote", "cache"], default="cache")
     q.add_argument("--player", default=play.DEFAULT_PLAYER, help="offline player name made op")
+    play_sub.add_parser("status", help="does a play session exist, is it ready, who is online (changes nothing)")
     play_sub.add_parser("stop", help="remove the play server, its MySQL and the client")
     q = play_sub.add_parser("console", help="run a server console command and print its output")
     q.add_argument("text", help="command without the leading /")

@@ -40,7 +40,9 @@ CLIENT_IMAGE = "irrenhaus-mc-client:local"
 CLIENT_VOLUME = "mcd-play-client-data"   # game files (client jar, assets, JVM) survive restarts
 CLIENT_CONTEXT = REPO_ROOT / "Minecraft" / "tools" / "client"
 SHOT_DIR = CACHE_DIR / "play" / "shots"
-TARGET_FILE = CACHE_DIR / "play" / "target.txt"
+RUN_LABEL = "mcdeploy.play.run"         # which `play start` created a container
+TARGET_LABEL = "mcdeploy.play.target"
+PACK_LIVE = "Resource pack is live via self-hosting"
 MC_PORT = 25565
 PACK_PORT = MC_PORT + 1   # ResourcePackManager self-host: Minecraft port + networkHttpOffset-v2 (1)
 DEFAULT_PLAYER = "ClaudeBot"
@@ -205,31 +207,78 @@ def play_start(target: Target, jars_from: str, player: str) -> None:
     if target.platform != "paper":
         raise McDeployError("mc play runs a backend (mc-backend-<Name>); the proxy is not supported yet")
     _check_player(player)
-    leftovers = [n for n in (CLIENT_NAME, SERVER_NAME, MYSQL_NAME) if _exists(n)]
-    if leftovers:
-        raise McDeployError(f"a play session exists already ({', '.join(leftovers)}); run `mc play stop` first")
+    _refuse_if_session_exists()
     inputs = boottest.prepare_boot(target, jars_from, purpose="play server")
     rendered = play_overrides(render_target(target, inputs.values), player)
+    _refuse_if_session_exists()   # rendering takes a while; another start may have begun meanwhile
+    run_id = uuid.uuid4().hex[:12]
+    label = ("--label", f"{RUN_LABEL}={run_id}", "--label", f"{TARGET_LABEL}={target.name}")
     workdir = Path(tempfile.mkdtemp(prefix="mcd-play-"))
     try:
         boottest.fill_workdir(target, rendered, inputs.jar_dir, workdir)
-        boottest.start_mysql(MYSQL_NAME, inputs.root_password, inputs.databases,
-                             publish=LOCAL_PORTS)
-        boottest.start_server_container(target, SERVER_NAME, MYSQL_NAME, workdir)
+        ports = tuple(arg for spec in LOCAL_PORTS for arg in ("-p", spec))
+        boottest.start_mysql(MYSQL_NAME, inputs.root_password, inputs.databases, run_args=label + ports)
+        boottest.start_server_container(target, SERVER_NAME, MYSQL_NAME, workdir, create_args=label)
     except BaseException:
+        # Only remove what this run created: with two starts racing, the loser must not
+        # delete the winner's containers (its own `docker run` failed on the name).
         for name in (SERVER_NAME, MYSQL_NAME):
-            docker("rm", "-f", name, check=False)
+            if _label(name, RUN_LABEL) == run_id:
+                docker("rm", "-f", name, check=False)
         raise
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
-    TARGET_FILE.parent.mkdir(parents=True, exist_ok=True)
-    TARGET_FILE.write_text(target.name, encoding="utf-8")
     print(f"{target.name}: play server starting (max {target.boot_timeout_seconds}s)")
     boottest.wait_until_started(target, SERVER_NAME)
     print(f"{target.name}: play server is up; offline mode, {player} is op. Next: mc client start")
     print(f"join with your own client: Multiplayer -> Direct Connection -> localhost:{MC_PORT}, "
           f"Minecraft {server_minecraft_version()} (this PC only; everyone in ops.json is admin, "
           f"others: mc play console \"op <name>\")")
+
+
+def _label(name: str, key: str) -> str | None:
+    result = docker("inspect", "-f", f'{{{{index .Config.Labels "{key}"}}}}', name, check=False)
+    value = result.stdout.strip() if result.returncode == 0 else ""
+    return value if value and value != "<no value>" else None
+
+
+def _refuse_if_session_exists() -> None:
+    existing = [n for n in (CLIENT_NAME, SERVER_NAME, MYSQL_NAME) if _exists(n)]
+    if existing:
+        raise McDeployError(
+            f"a play session exists already ({', '.join(existing)}). Check it with `mc play status`: "
+            f"reuse it if it fits, and run `mc play stop` only if it is yours or the owner agreed "
+            f"(someone may be playing on it)")
+
+
+def play_status() -> None:
+    """What exists, whether the server is ready and who is online; never changes anything."""
+    for name in (MYSQL_NAME, SERVER_NAME, CLIENT_NAME):
+        state = docker("inspect", "-f", "{{.State.Status}} since {{.State.StartedAt}}", name, check=False)
+        print(f"{name}: {state.stdout.strip() if state.returncode == 0 else 'absent'}")
+    if not _exists(MYSQL_NAME) and not _exists(SERVER_NAME):
+        print("no play session: start one with `mc play start <target>`")
+        return
+    print(f"target: {_label(SERVER_NAME, TARGET_LABEL) or _label(MYSQL_NAME, TARGET_LABEL) or 'unknown'}")
+    ports = docker("port", MYSQL_NAME, check=False).stdout.strip().replace("\n", ", ")
+    print(f"published ports: {ports or 'none'}")
+    if not _running(SERVER_NAME):
+        print("server: not running (a start may be in progress, or it failed: mc play log)")
+        return
+    logs = ANSI_RE.sub("", docker("logs", SERVER_NAME, check=False).stdout)
+    ready = bool(boottest.DONE_RE.search(logs))
+    print(f"server: {'up' if ready else 'starting'}"
+          + (f", Minecraft {VERSION_RE.search(logs).group(1)}" if VERSION_RE.search(logs) else ""))
+    print(f"resource pack: {'served on localhost:' + str(PACK_PORT) if PACK_LIVE in logs else 'not ready yet'}")
+    if ready:
+        before = len(logs.splitlines())
+        boottest.console_command(SERVER_NAME, "list")
+        time.sleep(1.5)
+        new = ANSI_RE.sub("", docker("logs", SERVER_NAME, check=False).stdout).splitlines()[before:]
+        online = [line.split("]: ", 1)[-1].removeprefix("System chat: ")
+                  for line in new if "players online" in line or "out of a maximum" in line]
+        print(f"players: {online[0] if online else 'unknown (see mc play log)'}")
+        print(f"join: Multiplayer -> Direct Connection -> localhost:{MC_PORT}")
 
 
 def play_stop() -> None:

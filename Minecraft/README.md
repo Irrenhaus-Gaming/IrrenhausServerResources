@@ -140,9 +140,12 @@ Under act, deploys always run as a dry run unless `--var MC_ACT_ALLOW_DEPLOY=tru
 
 ### Visual checks: local play server and game client
 
+How agents and workflows (e.g. [pets](docs/pets.md)) start, share and stop it: [docs/play.md](docs/play.md).
+
 `mc play` boots a backend like the boot test (dummy values, throwaway MySQL) and keeps it running; `mc client` runs the real Minecraft client on a virtual screen (Xvfb, software rendering) in its own container. Both share one Docker network namespace. The server's ports are always published on `127.0.0.1` so you can join with your own client (see below); nothing is reachable from other machines, and the host's screen is never touched. Screenshots land in `.cache/play/shots/`.
 
 ```powershell
+.\mc.ps1 play status                            # is a session running, ready, who is online (changes nothing)
 .\mc.ps1 play start mc-backend-Test             # cached jars (--jars-from remote refreshes them); join: localhost:25565
 .\mc.ps1 play console "op <name>"               # op someone not in Backend/ops.json (those are op already)
 .\mc.ps1 client start                           # first start downloads the game into the volume mcd-play-client-data

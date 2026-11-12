@@ -342,11 +342,10 @@ def wait_for(predicate, timeout: int, what: str, poll: float = 3.0):
     raise McDeployError(f"timed out after {timeout}s waiting for {what}")
 
 
-def start_mysql(name: str, root_password: str, databases: list[str], publish: tuple[str, ...] = ()) -> None:
-    """`publish`: docker -p specs. The server shares this container's network namespace, so its
-    ports can only be published here."""
-    ports = [arg for spec in publish for arg in ("-p", spec)]
-    docker("run", "-d", "--name", name, *ports, "-e", f"MYSQL_ROOT_PASSWORD={root_password}", MYSQL_IMAGE, timeout=600)
+def start_mysql(name: str, root_password: str, databases: list[str], run_args: tuple[str, ...] = ()) -> None:
+    """`run_args`: extra `docker run` options, e.g. `-p` specs. The server shares this container's
+    network namespace, so its ports can only be published here."""
+    docker("run", "-d", "--name", name, *run_args, "-e", f"MYSQL_ROOT_PASSWORD={root_password}", MYSQL_IMAGE, timeout=600)
 
     def ready():
         logs = docker("logs", name, check=False)
@@ -436,7 +435,8 @@ def fill_workdir(target: Target, rendered: dict[str, bytes], jar_dir: Path, work
         (workdir / "forwarding.secret").write_text(secrets.token_urlsafe(24))
 
 
-def start_server_container(target: Target, server_name: str, mysql_name: str, workdir: Path) -> None:
+def start_server_container(target: Target, server_name: str, mysql_name: str, workdir: Path,
+                           create_args: tuple[str, ...] = ()) -> None:
     """Run the server in its own container. It shares MySQL's network namespace, so "localhost:3306"
     in configs reaches the test database. Console commands go to /tmp/console (see console_command)."""
     script = (
@@ -445,7 +445,7 @@ def start_server_container(target: Target, server_name: str, mysql_name: str, wo
         + (" --nogui" if target.platform == "paper" else "") + " < /tmp/console"
     )
     docker("create", "--name", server_name, "--network", f"container:{mysql_name}", "-w", "/server",
-           target.java_image, "sh", "-c", script, timeout=600)
+           *create_args, target.java_image, "sh", "-c", script, timeout=600)
     docker("cp", f"{workdir}/.", f"{server_name}:/server", timeout=600)
     docker("start", server_name)
 

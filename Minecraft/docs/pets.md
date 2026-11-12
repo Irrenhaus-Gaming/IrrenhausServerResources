@@ -119,8 +119,15 @@ Lint checks every `irrenhaus_pet_*` file in the models folder:
 
 ## 6. Test on the local play server
 
+Start and share the server as described in [play.md](play.md): `play status` first, never stop a session you didn't
+start without asking the owner, start once in the foreground, wait for the pack, tell the owner how to join. The
+server only has the pet files from the moment it was started, so after `pet-build` or a pet file edit it needs a new
+start (stop + start, under the same rules).
+
 ```bash
-MC_NO_GIT=1 ./mc.sh play start mc-backend-Test     # `play stop` first if a session exists
+MC_NO_GIT=1 ./mc.sh play status                    # existing session? who is online? (play.md, steps 1-2)
+MC_NO_GIT=1 ./mc.sh play start mc-backend-Test     # only if there is none, or after the owner agreed to a restart
+MC_NO_GIT=1 ./mc.sh play status                    # until "resource pack: served on localhost:25566"
 MC_NO_GIT=1 ./mc.sh play log --grep "pet species"  # "Loaded N pet species" counts the new one
 MC_NO_GIT=1 ./mc.sh client start
 MC_NO_GIT=1 ./mc.sh client cmd "/fmm petadmin give <species>"
@@ -143,9 +150,31 @@ MC_NO_GIT=1 ./mc.sh client shot --name picker      # colour picker: one slot per
 
   Yaw: -90 looks east (+X), 0 south (+Z), 90 west, 180 north. Pets don't face a fixed way, so take a few angles.
 - Check every colour: texture, face, animations playing, nothing floating or missing.
-- `play stop` when done.
+- Stop the game client (`client stop`) but leave the server running for step 7.
 
-## 7. Deploy
+## 7. Owner test before deploying
+
+The last step before deploying is always a fresh play server that the owner joins and tries the pet in:
+
+```bash
+MC_NO_GIT=1 ./mc.sh play status                  # your session from step 6? nobody else online? (else ask, play.md)
+MC_NO_GIT=1 ./mc.sh play stop                    # restart so it loads the final files
+MC_NO_GIT=1 ./mc.sh play start mc-backend-Test
+MC_NO_GIT=1 ./mc.sh play status                  # until "resource pack: served on localhost:25566"
+```
+
+When the server is up and the pack is served, tell the owner how to join:
+
+- Multiplayer -> Direct Connection -> `localhost:25565`, with the server's Minecraft version (`play start` prints it).
+- Everyone in `Backend/ops.json` is admin. Anyone else: `mc play console "op <name>"`.
+- Try it: `/fmm petadmin give <species>`, pick each colour, `/fmm pets` to send pets out and home, walk around
+  with them.
+
+The server listens on `127.0.0.1` only (this PC). It runs in offline mode, so anyone who could reach it could join
+under any name; never publish it on other interfaces. Leave it running until the owner says they are done, then
+`play stop`. Changes go back to step 2 or 3; deploy only after the owner approves.
+
+## 8. Deploy
 
 The owner commits the files, then deploys the usual way: `mc drift` / `mc deploy` or the workflow. FMM builds the
 resource pack from the models on the server, as it does for `wolfu`. Deploys never restart servers, so the pet appears
