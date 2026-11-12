@@ -11,7 +11,7 @@ import time
 import sys
 from pathlib import Path
 
-from . import boottest, ci, convert, deploy, lint, pull, servers, shop
+from . import boottest, ci, convert, deploy, lint, play, pull, servers, shop
 from .config import OUT_DIR, OUTPUTS, REPO_ROOT, deploy_values, get_target, git_files, load_test_values, require_values
 from .errors import McDeployError
 from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint, verify_instance
@@ -142,6 +142,41 @@ def cmd_probe(args) -> None:
         remote.close()
 
 
+def cmd_play(args) -> None:
+    if args.play_command == "start":
+        play.play_start(get_target(args.target), args.jars_from, args.player, args.publish)
+    elif args.play_command == "stop":
+        play.play_stop()
+    elif args.play_command == "console":
+        play.play_console(args.text)
+    elif args.play_command == "log":
+        play.play_log(args.tail, args.grep)
+
+
+def cmd_client(args) -> None:
+    c = args.client_command
+    if c == "start":
+        play.client_start(args.player, args.size, args.timeout)
+    elif c == "stop":
+        play.client_stop()
+    elif c == "cmd":
+        play.client_cmd(args.text)
+    elif c == "key":
+        play.client_key(args.keys)
+    elif c == "type":
+        play.client_type(args.text)
+    elif c == "look":
+        play.client_look(args.dx, args.dy)
+    elif c == "click":
+        play.client_click(args.button, args.at)
+    elif c == "shot":
+        play.client_shot(args.name, args.no_hud)
+    elif c == "chat":
+        play.client_chat(args.lines)
+    elif c == "log":
+        play.client_log(args.tail, args.grep)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="mc", description="Irrenhaus Minecraft config tooling")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -200,6 +235,49 @@ def main(argv: list[str] | None = None) -> int:
                    help="remote: download jars from the server first (needs AMP_SFTP_*); cache: reuse .cache/jars")
     p = sub.add_parser("unit-tests", help="run the mcdeploy unit tests")
 
+    p = sub.add_parser("play", help="local play server for visual checks (offline mode, dummy values)")
+    play_sub = p.add_subparsers(dest="play_command", required=True)
+    q = play_sub.add_parser("start", help="boot a backend with test values and keep it running")
+    q.add_argument("target")
+    q.add_argument("--jars-from", choices=["remote", "cache"], default="cache")
+    q.add_argument("--player", default=play.DEFAULT_PLAYER, help="offline player name made op")
+    q.add_argument("--publish", action="store_true",
+                   help="also reachable from this PC (127.0.0.1:25565, pack on :25566) for your own client")
+    play_sub.add_parser("stop", help="remove the play server, its MySQL and the client")
+    q = play_sub.add_parser("console", help="run a server console command and print its output")
+    q.add_argument("text", help="command without the leading /")
+    q = play_sub.add_parser("log", help="print the server log")
+    q.add_argument("--tail", type=int, default=60)
+    q.add_argument("--grep", help="only lines matching this regex (case-insensitive)")
+
+    p = sub.add_parser("client", help="real Minecraft client on a virtual screen, joined to `mc play`")
+    client_sub = p.add_subparsers(dest="client_command", required=True)
+    q = client_sub.add_parser("start", help="start the client and wait until it joined")
+    q.add_argument("--player", default=play.DEFAULT_PLAYER)
+    q.add_argument("--size", default=play.DEFAULT_SIZE, help="virtual screen size, e.g. 1280x720")
+    q.add_argument("--timeout", type=int, default=1200, help="seconds to wait for the join (first start downloads the game)")
+    client_sub.add_parser("stop", help="stop the client")
+    q = client_sub.add_parser("cmd", help="type a chat line or /command and press Enter")
+    q.add_argument("text")
+    q = client_sub.add_parser("key", help="press keys (xdotool names: Escape, F1, F5, w, shift+Tab, …)")
+    q.add_argument("keys", nargs="+")
+    q = client_sub.add_parser("type", help="type text into the focused field")
+    q.add_argument("text")
+    q = client_sub.add_parser("look", help="move the mouse by dx dy pixels (turns the camera in game)")
+    q.add_argument("dx", type=int)
+    q.add_argument("dy", type=int)
+    q = client_sub.add_parser("click", help="mouse click, optionally at screen coordinates")
+    q.add_argument("button", nargs="?", choices=["left", "middle", "right"], default="left")
+    q.add_argument("--at", nargs=2, type=int, metavar=("X", "Y"))
+    q = client_sub.add_parser("shot", help="screenshot of the virtual screen into .cache/play/shots/")
+    q.add_argument("--name", help="file name without .png (default: timestamp)")
+    q.add_argument("--no-hud", action="store_true", help="hide the HUD (F1) for the screenshot")
+    q = client_sub.add_parser("chat", help="last chat lines the client received")
+    q.add_argument("lines", nargs="?", type=int, default=15)
+    q = client_sub.add_parser("log", help="print the client log")
+    q.add_argument("--tail", type=int, default=60)
+    q.add_argument("--grep", help="only lines matching this regex (case-insensitive)")
+
     args = parser.parse_args(argv)
     # Results of this run only: mc.sh forwards this folder to the GitHub step summary / outputs.
     if OUT_DIR.exists():
@@ -247,6 +325,10 @@ def main(argv: list[str] | None = None) -> int:
             cmd_shop_report(args)
         elif args.command == "shop-audit":
             cmd_shop_audit(args)
+        elif args.command == "play":
+            cmd_play(args)
+        elif args.command == "client":
+            cmd_client(args)
         elif args.command == "unit-tests":
             import pytest
             return pytest.main(["-q", str(Path(__file__).resolve().parent.parent / "tests")])

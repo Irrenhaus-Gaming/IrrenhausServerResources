@@ -137,6 +137,26 @@ act workflow_dispatch --secret-file .mc-local.env --artifact-server-path .cache/
 
 Under act, deploys always run as a dry run unless `--var MC_ACT_ALLOW_DEPLOY=true` is passed.
 
+### Visual checks: local play server and game client
+
+`mc play` boots a backend like the boot test (dummy values, throwaway MySQL) and keeps it running; `mc client` runs the real Minecraft client on a virtual screen (Xvfb, software rendering) in its own container. Both share one Docker network namespace and publish no port, so nothing is reachable from outside and the host's screen is never touched. Screenshots land in `.cache/play/shots/`.
+
+```powershell
+.\mc.ps1 play start mc-backend-Test             # cached jars; add --jars-from remote to refresh them
+.\mc.ps1 play start mc-backend-Test --publish   # also join with your own client: localhost:25565 (this PC only)
+.\mc.ps1 play console "op <name>"               # op someone not in Backend/ops.json (those are op already)
+.\mc.ps1 client start                           # first start downloads the game into the volume mcd-play-client-data
+.\mc.ps1 client cmd "/fmm petadmin give wolfu"  # chat line or /command as the player (ClaudeBot, op)
+.\mc.ps1 client click left --at 496 280         # click in a menu (screen coordinates of the screenshot)
+.\mc.ps1 client key Escape                      # keys by xdotool name (F1, F5, Escape, w, …)
+.\mc.ps1 play console "execute as ClaudeBot at @s as @e[type=wolf,sort=nearest,limit=1] at @s run minecraft:tp ClaudeBot ~2.5 ~1.5 ~1 facing entity @s feet"
+.\mc.ps1 client shot --name wolfu --no-hud      # -> .cache/play/shots/wolfu.png
+.\mc.ps1 client chat                            # last chat lines; also: client log / play log [--grep]
+.\mc.ps1 play stop                              # removes server, MySQL and client
+```
+
+Local-only overrides (`mcdeploy/play.py`, never deployed): offline mode without Velocity forwarding, a flat peaceful creative world, the client's player and everyone in `Backend/ops.json` as op (under their offline-mode UUID, which differs from the real one), and ResourcePackManager serving the merged pack itself (`selfHostForce`, `http://localhost:25566/rspm.zip`) instead of uploading it to magmaguy.com. The client accepts the server pack without a prompt, so models and textures look as players see them. A plugin overrides `/tp`; use `minecraft:tp`. `--publish` binds the Minecraft port and the pack port to `127.0.0.1` only: the server is in offline mode, so anyone who could reach it could join under any name, the op player included. The client runs in offline mode: it is meant for the owner's own license, for local checks only.
+
 ## What is tracked
 
 Everything under `Backend/` and `Proxy/` is tracked unless `/.gitignore` excludes it. Generated or plugin-installed content (content packages, models, caches, data, jars, DBs, logs, keys) is excluded. To start tracking an excluded file you edit by hand, add a `!` rule for it and run `mc lint`.

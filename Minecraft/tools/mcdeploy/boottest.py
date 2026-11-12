@@ -342,8 +342,11 @@ def wait_for(predicate, timeout: int, what: str, poll: float = 3.0):
     raise McDeployError(f"timed out after {timeout}s waiting for {what}")
 
 
-def start_mysql(name: str, root_password: str, databases: list[str]) -> None:
-    docker("run", "-d", "--name", name, "-e", f"MYSQL_ROOT_PASSWORD={root_password}", MYSQL_IMAGE, timeout=600)
+def start_mysql(name: str, root_password: str, databases: list[str], publish: tuple[str, ...] = ()) -> None:
+    """`publish`: docker -p specs. The server shares this container's network namespace, so its
+    ports can only be published here."""
+    ports = [arg for spec in publish for arg in ("-p", spec)]
+    docker("run", "-d", "--name", name, *ports, "-e", f"MYSQL_ROOT_PASSWORD={root_password}", MYSQL_IMAGE, timeout=600)
 
     def ready():
         logs = docker("logs", name, check=False)
@@ -375,15 +378,25 @@ def _list_values_from_real_names(names: dict[str, str]) -> dict[str, str]:
     return result
 
 
-def run_boot_test(target: Target, jars_from: str) -> None:
+@dataclass
+class BootInputs:
+    values: dict[str, str]     # every placeholder of the target, filled with test values
+    root_password: str         # of the throwaway MySQL
+    databases: list[str]
+    jar_dir: Path
+    expected_plugins: list[str]
+
+
+def prepare_boot(target: Target, jars_from: str, purpose: str = "boot test") -> BootInputs:
+    """Test values, MySQL settings and cached jars for running `target` locally (boot test, mc play)."""
     if target.platform == "paper" and not target.accept_eula:
         raise McDeployError(
-            f"{target.name}: accept_eula is false in targets.yml. The boot test runs a Minecraft server and "
+            f"{target.name}: accept_eula is false in targets.yml. The {purpose} runs a Minecraft server and "
             f"needs the Mojang EULA (https://aka.ms/MinecraftEULA) accepted; set it to true to confirm."
         )
     test_values = load_test_values()
     names = target_placeholders(target)
-    values = resolve_values(target, names, test_values, f"{target.name} boot test (test-values.env)")
+    values = resolve_values(target, names, test_values, f"{target.name} {purpose} (test-values.env)")
     values.update(_list_values_from_real_names(names))
     stack = require_values(["TEST_MYSQL_ROOT_PASSWORD", "TEST_MYSQL_DATABASES"], test_values, "the test MySQL")
     databases = [d.strip() for d in stack["TEST_MYSQL_DATABASES"].split(",") if d.strip()]
@@ -404,54 +417,81 @@ def run_boot_test(target: Target, jars_from: str) -> None:
     expected: list[str] = []
     for jar in sorted((jar_dir / "plugins").glob("*.jar")):
         expected += plugin_names(jar, target.platform)
+    return BootInputs(values, stack["TEST_MYSQL_ROOT_PASSWORD"], databases, jar_dir, expected)
 
-    rendered = render_target(target, values)
+
+def fill_workdir(target: Target, rendered: dict[str, bytes], jar_dir: Path, workdir: Path) -> None:
+    """Server folder: rendered configs, the cached server and plugin jars, eula.txt."""
+    for rel, data in rendered.items():
+        dest = workdir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    shutil.copy2(jar_dir / "server.jar", workdir / "server.jar")
+    (workdir / "plugins").mkdir(exist_ok=True)
+    for jar in (jar_dir / "plugins").glob("*.jar"):
+        shutil.copy2(jar, workdir / "plugins" / jar.name)
+    (workdir / "eula.txt").write_text("eula=true\n")
+    if target.platform == "velocity":
+        # Server-only secret in production; a throwaway one for the test.
+        (workdir / "forwarding.secret").write_text(secrets.token_urlsafe(24))
+
+
+def start_server_container(target: Target, server_name: str, mysql_name: str, workdir: Path) -> None:
+    """Run the server in its own container. It shares MySQL's network namespace, so "localhost:3306"
+    in configs reaches the test database. Console commands go to /tmp/console (see console_command)."""
+    script = (
+        "mkfifo /tmp/console && (sleep infinity > /tmp/console &) && "
+        f"exec java -Xms512M -Xmx{target.memory} -jar server.jar"
+        + (" --nogui" if target.platform == "paper" else "") + " < /tmp/console"
+    )
+    docker("create", "--name", server_name, "--network", f"container:{mysql_name}", "-w", "/server",
+           target.java_image, "sh", "-c", script, timeout=600)
+    docker("cp", f"{workdir}/.", f"{server_name}:/server", timeout=600)
+    docker("start", server_name)
+
+
+def console_command(server_name: str, command: str) -> None:
+    # The command is an argument of sh, never part of the script, so it needs no quoting.
+    docker("exec", server_name, "sh", "-c", 'printf "%s\\n" "$1" > /tmp/console', "sh", command)
+
+
+def wait_until_started(target: Target, server_name: str) -> str:
+    """Wait for "Done (...)!" and return the log so far; fail if the server exits first."""
+    raw_log = ""
+
+    def started():
+        nonlocal raw_log
+        logs = docker("logs", server_name, check=False)
+        raw_log = logs.stdout + logs.stderr
+        if DONE_RE.search(ANSI_RE.sub("", raw_log)):
+            return True
+        if docker("inspect", "-f", "{{.State.Running}}", server_name).stdout.strip() != "true":
+            raise McDeployError(f"{target.name}: server exited before finishing startup:\n{raw_log[-5000:]}")
+        return False
+
+    wait_for(started, target.boot_timeout_seconds, f"{target.name} to finish starting", poll=5)
+    return raw_log
+
+
+def run_boot_test(target: Target, jars_from: str) -> None:
+    inputs = prepare_boot(target, jars_from)
+    jar_dir = inputs.jar_dir
+    expected = inputs.expected_plugins
+    rendered = render_target(target, inputs.values)
     run_id = os.environ.get("GITHUB_RUN_ID", "") + uuid.uuid4().hex[:8]
     mysql_name = f"mcd-mysql-{target.name}-{run_id}"
     server_name = f"mcd-server-{target.name}-{run_id}"
     workdir = Path(tempfile.mkdtemp(prefix="mcd-boot-"))
     raw_log = ""
     try:
-        for rel, data in rendered.items():
-            dest = workdir / rel
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_bytes(data)
-        shutil.copy2(jar_dir / "server.jar", workdir / "server.jar")
-        (workdir / "plugins").mkdir(exist_ok=True)
-        for jar in (jar_dir / "plugins").glob("*.jar"):
-            shutil.copy2(jar, workdir / "plugins" / jar.name)
-        (workdir / "eula.txt").write_text("eula=true\n")
-        if target.platform == "velocity":
-            # Server-only secret in production; a throwaway one for the test.
-            (workdir / "forwarding.secret").write_text(secrets.token_urlsafe(24))
-
-        start_mysql(mysql_name, stack["TEST_MYSQL_ROOT_PASSWORD"], databases)
-        # Share MySQL's network namespace so "localhost:3306" in configs reaches the test database.
-        script = (
-            "mkfifo /tmp/console && (sleep infinity > /tmp/console &) && "
-            f"exec java -Xms512M -Xmx{target.memory} -jar server.jar"
-            + (" --nogui" if target.platform == "paper" else "") + " < /tmp/console"
-        )
-        docker("create", "--name", server_name, "--network", f"container:{mysql_name}", "-w", "/server",
-               target.java_image, "sh", "-c", script, timeout=600)
-        docker("cp", f"{workdir}/.", f"{server_name}:/server", timeout=600)
-        docker("start", server_name)
+        fill_workdir(target, rendered, jar_dir, workdir)
+        start_mysql(mysql_name, inputs.root_password, inputs.databases)
+        start_server_container(target, server_name, mysql_name, workdir)
         print(f"{target.name}: server container started, waiting for startup (max {target.boot_timeout_seconds}s)")
-
-        def started():
-            nonlocal raw_log
-            logs = docker("logs", server_name, check=False)
-            raw_log = logs.stdout + logs.stderr
-            if DONE_RE.search(ANSI_RE.sub("", raw_log)):
-                return True
-            if docker("inspect", "-f", "{{.State.Running}}", server_name).stdout.strip() != "true":
-                raise McDeployError(f"{target.name}: server exited before finishing startup:\n{raw_log[-5000:]}")
-            return False
-
-        wait_for(started, target.boot_timeout_seconds, f"{target.name} to finish starting", poll=5)
+        raw_log = wait_until_started(target, server_name)
         print(f"{target.name}: startup finished, letting it settle for {target.settle_seconds}s")
         time.sleep(target.settle_seconds)
-        docker("exec", server_name, "sh", "-c", f"echo {STOP_COMMAND[target.platform]} > /tmp/console")
+        console_command(server_name, STOP_COMMAND[target.platform])
         exit_code = docker("wait", server_name, timeout=240).stdout.strip()
         logs = docker("logs", server_name, check=False)
         raw_log = logs.stdout + logs.stderr
