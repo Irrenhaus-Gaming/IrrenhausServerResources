@@ -1,9 +1,30 @@
+# CREATURES mode: wild pets live like vanilla's farm animals. They come with the world, stay where
+# they are, wait while their chunk is unloaded and never despawn. At 1, each species stocks new
+# chunks of its biomes as often as a vanilla animal of the same wildSpawn weight stocks a plains
+# chunk, so weight 8 in groups of 4 is as common as cows (about 8 per 100 chunks). 2 doubles every
+# species, 0.5 halves it, 0 stops new chunks getting wild pets.
+wildAbundance: 1.0
+saddledMessage: '&7Your $pet &7wears a saddle. Right-click it with an empty hand to
+  ride it; shears take it off.'
+unsaddledMessage: '&7You took the saddle off your $pet&7.'
+saddleTooYoungMessage: '&7Your $pet &7is too young for a saddle.'
+# How many pets a player may own in all, home or out. Taming and breeding stop at it until they
+# set one free from /fmm pets. 0 means no limit.
 maxOwnedPets: 0
+# Whether babies, owned ones and ones set free, grow into adults after their species'
+# babyGrowthMinutes. When false they stay babies.
 babiesGrowUp: true
+# Whether a pet whose health changes shows EliteMobs' overhead health display: its health in
+# numbers over a bar, sturdier pets getting more bars.
 showHealthBar: true
+# How many seconds the health display stays up after a pet's health last changed.
 healthBarSeconds: 30
 healthBarSeparator: ' &7/ '
+# A hurt pet regains 1 health every this many seconds on its own; 0 turns that off. Its body's
+# own faster healing (an allay's 2 health a second) never applies.
 regenSeconds: 5
+# Health a hurt owned pet regains from one of its food, as a tamed wolf heals from meat. At full
+# health its breeding food puts it in love instead.
 feedingHeals: 4.0
 maxOwnedMessage: '&cYou can only keep $amount pets. Set one free at the &fStallmeister
   &cfirst.'
@@ -27,11 +48,6 @@ petsInvulnerableToPlayers: true
 # Whether a pet that dies leaves its owner's collection for good, as a tamed wolf does. When false it
 # goes home until re-equipped.
 petsDiePermanently: false
-# CREATURES mode: wild pets live like vanilla's farm animals. They come with the world, stay where
-# they are, wait while their chunk is unloaded and never despawn. This is the chance, 0 to 0.9, that
-# a newly generated chunk gets a group of wild pets, rolled again after each group (vanilla's
-# animals use 0.1, shared by every animal of the biome).
-wildGenerationChance: 0.01
 # CREATURES mode: ticks between top-up passes, which add wild pets around players where there are
 # fewer than the cap, never closer than 24 blocks to a player. 400 is vanilla's pace for animals.
 wildSpawnIntervalTicks: 400
@@ -56,29 +72,3 @@ maxEquippedMessage: '&cYou can only have one pet with you. Click your current pe
   send it home first.'
 breedingCooldownMessage: '&7Your $pet &7is not ready to breed again yet.'
 bornMessage: '&aA $pet &awas born!'
-migrations:
-  rareFlockChance: 0.1
-  # Night migrations: rare flocks of a migrating pet species crossing the night sky over players.
-  # The members are wild pets of the species flying a migration route: same model and animations,
-  # and in CREATURES mode a player who reaches one can tame it. They leave after durationSeconds.
-  # A species migrates when it flies, its pet file has a migration: section, and migrate is among
-  # its behaviors (the flying defaults include it); the console says when one cannot.
-  enabled: true
-  # Chance, 0 to 1, that a player gets a flock over them on a given night.
-  chancePerNight: 0.15
-  # Fewest and most creatures in one flock.
-  minFlockSize: 8
-  maxFlockSize: 14
-  # Blocks above the higher of the player and the ground under them that the flock flies at.
-  altitude: 28.0
-  # Flock speed in blocks per tick (0.15 is 3 blocks a second).
-  speed: 0.15
-  # Seconds from the flock appearing to its removal. It passes over the player halfway through.
-  durationSeconds: 90.0
-  # Blocks from which players see a flock; well past the usual model view distance.
-  # Clients still need the chunks the flock flies over within their render distance.
-  viewDistance: 160
-  # Most flocks in the air at once across the server.
-  maxActiveFlocks: 3
-  # Species ids that may migrate. Empty means every species that can (see enabled above).
-  species: []
