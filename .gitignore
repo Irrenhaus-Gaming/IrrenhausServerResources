@@ -36,6 +36,12 @@ Minecraft/Backend/plugins/FreeMinecraftModels/models/*
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.bbmodel
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.pet.yml
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_wolfu.source.md
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon.pet.yml
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon.source.md
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_albino.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_black.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_ginger.bbmodel
 Minecraft/Backend/plugins/FreeMinecraftModels/output
 Minecraft/Backend/plugins/FreeMinecraftModels/recipes
 Minecraft/Backend/plugins/FreeMinecraftModels/resource_pack

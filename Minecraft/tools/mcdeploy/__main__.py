@@ -11,7 +11,7 @@ import time
 import sys
 from pathlib import Path
 
-from . import boottest, ci, convert, deploy, lint, play, pull, servers, shop
+from . import boottest, ci, convert, deploy, lint, pets, play, pull, servers, shop
 from .config import OUT_DIR, OUTPUTS, REPO_ROOT, deploy_values, get_target, git_files, load_test_values, require_values
 from .errors import McDeployError
 from .remote import SFTP_KEYS, SftpRemote, fetch_host_key, fingerprint, verify_instance
@@ -144,7 +144,7 @@ def cmd_probe(args) -> None:
 
 def cmd_play(args) -> None:
     if args.play_command == "start":
-        play.play_start(get_target(args.target), args.jars_from, args.player, args.publish)
+        play.play_start(get_target(args.target), args.jars_from, args.player)
     elif args.play_command == "stop":
         play.play_stop()
     elif args.play_command == "console":
@@ -233,16 +233,19 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("target")
     p.add_argument("--jars-from", choices=["remote", "cache"], default="cache",
                    help="remote: download jars from the server first (needs AMP_SFTP_*); cache: reuse .cache/jars")
+    p = sub.add_parser("pet-build", help="build a pet's models from its recipe Minecraft/pets/<species>.yml")
+    p.add_argument("species")
+    p.add_argument("--source", help="raw .bbmodel download (under the repo, e.g. .cache/pet-sources/) to import "
+                                    "as the base model; without it the committed base model is used")
     p = sub.add_parser("unit-tests", help="run the mcdeploy unit tests")
 
     p = sub.add_parser("play", help="local play server for visual checks (offline mode, dummy values)")
     play_sub = p.add_subparsers(dest="play_command", required=True)
-    q = play_sub.add_parser("start", help="boot a backend with test values and keep it running")
+    q = play_sub.add_parser("start", help="boot a backend with test values and keep it running; "
+                                          "join it from this PC at localhost:25565")
     q.add_argument("target")
     q.add_argument("--jars-from", choices=["remote", "cache"], default="cache")
     q.add_argument("--player", default=play.DEFAULT_PLAYER, help="offline player name made op")
-    q.add_argument("--publish", action="store_true",
-                   help="also reachable from this PC (127.0.0.1:25565, pack on :25566) for your own client")
     play_sub.add_parser("stop", help="remove the play server, its MySQL and the client")
     q = play_sub.add_parser("console", help="run a server console command and print its output")
     q.add_argument("text", help="command without the leading /")
@@ -325,6 +328,8 @@ def main(argv: list[str] | None = None) -> int:
             cmd_shop_report(args)
         elif args.command == "shop-audit":
             cmd_shop_audit(args)
+        elif args.command == "pet-build":
+            pets.run_build(args.species, args.source)
         elif args.command == "play":
             cmd_play(args)
         elif args.command == "client":

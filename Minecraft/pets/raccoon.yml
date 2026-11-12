@@ -1,0 +1,28 @@
+# Build recipe for the raccoon pet (Minecraft/docs/pets.md). Rebuild after an edit:
+#   mc pet-build raccoon                                                  (colours only)
+#   mc pet-build raccoon --source .cache/pet-sources/raccoon-trader.bbmodel   (re-import the download too)
+# Source and license: Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon.source.md
+model: irrenhaus_pet_raccoon
+import:
+  strip_animation_prefix: animation.raccoon_trader.
+  copy_animations:
+    idle.long: sneeze              # FMM plays idle.long now and then while the pet stands
+  hitbox: {from: [-4, 0, -7], to: [4, 16, 7]}
+recolor:
+  # Cubes whose texture is fur. Hat, scarf, feather, flower and backpack keep their colours.
+  cubes: [body, head, head_back, snout, cheek_right, cheek_left, ear_right, ear_left, arm_right, arm_left,
+          tail_base, tail_mid, tail_tip, leg_right, leg_left, foot_right, foot_left]
+  # gradient: pixel brightness (0-255, of the original) -> new colour. The original mask is ~37, fur ~95-135,
+  # the white face ~240. Eye highlight, irises, pupils and pink pads stay unless iris/pupil is set.
+  variants:
+    ginger:
+      gradient: {0: '#1e100c', 30: '#341c14', 60: '#542a18', 95: '#964e24', 135: '#c47034', 165: '#da965c',
+                 200: '#ecc8a0', 240: '#f8ecda', 255: '#fff8ec'}
+    black:
+      gradient: {0: '#080708', 30: '#0e0c0e', 60: '#1a1618', 95: '#282324', 135: '#3a3434', 165: '#504846',
+                 200: '#766c68', 240: '#968e88', 255: '#a59e96'}
+    albino:
+      gradient: {0: '#bea0a4', 30: '#ccb0b2', 60: '#d6c6c4', 95: '#e4dcd6', 135: '#eee9e2', 200: '#f8f5ee',
+                 255: '#fffdf8'}
+      iris: '#ff3c50'
+      pupil: '#6e1420'

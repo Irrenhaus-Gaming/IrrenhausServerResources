@@ -122,6 +122,7 @@ The rules (shop always worse than trading with players, farm output sells for to
 .\mc.ps1 drift mc-backend-Test                      # read-only: what would a deploy change?
 .\mc.ps1 shop-report                                # admin shop prices -> .cache/out/shop-report.md
 .\mc.ps1 shop-audit mc-backend-Test                 # refresh shop/vanilla.lock.yml from the cached server jar
+.\mc.ps1 pet-build raccoon                          # rebuild a pet's colour models from Minecraft/pets/raccoon.yml
 ```
 
 `.mc-local.env` (git-ignored, repo root) holds the secrets of the server you work with (`MC_SERVER_HOST`, `MC_SERVER_SFTP_PORT`, `AMP_SFTP_HOST_KEY`) and the deploy account (`AMP_SFTP_USER`, `AMP_SFTP_PASSWORD`) as `KEY=value` lines.
@@ -139,11 +140,10 @@ Under act, deploys always run as a dry run unless `--var MC_ACT_ALLOW_DEPLOY=tru
 
 ### Visual checks: local play server and game client
 
-`mc play` boots a backend like the boot test (dummy values, throwaway MySQL) and keeps it running; `mc client` runs the real Minecraft client on a virtual screen (Xvfb, software rendering) in its own container. Both share one Docker network namespace and publish no port, so nothing is reachable from outside and the host's screen is never touched. Screenshots land in `.cache/play/shots/`.
+`mc play` boots a backend like the boot test (dummy values, throwaway MySQL) and keeps it running; `mc client` runs the real Minecraft client on a virtual screen (Xvfb, software rendering) in its own container. Both share one Docker network namespace. The server's ports are always published on `127.0.0.1` so you can join with your own client (see below); nothing is reachable from other machines, and the host's screen is never touched. Screenshots land in `.cache/play/shots/`.
 
 ```powershell
-.\mc.ps1 play start mc-backend-Test             # cached jars; add --jars-from remote to refresh them
-.\mc.ps1 play start mc-backend-Test --publish   # also join with your own client: localhost:25565 (this PC only)
+.\mc.ps1 play start mc-backend-Test             # cached jars (--jars-from remote refreshes them); join: localhost:25565
 .\mc.ps1 play console "op <name>"               # op someone not in Backend/ops.json (those are op already)
 .\mc.ps1 client start                           # first start downloads the game into the volume mcd-play-client-data
 .\mc.ps1 client cmd "/fmm petadmin give wolfu"  # chat line or /command as the player (ClaudeBot, op)
@@ -155,7 +155,21 @@ Under act, deploys always run as a dry run unless `--var MC_ACT_ALLOW_DEPLOY=tru
 .\mc.ps1 play stop                              # removes server, MySQL and client
 ```
 
-Local-only overrides (`mcdeploy/play.py`, never deployed): offline mode without Velocity forwarding, a flat peaceful creative world, the client's player and everyone in `Backend/ops.json` as op (under their offline-mode UUID, which differs from the real one), and ResourcePackManager serving the merged pack itself (`selfHostForce`, `http://localhost:25566/rspm.zip`) instead of uploading it to magmaguy.com. The client accepts the server pack without a prompt, so models and textures look as players see them. A plugin overrides `/tp`; use `minecraft:tp`. `--publish` binds the Minecraft port and the pack port to `127.0.0.1` only: the server is in offline mode, so anyone who could reach it could join under any name, the op player included. The client runs in offline mode: it is meant for the owner's own license, for local checks only.
+Local-only overrides (`mcdeploy/play.py`, never deployed): offline mode without Velocity forwarding, a flat peaceful creative world, the client's player and everyone in `Backend/ops.json` as op (under their offline-mode UUID, which differs from the real one), and ResourcePackManager serving the merged pack itself (`selfHostForce`, `http://localhost:25566/rspm.zip`) instead of uploading it to magmaguy.com. The client accepts the server pack without a prompt, so models and textures look as players see them. A plugin overrides `/tp`; use `minecraft:tp`. The Minecraft port and the pack port are bound to `127.0.0.1` only, never to all interfaces: the server is in offline mode, so anyone who could reach it could join under any name, the op player included. The client runs in offline mode: it is meant for the owner's own license, for local checks only.
+
+#### Joining with your own client (as admin)
+
+Every play server is joinable from this PC, also when an agent (Claude Code) started it for a test: you can join the same server and look along. The agent tells you when it is up (rule in `CLAUDE.md`).
+
+1. Start the server (`.\mc.ps1 play start mc-backend-Test` or `mc.cmd …`), or let an agent do it. Wait for `play server is up`; the next line repeats the address and version.
+2. In your normal Minecraft launcher, start the same Minecraft version as the server (the `play` log shows it: `for Minecraft 26.3`).
+3. Multiplayer → Direct Connection → `localhost:25565` (`localhost` or `127.0.0.1` both work; it is reachable from this PC only).
+4. Accept the server resource pack. It comes from `http://localhost:25566/rspm.zip` on the same PC.
+5. Admin rights: everyone in `Backend/ops.json` is op automatically, and LuckPerms honors op here (`enable-ops`, `commands-allow-op`), so op means full admin. The server is in offline mode, so it gives you a UUID made from your name, not your real one; `mc play` converts the ops list to those UUIDs, which is why the entries match. Anyone else: `.\mc.ps1 play console "op <name>"` (works while they are online, no reconnect needed).
+
+Your logged-in client can join the offline server; nothing about your account is checked or stored. Everything (world, op list, database) is thrown away with `.\mc.ps1 play stop`.
+
+Adding a pet species or colour variant: [docs/pets.md](docs/pets.md).
 
 ## What is tracked
 

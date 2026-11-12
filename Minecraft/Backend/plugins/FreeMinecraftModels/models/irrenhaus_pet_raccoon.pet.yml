@@ -1,0 +1,56 @@
+# Raccoon pet. The species id and the variant model names are stored in every owned pet: never rename them.
+isEnabled: true
+species: raccoon
+model: irrenhaus_pet_raccoon
+name: '&7Waschbär'
+body: FOX
+scale: 1.0
+health: 20
+icon: COOKIE
+locomotion: GROUNDED
+tamingFood:
+  - COOKIE
+  - SWEET_BERRIES
+breedingFood:
+  - SWEET_BERRIES
+  - GLOW_BERRIES
+tameChance: 0.333
+babyScale: 0.5
+follow:
+  distance: 5
+  teleportDistance: 24
+  speed: 1.0
+# Colours share every bone and animation; only the texture differs.
+# weight sets how often a colour spawns wild (CREATURES mode) and is drawn on mutation.
+variants:
+  - model: irrenhaus_pet_raccoon
+    name: '&7Waschbär'
+    weight: 20
+  - model: irrenhaus_pet_raccoon_ginger
+    name: '&6Roter Waschbär'
+    weight: 4
+  - model: irrenhaus_pet_raccoon_black
+    name: '&8Schwarzer Waschbär'
+    weight: 2
+  - model: irrenhaus_pet_raccoon_albino
+    name: '&fAlbino-Waschbär'
+    weight: 1
+# Only used in CREATURES mode (pets.yml).
+wildSpawn:
+  enabled: true
+  weight: 10
+  placement: GROUND
+  cap: 2
+  environments:
+    - NORMAL
+  biomes:
+    - minecraft:forest
+    - minecraft:birch_forest
+    - minecraft:dark_forest
+    - minecraft:swamp
+    - minecraft:river
+behaviors:
+  - stay
+  - follow_owner
+  - wander
+  - idle_look

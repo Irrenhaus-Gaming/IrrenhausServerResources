@@ -3,11 +3,12 @@
 `mc play start <target>` boots the target like the boot test (rendered configs, dummy test values,
 throwaway MySQL) but keeps it running, with a few local-only overrides (see play_overrides): offline
 mode without Velocity, a flat creative world, and ResourcePackManager serving the merged pack itself
-on the Minecraft port + 1 instead of uploading it to magmaguy.com.
+on the Minecraft port + 1 instead of uploading it to magmaguy.com. Both ports are always published on
+127.0.0.1, so the owner can join with their own client (localhost:25565) whenever something is tested.
 
 `mc client start` runs the real Minecraft client (Minecraft/tools/client) on a virtual screen in its
 own container. It shares the server's network namespace, so it joins localhost and downloads the pack
-from localhost; nothing is published on the host. `mc client …` drives that client with xdotool and
+from localhost. `mc client …` drives that client with xdotool and
 saves screenshots of its virtual screen to .cache/play/shots/.
 """
 from __future__ import annotations
@@ -200,7 +201,7 @@ def _check_player(player: str) -> None:
 LOCAL_PORTS = (f"127.0.0.1:{MC_PORT}:{MC_PORT}", f"127.0.0.1:{PACK_PORT}:{PACK_PORT}")
 
 
-def play_start(target: Target, jars_from: str, player: str, publish: bool = False) -> None:
+def play_start(target: Target, jars_from: str, player: str) -> None:
     if target.platform != "paper":
         raise McDeployError("mc play runs a backend (mc-backend-<Name>); the proxy is not supported yet")
     _check_player(player)
@@ -213,7 +214,7 @@ def play_start(target: Target, jars_from: str, player: str, publish: bool = Fals
     try:
         boottest.fill_workdir(target, rendered, inputs.jar_dir, workdir)
         boottest.start_mysql(MYSQL_NAME, inputs.root_password, inputs.databases,
-                             publish=LOCAL_PORTS if publish else ())
+                             publish=LOCAL_PORTS)
         boottest.start_server_container(target, SERVER_NAME, MYSQL_NAME, workdir)
     except BaseException:
         for name in (SERVER_NAME, MYSQL_NAME):
@@ -226,9 +227,9 @@ def play_start(target: Target, jars_from: str, player: str, publish: bool = Fals
     print(f"{target.name}: play server starting (max {target.boot_timeout_seconds}s)")
     boottest.wait_until_started(target, SERVER_NAME)
     print(f"{target.name}: play server is up; offline mode, {player} is op. Next: mc client start")
-    if publish:
-        print(f"your own client: multiplayer -> direct connection -> localhost:{MC_PORT} "
-              f"(this PC only; everyone in ops.json is op, others: mc play console \"op <name>\")")
+    print(f"join with your own client: Multiplayer -> Direct Connection -> localhost:{MC_PORT}, "
+          f"Minecraft {server_minecraft_version()} (this PC only; everyone in ops.json is admin, "
+          f"others: mc play console \"op <name>\")")
 
 
 def play_stop() -> None:
