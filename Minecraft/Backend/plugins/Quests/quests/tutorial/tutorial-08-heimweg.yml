@@ -1,4 +1,4 @@
-# Tutorial step 8/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 8/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -7,7 +7,7 @@ tasks:
     ignore-case: true
     command-match-mode: "STARTS_WITH"
 display:
-  name: "&6Tutorial 8/13 • Der Heimweg"
+  name: "&6Tutorial 8/14 • Der Heimweg"
   lore-normal:
   - "&7Reise mit &e/home &7zu deinem Zuhause."
   lore-started:

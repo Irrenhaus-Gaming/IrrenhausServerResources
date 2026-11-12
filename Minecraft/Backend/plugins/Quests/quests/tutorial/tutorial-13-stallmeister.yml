@@ -1,0 +1,44 @@
+# Tutorial step 13/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# The species, biomes and food below come from FreeMinecraftModels/models/irrenhaus_pet_*.pet.yml
+# (wildSpawn.biomes, tamingFood): keep them in line when a pet species is added or changed.
+tasks:
+  talk:
+    type: "citizens_interact"
+    npc-name: "Stallmeister Anton"
+display:
+  name: "&6Tutorial 13/14 • Der Stallmeister"
+  lore-normal:
+  - "&7Sprich mit &fStallmeister Anton &7am Spawn."
+  lore-started:
+  - "&7Sprich mit &fStallmeister Anton &7am Spawn."
+  type: "LEAD"
+startstring:
+- "&7Kehre mit &e/spawn &7zurück. &fStallmeister Anton &7kümmert sich dort um die Haustiere aller Spieler."
+- "&7Rechtsklicke ihn."
+rewards:
+- "minecraft:give {player} minecraft:cookie 8"
+- "minecraft:xp add {player} 50 points"
+- "quests a moddata start {player} tutorial-14-abschluss"
+rewardstring:
+- "&7Anton: &f„Haustiere fängst du in der Wildnis. Füttere ein wildes Tier mit seinem Lieblingsfutter,"
+- "&f  bis es dir folgt – manchmal braucht es ein paar Versuche.“"
+- "&7  • &7Waschbär &8– &7Wälder, Sümpfe, Flüsse &8– &fKekse, Süßbeeren"
+- "&7  • &cKrabbe &8– &7Strände, Mangrovensümpfe &8– &fKabeljau, Lachs"
+- "&7  • &bWolfu &8– &7Schneegebiete &8– &fKnochen"
+- "&7Anton: &f„Manche gibt es in seltenen Farben. Komm zu mir, wenn du ein anderes Tier mitnehmen"
+- "&f  oder eins nach Hause schicken willst – mitnehmen kannst du immer nur eins.“"
+- "&a+ 8 Kekse, 50 XP"
+placeholders:
+  description: "Sprich mit Stallmeister Anton"
+  progress: '0'
+  max: '1'
+  target: "Stallmeister Anton"
+options:
+  category: "tutorial"
+  requires:
+  - "tutorial-12-gruppe"
+  repeatable: false
+  cancellable: true
+  counts-towards-limit: false
+  counts-towards-completed: false
+  sort-order: 13

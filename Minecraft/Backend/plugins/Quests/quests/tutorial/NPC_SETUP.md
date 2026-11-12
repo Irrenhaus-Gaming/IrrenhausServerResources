@@ -8,9 +8,10 @@ Run the commands in game as an operator. An NPC spawns exactly where you stand a
 
 | NPC | Where | Quest steps |
 |---|---|---|
-| `Wärter Otto` | spawn | 1 (start), 13 (finale) |
+| `Wärter Otto` | spawn | 1 (start), 14 (finale) |
 | `Wegmeisterin Frieda` | spawn | 3, 4 (takes 16 oak logs) |
 | `Gildenbote Kasimir` | spawn, next to the Adventurer's Guild wormhole | 9 |
+| `Stallmeister Anton` | spawn, next to Wärter Otto | 13 |
 | `Alter Hase` | next to Wärter Otto | skips the tutorial |
 
 Step 5 also uses the EliteMobs Flugmeister (not a Citizens NPC), see section 5.
@@ -34,7 +35,7 @@ Stand at the spawn where Otto should stand, look the way he should face:
 /npc lookclose
 ```
 
-Steps 1 and 13 react to a right-click on Otto by themselves; he needs no `/npc command`.
+Steps 1 and 14 react to a right-click on Otto by themselves; he needs no `/npc command`.
 
 ## 3. Wegmeisterin Frieda
 
@@ -62,13 +63,18 @@ The Flugmeister is an EliteMobs NPC (`interactionType: TRANSPORT`, `plugins/Elit
 - **When the route's last waypoint changes**, update `x`, `y`, `z` in `tutorial-05-flugroute.yml` to match, or step 5 can no longer be completed.
 - The old Citizens NPC `Flightmaster` (it ran `em transport start flightmaster_01`) isn't needed for the tutorial; remove it if it still exists.
 
-## 6. Alter Hase (skip)
+## 6. Stallmeister Anton
 
-Stand next to Wärter Otto. Run this whole block in one go, in this order. `/npc create` selects the new NPC and `/npc command add` adds to the selected NPC, so all 15 commands end up on Alter Hase. Don't select or create another NPC in between.
+Set him up next to Wärter Otto exactly as in [docs/stablemaster.md](../../../../../docs/stablemaster.md) (the LuckPerms permission and the NPC with its two commands). Step 13 reacts to a right-click on him by itself and needs no extra `/npc command`. His answer explains how pets are caught, so the species, biomes and food in `tutorial-13-stallmeister.yml` must match the pet files.
+
+
+## 7. Alter Hase (skip)
+
+Stand next to Wärter Otto. Run this whole block in one go, in this order. `/npc create` selects the new NPC and `/npc command add` adds to the selected NPC, so all 16 commands end up on Alter Hase. Don't select or create another NPC in between.
 
 - `-r` means right-click only.
 - Without `-p` the commands run from the console, and Citizens replaces `<p>` with the clicking player's name.
-- `--permissions irrenhaus.tutorial.aktiv` limits them to players who started the tutorial and haven't finished it. Step 1 grants the permission; step 13 and the last command here remove it. Without this check, players could reset a finished tutorial and collect the rewards again.
+- `--permissions irrenhaus.tutorial.aktiv` limits them to players who started the tutorial and haven't finished it. Step 1 grants the permission; step 14 and the last command here remove it. Without this check, players could reset a finished tutorial and collect the rewards again.
 
 ```
 /npc create Alter Hase
@@ -85,12 +91,13 @@ Stand next to Wärter Otto. Run this whole block in one go, in this order. `/npc
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-10-wurmloch
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-11-gildenmenue
 /npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-12-gruppe
-/npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-13-abschluss
+/npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-13-stallmeister
+/npc command add -r --permissions irrenhaus.tutorial.aktiv quests a moddata reset <p> tutorial-14-abschluss
 /npc command add -r --permissions irrenhaus.tutorial.aktiv minecraft:tellraw <p> {"text":"Du hast das Tutorial übersprungen. Unter /quests → Tutorial kannst du es jederzeit neu starten.","color":"gray"}
 /npc command add -r --permissions irrenhaus.tutorial.aktiv lp user <p> permission unset irrenhaus.tutorial.aktiv
 ```
 
-Check the result with `/npc command`. It should list these 15 commands in this order. If something went wrong (a typo, or the commands landed on another NPC), select the affected NPC, clear its commands, then select Alter Hase and add all 15 again:
+Check the result with `/npc command`. It should list these 16 commands in this order. If something went wrong (a typo, or the commands landed on another NPC), select the affected NPC, clear its commands, then select Alter Hase and add all 16 again:
 
 ```
 /npc list
@@ -98,13 +105,13 @@ Check the result with `/npc command`. It should list these 15 commands in this o
 /npc command remove all
 ```
 
-## 7. Check
+## 8. Check
 
 ```
 /npc list
 ```
 
-The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Gildenbote Kasimir` and `Alter Hase`.
+The list shows `Wärter Otto`, `Wegmeisterin Frieda`, `Gildenbote Kasimir`, `Stallmeister Anton` and `Alter Hase`.
 
 Play through once with your own account:
 
@@ -120,7 +127,7 @@ Play through once with your own account:
 
 To start over, right-click Alter Hase while the tutorial is running, or reset every step with the `quests a moddata reset` commands above.
 
-## 8. First-join trigger and old quest file
+## 9. First-join trigger and old quest file
 
 In AMP, add a trigger "A player joins the server for the first time" on this server with these three tasks, in this order:
 
@@ -137,6 +144,6 @@ In AMP, add a trigger "A player joins the server for the first time" on this ser
 - **The wait is required.** Quests loads a player's data `delay-loading` ticks after join (`config.yml`, 100 ticks = 5 s, plus the database load). A `quests a moddata …` command before that loads the data a second time, and the quest Quests tracks on login lands on that copy: chat says "Tracking quest …", but the sidebar stays empty until the player tracks the quest again.
 - **The tag stands in for "first time".** AMP's first-join event fires on every login. The `irr_tutorial_offered` tag (saved in the player's data on this server) lets both commands run once per player; on later logins both conditions fail and nothing is logged. Players who were on the server before the trigger existed get the start command once more, which fails harmlessly if they already finished step 1.
 - Use `execute if`, not `execute as`: with `as` the player would run the `quests` command and need admin permission.
-- Check it once: log in twice with a test account. On the first login step 1 starts and the sidebar shows "Ziel: Wärter Otto"; on the second the console shows neither `Quest data for '<name>' is being loaded.` nor a `tag` message. To repeat the test, run `tag <name> remove irr_tutorial_offered` and reset the tutorial steps as in section 6.
+- Check it once: log in twice with a test account. On the first login step 1 starts and the sidebar shows "Ziel: Wärter Otto"; on the second the console shows neither `Quest data for '<name>' is being loaded.` nor a `tag` message. To repeat the test, run `tag <name> remove irr_tutorial_offered` and reset the tutorial steps as in section 7.
 - Delete `plugins/Quests/quests/npcquests/npcquest-tutorial.yml` on the server. Deploys never delete remote files.
 - Restart the instance, or run `/quests a reload`, so the old quest is gone.

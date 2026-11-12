@@ -1,4 +1,4 @@
-# Tutorial step 11/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 11/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -8,7 +8,7 @@ tasks:
     ignore-case: true
     command-match-mode: "EQUALS"
 display:
-  name: "&6Tutorial 11/13 • Die Abenteurergilde"
+  name: "&6Tutorial 11/14 • Die Abenteurergilde"
   lore-normal:
   - "&7Nutze &e/ag&7, um in die Gilde zu kommen."
   lore-started:

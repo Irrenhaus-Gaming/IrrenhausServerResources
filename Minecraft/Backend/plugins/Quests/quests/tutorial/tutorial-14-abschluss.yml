@@ -1,17 +1,17 @@
-# Tutorial step 13/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 14/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   talk:
     type: "citizens_interact"
     npc-name: "Wärter Otto"
 display:
-  name: "&6Tutorial 13/13 • Bereit für das Irrenhaus"
+  name: "&6Tutorial 14/14 • Bereit für das Irrenhaus"
   lore-normal:
   - "&7Kehre zu &fWärter Otto &7am Spawn zurück."
   lore-started:
   - "&7Kehre zu &fWärter Otto &7am Spawn zurück."
   type: "NETHER_STAR"
 startstring:
-- "&7Kehre mit &e/spawn &7zurück und sprich ein letztes Mal mit &fWärter Otto&7."
+- "&7Sprich ein letztes Mal mit &fWärter Otto &7am Spawn."
 rewards:
 - "minecraft:give {player} minecraft:iron_pickaxe 1"
 - "minecraft:give {player} minecraft:iron_axe 1"
@@ -33,9 +33,9 @@ placeholders:
 options:
   category: "tutorial"
   requires:
-  - "tutorial-12-gruppe"
+  - "tutorial-13-stallmeister"
   repeatable: false
   cancellable: true
   counts-towards-limit: false
   counts-towards-completed: false
-  sort-order: 13
+  sort-order: 14

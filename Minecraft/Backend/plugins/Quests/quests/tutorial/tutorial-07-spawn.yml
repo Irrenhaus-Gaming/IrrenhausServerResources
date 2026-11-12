@@ -1,4 +1,4 @@
-# Tutorial step 7/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 7/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -7,7 +7,7 @@ tasks:
     ignore-case: true
     command-match-mode: "EQUALS"
 display:
-  name: "&6Tutorial 7/13 • Zurück zum Spawn"
+  name: "&6Tutorial 7/14 • Zurück zum Spawn"
   lore-normal:
   - "&7Kehre mit &e/spawn &7zum Spawn zurück."
   lore-started:

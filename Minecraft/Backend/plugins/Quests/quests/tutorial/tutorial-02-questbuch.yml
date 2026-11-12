@@ -1,4 +1,4 @@
-# Tutorial step 2/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 2/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -9,7 +9,7 @@ tasks:
     ignore-case: true
     command-match-mode: "EQUALS"
 display:
-  name: "&6Tutorial 2/13 • Das Questbuch"
+  name: "&6Tutorial 2/14 • Das Questbuch"
   lore-normal:
   - "&7Öffne dein Questbuch mit &e/quests&7."
   lore-started:

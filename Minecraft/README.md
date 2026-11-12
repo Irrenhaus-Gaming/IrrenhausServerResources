@@ -172,7 +172,7 @@ Every play server is joinable from this PC, also when an agent (Claude Code) sta
 
 Your logged-in client can join the offline server; nothing about your account is checked or stored. Everything (world, op list, database) is thrown away with `.\mc.ps1 play stop`.
 
-Adding a pet species or colour variant: [docs/pets.md](docs/pets.md).
+Adding a pet species or colour variant: [docs/pets.md](docs/pets.md). Players pick their pet at the Stallmeister NPC: [docs/stablemaster.md](docs/stablemaster.md).
 
 ## What is tracked
 

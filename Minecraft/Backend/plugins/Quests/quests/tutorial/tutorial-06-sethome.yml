@@ -1,4 +1,4 @@
-# Tutorial step 6/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 6/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -7,7 +7,7 @@ tasks:
     ignore-case: true
     command-match-mode: "STARTS_WITH"
 display:
-  name: "&6Tutorial 6/13 • Ein Zuhause"
+  name: "&6Tutorial 6/14 • Ein Zuhause"
   lore-normal:
   - "&7Setze dein Zuhause mit &e/sethome&7."
   lore-started:

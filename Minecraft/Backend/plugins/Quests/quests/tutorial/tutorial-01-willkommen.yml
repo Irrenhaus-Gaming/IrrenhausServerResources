@@ -1,10 +1,10 @@
-# Tutorial step 1/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 1/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   talk:
     type: "citizens_interact"
     npc-name: "Wärter Otto"
 display:
-  name: "&6Tutorial 1/13 • Willkommen im Irrenhaus"
+  name: "&6Tutorial 1/14 • Willkommen im Irrenhaus"
   lore-normal:
   - "&7Sprich mit &fWärter Otto &7am Spawn."
   - "&7Er erklärt dir, wie der Server funktioniert."

@@ -1,4 +1,4 @@
-# Tutorial step 5/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 5/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 # The Flugmeister is an EliteMobs transport NPC, which Quests can't detect. The step completes
 # where route flightmaster_01 drops the player: its last waypoint (-41.3 / 72.4 / -22.8), about
 # 5 blocks above the spawn ground (y 67), so walking or jumping there does not count.
@@ -12,7 +12,7 @@ tasks:
     z: -23
     distance-padding: 2
 display:
-  name: "&6Tutorial 5/13 • Flugrouten"
+  name: "&6Tutorial 5/14 • Flugrouten"
   lore-normal:
   - "&7Sprich mit dem &fFlugmeister &7am Spawn"
   - "&7und fliege eine &fFlugroute &7bis zum Ende."

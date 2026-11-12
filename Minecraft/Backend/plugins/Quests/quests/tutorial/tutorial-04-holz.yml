@@ -1,4 +1,4 @@
-# Tutorial step 4/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 4/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   deliver:
     type: "citizens_deliver"
@@ -8,7 +8,7 @@ tasks:
     remove-items-when-complete: true
     allow-partial-completion: true
 display:
-  name: "&6Tutorial 4/13 • Holz für die Wegmeisterin"
+  name: "&6Tutorial 4/14 • Holz für die Wegmeisterin"
   lore-normal:
   - "&7Bringe &f16 Eichenstämme &7zu &fWegmeisterin Frieda&7."
   lore-started:

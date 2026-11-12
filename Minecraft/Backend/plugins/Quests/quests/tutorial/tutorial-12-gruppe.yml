@@ -1,4 +1,4 @@
-# Tutorial step 12/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 12/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   command:
     type: "command"
@@ -7,7 +7,7 @@ tasks:
     ignore-case: true
     command-match-mode: "STARTS_WITH"
 display:
-  name: "&6Tutorial 12/13 • Gemeinsam stark"
+  name: "&6Tutorial 12/14 • Gemeinsam stark"
   lore-normal:
   - "&7Lade Freunde mit &e/em party invite <Spieler> &7ein."
   lore-started:
@@ -20,7 +20,7 @@ startstring:
 - "&8Dungeons erreichst du über die Teleporter in der Gilde – zusammen geht es leichter."
 rewards:
 - "minecraft:xp add {player} 50 points"
-- "quests a moddata start {player} tutorial-13-abschluss"
+- "quests a moddata start {player} tutorial-13-stallmeister"
 rewardstring:
 - "&7Jetzt bist du bereit für gemeinsame Abenteuer!"
 - "&a+ 50 XP"

@@ -122,7 +122,9 @@ common ≥ half, uncommon ≥ a fifth, rare below).
   so it lists `stay`, `follow_owner`, `wander` and `idle_look` too. New modules go in `pet_behaviors/irrenhaus/`
   (the rest of `pet_behaviors/` is FMM's and git-ignored); the module id must be `fmm:pet/<file name>`, and every
   behavior needs a `tick` function or FMM skips the module.
-- `wildSpawn` only matters in CREATURES mode; the server runs COSMETIC (`pets.yml`).
+- `wildSpawn` only matters in CREATURES mode, which the server runs (`pets.yml`): players catch pets by feeding
+  wild ones their `tamingFood`. Tutorial step `tutorial-13-stallmeister` names every species with its biomes and
+  food; add a new species there too.
 
 `irrenhaus_pet_<species>.source.md`: source URL, author, license, which pet uses it, and every change made to the
 model (hitbox, renames, recolours). It is repo-only.
@@ -164,7 +166,8 @@ MC_NO_GIT=1 ./mc.sh client shot --name picker      # colour picker: one slot per
 - In the picker the variants sit in `variants:` order from `--at 496 280`, one slot every 36 px
   (532, 568, …). Clicking one gives the pet and sends it out. Wait a few seconds before freezing: it walks in from
   where it appeared.
-- `/fmm pets` lists owned pets; clicking one sends it home or brings it back.
+- `/fmm pets` lists owned pets; clicking one sends it home or brings it back. Players don't have `/fmm pets`; they
+  open the same menu at the Stallmeister NPC ([stablemaster.md](stablemaster.md)). One pet may be out at a time.
 - Pets wander and follow, so freeze the game before taking pictures, and set the camera with explicit yaw/pitch
   (`facing entity` did not pitch the camera down reliably):
 

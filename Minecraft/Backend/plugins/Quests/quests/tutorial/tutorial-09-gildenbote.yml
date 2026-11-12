@@ -1,10 +1,10 @@
-# Tutorial step 9/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 9/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   talk:
     type: "citizens_interact"
     npc-name: "Gildenbote Kasimir"
 display:
-  name: "&6Tutorial 9/13 • Der Ruf der Gilde"
+  name: "&6Tutorial 9/14 • Der Ruf der Gilde"
   lore-normal:
   - "&7Sprich mit &fGildenbote Kasimir &7beim Wurmloch am Spawn."
   lore-started:

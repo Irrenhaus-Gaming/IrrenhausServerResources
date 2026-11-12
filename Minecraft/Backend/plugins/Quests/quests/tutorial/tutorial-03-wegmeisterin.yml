@@ -1,10 +1,10 @@
-# Tutorial step 3/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 3/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   talk:
     type: "citizens_interact"
     npc-name: "Wegmeisterin Frieda"
 display:
-  name: "&6Tutorial 3/13 • Die Wegmeisterin"
+  name: "&6Tutorial 3/14 • Die Wegmeisterin"
   lore-normal:
   - "&7Sprich mit &fWegmeisterin Frieda &7am Spawn."
   lore-started:

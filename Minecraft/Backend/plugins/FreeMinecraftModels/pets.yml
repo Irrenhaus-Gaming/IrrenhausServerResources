@@ -5,22 +5,22 @@ healthBarSeconds: 30
 healthBarSeparator: ' &7/ '
 regenSeconds: 5
 feedingHeals: 4.0
-maxOwnedMessage: '&cYou can only keep $amount pets. Set one free from &f/fmm pets
+maxOwnedMessage: '&cYou can only keep $amount pets. Set one free at the &fStallmeister
   &cfirst.'
 releaseConfirmMessage: '&7Shift-right-click $pet &7again within 5 seconds to set it
   free for good.'
 releasedMessage: '&7You set $pet &7free.'
 diedMessage: '&cYour $pet &cdied.'
-givenMessage: '&aYou got a $pet&a! &f/fmm pets &amanages your pets.'
+givenMessage: '&aYou got a $pet&a! The &fStallmeister &aat spawn looks after your pets.'
 nameTagBlankMessage: '&7Rename the name tag in an anvil first, then use it on your
   pet.'
 nameTagWildMessage: '&7Tame the $pet &7first, then name it.'
 # Which kind of pet server this is. Also switchable from /fmm setup and /fmm petadmin mode.
 # CREATURES (more creatures): pet species also spawn wild in the world and are tamed by feeding them.
 # COSMETIC (cosmetic pets): only pets players own exist in the world; no wild spawns.
-mode: COSMETIC
+mode: CREATURES
 # How many pets a player may have out at once. 0 means no limit.
-maxEquippedPets: 0
+maxEquippedPets: 1
 # Whether owned pets ignore damage from players, their owner included. When false they are mortal,
 # like tamed wolves. Pets are always invulnerable in COSMETIC mode.
 petsInvulnerableToPlayers: true
@@ -42,17 +42,18 @@ wildSpawnChunkChance: 0.01
 # player, like a vanilla mob cap. Each species' wildSpawn.cap limits that species further. New
 # chunks are stocked regardless.
 wildPetCapPerPlayer: 6
-tamedMessage: '&aYou tamed a $pet&a! It follows you now. &f/fmm pets &amanages your
-  pets.'
+tamedMessage: '&aYou tamed a $pet&a! It follows you now. The &fStallmeister &aat spawn
+  looks after your pets.'
 tameFailedMessage: '&7The $pet &7eats it, but is not tamed yet.'
 stayMessage: '&7Your $pet &7stays here.'
 followMessage: '&7Your $pet &7follows you again.'
 menuTitle: '&2Your pets'
-noPetsMessage: '&7You have no pets yet. Tame a wild creature by feeding it its favorite
-  food.'
+noPetsMessage: '&6[Stallmeister Anton] &fDu hast ja noch gar keine Haustiere! Zieh
+  los und fang dir welche.'
 equippedMessage: '&a$pet &ais with you.'
 unequippedMessage: '&7$pet &7went home.'
-maxEquippedMessage: '&cYou can only have $amount pets with you at once.'
+maxEquippedMessage: '&cYou can only have one pet with you. Click your current pet to
+  send it home first.'
 breedingCooldownMessage: '&7Your $pet &7is not ready to breed again yet.'
 bornMessage: '&aA $pet &awas born!'
 migrations:

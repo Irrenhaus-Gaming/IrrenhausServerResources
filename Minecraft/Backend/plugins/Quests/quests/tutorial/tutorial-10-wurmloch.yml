@@ -1,4 +1,4 @@
-# Tutorial step 10/13. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
+# Tutorial step 10/14. NPCs are matched by name and placed by hand on the server (see NPC_SETUP.md in this folder).
 tasks:
   reach:
     type: "position"
@@ -8,7 +8,7 @@ tasks:
     z: 235
     distance-padding: 8
 display:
-  name: "&6Tutorial 10/13 • Durch das Wurmloch"
+  name: "&6Tutorial 10/14 • Durch das Wurmloch"
   lore-normal:
   - "&7Geh durch das &dWurmloch &7am Spawn in die &fAbenteurergilde&7."
   lore-started:
