@@ -111,7 +111,7 @@ common ≥ half, uncommon ≥ a fifth, rare below).
     - wander
     - idle_look
     - idle_tricks:
-        animations: ['dance:2', 'snap:1']   # 'animation:seconds it holds still' (the animation's length)
+        animations: ['dance:2', 'wash:1.6*3']   # 'animation:length in seconds', '*n' plays it n times in a row
         rest_seconds: 15                    # a trick every 15 + 0..30 seconds
         rest_random_seconds: 30
   ```

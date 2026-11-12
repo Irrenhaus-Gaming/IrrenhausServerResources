@@ -10,6 +10,8 @@
   - renamed the animations from `animation.raccoon_trader.<name>` to `<name>` (FreeMinecraftModels plays `idle`
     and `walk` by name)
   - added `idle.long`, a copy of `sneeze`, which FreeMinecraftModels plays now and then while the pet stands still
+  - set `wash`, `eat` and `sit_beg` to play once instead of looping; the `idle_tricks` behavior plays them (and
+    `happy`) now and then while the pet stands still, and cannot stop a looping animation
   - added a top-level `hitbox` bone (8 x 16 x 14 px) so FreeMinecraftModels sizes the pet's click box and Bedrock
     hitbox from it instead of falling back to 1 x 2 blocks
   - renamed the model and its texture to the file name, removed the GeckoLib export paths

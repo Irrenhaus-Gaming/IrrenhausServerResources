@@ -7,6 +7,9 @@ import:
   strip_animation_prefix: animation.raccoon_trader.
   copy_animations:
     idle.long: sneeze              # FMM plays idle.long now and then while the pet stands
+  # wash, eat and sit_beg loop in the download; idle_tricks plays them as one-offs, and the pet Lua API cannot stop an
+  # animation, so they play once.
+  play_once: [wash, eat, sit_beg]
   hitbox: {from: [-4, 0, -7], to: [4, 16, 7]}
 recolor:
   # Cubes whose texture is fur. Hat, scarf, feather, flower and backpack keep their colours.

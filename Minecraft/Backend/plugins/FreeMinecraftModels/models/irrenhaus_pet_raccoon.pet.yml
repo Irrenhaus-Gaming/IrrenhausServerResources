@@ -54,3 +54,10 @@ behaviors:
   - follow_owner
   - wander
   - idle_look
+  # Our module (pet_behaviors/irrenhaus/idle_tricks.lua): standing about, it now and then plays one of these
+  # ('animation:seconds it holds still', '*n' plays it n times in a row). FMM's own idle.long (a copy of sneeze)
+  # plays in between. The backpack animations stay out: they end on a held pose (backpack off).
+  - idle_tricks:
+      animations: ['happy:1.6', 'wash:1.6*3', 'eat:2*2', 'sit_beg:2*2']
+      rest_seconds: 15             # a trick every 15 to 45 seconds while it stands about
+      rest_random_seconds: 30
