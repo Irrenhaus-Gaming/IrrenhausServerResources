@@ -42,6 +42,12 @@ Minecraft/Backend/plugins/FreeMinecraftModels/models/*
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_albino.bbmodel
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_black.bbmodel
 !Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_raccoon_ginger.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab.pet.yml
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab.source.md
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab_blue.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab_gold.bbmodel
+!Minecraft/Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab_green.bbmodel
 Minecraft/Backend/plugins/FreeMinecraftModels/output
 Minecraft/Backend/plugins/FreeMinecraftModels/recipes
 Minecraft/Backend/plugins/FreeMinecraftModels/resource_pack
@@ -196,7 +202,9 @@ Minecraft/Backend/plugins/FreeMinecraftModels/nightbreak-changelogs.yml
 Minecraft/Backend/plugins/nightcore/lang
 Minecraft/Backend/plugins/BetterStructures/spawn_pools/tommy.yml
 Minecraft/Backend/plugins/DecentHolograms/lang.yml
-Minecraft/Backend/plugins/FreeMinecraftModels/pet_behaviors
+Minecraft/Backend/plugins/FreeMinecraftModels/pet_behaviors/*
+# Our own pet behavior modules (FMM never overwrites files with new names)
+!Minecraft/Backend/plugins/FreeMinecraftModels/pet_behaviors/irrenhaus/
 Minecraft/Backend/plugins/EconomyShopGUI/LanguageFiles
 Minecraft/Backend/plugins/EconomyShopGUI/cache
 Minecraft/Backend/plugins/EconomyShopGUI/transaction-log.txt

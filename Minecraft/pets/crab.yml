@@ -1,0 +1,42 @@
+# Build recipe for the crab pet (Minecraft/docs/pets.md). Rebuild after an edit:
+#   mc pet-build crab                                                  (colours only)
+#   mc pet-build crab --source .cache/pet-sources/crab-sailor.bbmodel  (re-import the download too)
+# Source and license: Backend/plugins/FreeMinecraftModels/models/irrenhaus_pet_crab.source.md
+model: irrenhaus_pet_crab
+import:
+  strip_animation_prefix: animation.funny_crab.
+  copy_animations:
+    idle.long: drink               # FMM plays idle.long now and then while the pet stands
+    spawn: salute                  # played when the pet is sent out
+  # dance and tipsy loop in the download; idle_tricks plays them as one-offs, and the pet Lua API cannot stop an
+  # animation, so they play once.
+  play_once: [dance, tipsy]
+  hitbox: {from: [-6, 0, -8], to: [6, 10, 4]}
+recolor:
+  # Cubes whose texture is shell. Cap, eyes' dark pupils and the bottle keep their colours.
+  cubes: [shell, underbody, shoulder_right, shoulder_left, arm_right, arm_left, eye_right, eye_left,
+          claw_palm_right, claw_top_right, claw_top_tip_right, claw_bottom_right, claw_bottom_tip_right,
+          claw_palm_left, claw_top_left, claw_top_tip_left, claw_bottom_left, claw_bottom_tip_left,
+          leg_right_1_hip, leg_right_1_upper, leg_right_1_knee, leg_right_1_lower, leg_right_1_ankle, leg_right_1_point,
+          leg_right_2_hip, leg_right_2_upper, leg_right_2_knee, leg_right_2_lower, leg_right_2_ankle, leg_right_2_point,
+          leg_right_3_hip, leg_right_3_upper, leg_right_3_knee, leg_right_3_lower, leg_right_3_ankle, leg_right_3_point,
+          leg_right_4_hip, leg_right_4_upper, leg_right_4_knee, leg_right_4_lower, leg_right_4_ankle, leg_right_4_point,
+          leg_left_1_hip, leg_left_1_upper, leg_left_1_knee, leg_left_1_lower, leg_left_1_ankle, leg_left_1_point,
+          leg_left_2_hip, leg_left_2_upper, leg_left_2_knee, leg_left_2_lower, leg_left_2_ankle, leg_left_2_point,
+          leg_left_3_hip, leg_left_3_upper, leg_left_3_knee, leg_left_3_lower, leg_left_3_ankle, leg_left_3_point,
+          leg_left_4_hip, leg_left_4_upper, leg_left_4_knee, leg_left_4_lower, leg_left_4_ankle, leg_left_4_point]
+  # The shell is saturated red, so the default fur rules (keep saturated pixels) would change nothing.
+  # match: only the shell's magenta-to-peach hues change; the navy pupils stay.
+  match: {hue: [270, 45], min_saturation: 0.25}
+  # gradient: pixel brightness (0-255, of the original) -> new colour. The original dark purple is ~40-55,
+  # the red shell ~85-130, the peach highlights ~155-210.
+  variants:
+    blue:
+      gradient: {40: '#121838', 55: '#18264f', 70: '#1f3870', 85: '#284a8e', 104: '#325fae', 127: '#447dca',
+                 156: '#64a2de', 186: '#90c4ee', 211: '#c0e0f8'}
+    green:
+      gradient: {40: '#0e241c', 55: '#143426', 70: '#1c4a32', 85: '#24603e', 104: '#2e784a', 127: '#429458',
+                 156: '#64b06a', 186: '#90c888', 211: '#bee0ae'}
+    gold:
+      gradient: {40: '#36200e', 55: '#4e2e12', 70: '#6a4016', 85: '#88561a', 104: '#a8701e', 127: '#c68e28',
+                 156: '#deae3e', 186: '#eeca68', 211: '#f8e2a0'}

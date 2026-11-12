@@ -1,0 +1,59 @@
+# Crab sailor pet. The species id and the variant model names are stored in every owned pet: never rename them.
+isEnabled: true
+species: crab
+model: irrenhaus_pet_crab
+name: '&cKrabbe'
+body: FOX
+scale: 1.0
+health: 20
+icon: NAUTILUS_SHELL
+locomotion: GROUNDED
+tamingFood:
+  - COD
+  - SALMON
+breedingFood:
+  - TROPICAL_FISH
+tameChance: 0.333
+babyScale: 0.5
+follow:
+  distance: 5
+  teleportDistance: 24
+  speed: 1.0
+# Colours share every bone and animation; only the texture differs.
+# weight sets how often a colour spawns wild (CREATURES mode) and is drawn on mutation.
+variants:
+  - model: irrenhaus_pet_crab
+    name: '&cKrabbe'
+    weight: 20
+  - model: irrenhaus_pet_crab_blue
+    name: '&9Blaue Krabbe'
+    weight: 4
+  - model: irrenhaus_pet_crab_green
+    name: '&2Grüne Krabbe'
+    weight: 4
+  - model: irrenhaus_pet_crab_gold
+    name: '&6Goldene Krabbe'
+    weight: 1
+# Only used in CREATURES mode (pets.yml).
+wildSpawn:
+  enabled: true
+  weight: 10
+  placement: GROUND
+  cap: 2
+  environments:
+    - NORMAL
+  biomes:
+    - minecraft:beach
+    - minecraft:stony_shore
+    - minecraft:mangrove_swamp
+behaviors:
+  - stay
+  - follow_owner
+  - wander
+  - idle_look
+  # Our module (pet_behaviors/irrenhaus/idle_tricks.lua): standing about, it now and then plays one of these
+  # ('animation:seconds it holds still'). FMM's own idle.long (a copy of drink) plays in between.
+  - idle_tricks:
+      animations: ['dance:2', 'snap:1', 'salute:1.7', 'hat_toss:2.2', 'tipsy:4']
+      rest_seconds: 15             # a trick every 15 to 45 seconds while it stands about
+      rest_random_seconds: 30

@@ -29,6 +29,7 @@ import:                                # applied to the raw download with --sour
   strip_animation_prefix: animation.<name>.
   rename_animations: {walking: walk}   # optional
   copy_animations: {idle.long: sneeze} # optional: new name <- existing animation
+  play_once: [dance]                   # optional: looping animations idle_tricks plays (see section 4)
   hitbox: {from: [-4, 0, -7], to: [4, 16, 7]}
 recolor:
   cubes: [body, head, ...]             # cubes whose texture is fur
@@ -77,6 +78,10 @@ same bones and animations, listed under `variants:` in the pet file. `pet-build`
    pick the stops, look at the brightness of the texture's main shades (dark mask, fur, light belly).
 3. Pixels that are not fur colour stay: the white eye highlight, saturated irises, near-black pupils, pink pads and
    blush. `iris`/`pupil` recolour the eyes (the albino gets red ones).
+   - If the main colour is itself saturated (the crab's red shell), step 3 would keep almost every pixel. Set
+     `recolor.match: {hue: [from, to], min_saturation: s}` instead (degrees, `from > to` wraps past red; example
+     `crab.yml`): exactly the pixels in that hue window change, everything else (pupils, gear) keeps its colour.
+     `iris`/`pupil` don't apply then.
 4. Look at `.cache/pets/<species>.png` (all textures side by side) before going in game. Adjust the gradient and run
    `pet-build <species>` again; without `--source` it rebuilds only the colours.
 
@@ -95,6 +100,28 @@ common ≥ half, uncommon ≥ a fifth, rare below).
 - `tamingFood`, `breedingFood`, `icon` (the item shown in `/fmm pets`), `locomotion`, `follow`, `behaviors`
   (Lua modules from `pet_behaviors/`).
 - `name` and variant names are German, with `&` colour codes.
+- More idle animations: FMM itself plays only one, `idle.long`. Our module `idle_tricks`
+  (`pet_behaviors/irrenhaus/idle_tricks.lua`, tracked; FMM never overwrites files with names of its own) plays a
+  random one from a list now and then while the pet stands still, and holds it still meanwhile (example: crab):
+
+  ```yaml
+  behaviors:
+    - stay
+    - follow_owner
+    - wander
+    - idle_look
+    - idle_tricks:
+        animations: ['dance:2', 'snap:1']   # 'animation:seconds it holds still' (the animation's length)
+        rest_seconds: 15                    # a trick every 15 + 0..30 seconds
+        rest_random_seconds: 30
+  ```
+
+  The pet Lua API can start an animation but not stop it, so every listed animation must play once: put looping
+  ones in the recipe's `import.play_once`. `c.pet.speed` is not the pet's current speed (it never drops near 0
+  standing still); the module measures movement from `c.pet.position`. A `behaviors` list replaces the default one,
+  so it lists `stay`, `follow_owner`, `wander` and `idle_look` too. New modules go in `pet_behaviors/irrenhaus/`
+  (the rest of `pet_behaviors/` is FMM's and git-ignored); the module id must be `fmm:pet/<file name>`, and every
+  behavior needs a `tick` function or FMM skips the module.
 - `wildSpawn` only matters in CREATURES mode; the server runs COSMETIC (`pets.yml`).
 
 `irrenhaus_pet_<species>.source.md`: source URL, author, license, which pet uses it, and every change made to the

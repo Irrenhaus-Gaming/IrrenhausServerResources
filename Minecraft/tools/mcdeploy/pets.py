@@ -5,7 +5,9 @@ A recipe `Minecraft/pets/<species>.yml` describes how the committed models of on
 - `import`: fixes applied to a raw download (`mc pet-build <species> --source file.bbmodel`), which becomes
   the base model `<model>.bbmodel`.
 - `recolor`: colour variants `<model>_<colour>.bbmodel`, made from the base model's texture. Only the texture
-  pixels of the listed cubes change; each is mapped by brightness onto the variant's gradient.
+  pixels of the listed cubes change; each is mapped by brightness onto the variant's gradient. By default
+  saturated pixels (irises, pink pads) keep their colour; `recolor.match` instead recolours exactly the pixels
+  in a hue window, for models whose main colour is itself saturated (a red crab shell).
 
 Lint rebuilds every variant from the committed base model and fails if a file differs, so variants can only
 change through their recipe. See Minecraft/docs/pets.md for the whole workflow.
@@ -32,8 +34,9 @@ NAME_RE = re.compile(r"^[a-z0-9._-]+$")
 COLOUR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 REQUIRED_ANIMATIONS = ("idle", "walk")
 RECIPE_KEYS = {"model", "import", "recolor"}
-IMPORT_KEYS = {"strip_animation_prefix", "rename_animations", "copy_animations", "hitbox"}
-RECOLOR_KEYS = {"cubes", "variants"}
+IMPORT_KEYS = {"strip_animation_prefix", "rename_animations", "copy_animations", "play_once", "hitbox"}
+RECOLOR_KEYS = {"cubes", "variants", "match"}
+MATCH_KEYS = {"hue", "min_saturation"}
 VARIANT_KEYS = {"gradient", "iris", "pupil"}
 
 
@@ -60,15 +63,35 @@ class Variant:
 
 
 @dataclass
+class Match:
+    """Recolour only pixels whose hue lies in [hue_from, hue_to] degrees (wrapping past 360) and whose
+    saturation is at least min_saturation. Everything else keeps its colour."""
+    hue_from: float
+    hue_to: float
+    min_saturation: float = 0.0
+
+    def __contains__(self, rgb: tuple[int, int, int]) -> bool:
+        h, s, _ = colorsys.rgb_to_hsv(*(c / 255 for c in rgb))
+        if s < self.min_saturation or s == 0:
+            return False
+        h *= 360
+        if self.hue_from <= self.hue_to:
+            return self.hue_from <= h <= self.hue_to
+        return h >= self.hue_from or h <= self.hue_to
+
+
+@dataclass
 class Recipe:
     species: str
     model: str
     strip_prefix: str = ""
     rename: dict[str, str] = field(default_factory=dict)
     copies: dict[str, str] = field(default_factory=dict)
+    play_once: list[str] = field(default_factory=list)
     hitbox: tuple[list[float], list[float]] | None = None
     cubes: list[str] = field(default_factory=list)
     variants: list[Variant] = field(default_factory=list)
+    match: Match | None = None
 
     def variant_model(self, variant: Variant) -> str:
         return f"{self.model}_{variant.name}"
@@ -99,6 +122,10 @@ def load_recipe(species: str) -> Recipe:
     recipe.strip_prefix = imp.get("strip_animation_prefix") or ""
     recipe.rename = dict(imp.get("rename_animations") or {})
     recipe.copies = dict(imp.get("copy_animations") or {})
+    once = imp.get("play_once") or []
+    if not isinstance(once, list) or not all(isinstance(n, str) for n in once):
+        raise McDeployError(f"{where}: import.play_once must be a list of animation names")
+    recipe.play_once = list(once)
     if imp.get("hitbox") is not None:
         hb = imp["hitbox"]
         if not (isinstance(hb, dict) and set(hb) == {"from", "to"}
@@ -108,6 +135,20 @@ def load_recipe(species: str) -> Recipe:
     rec = data.get("recolor") or {}
     _unknown(rec, RECOLOR_KEYS, f"{where} recolor")
     recipe.cubes = list(rec.get("cubes") or [])
+    if rec.get("match") is not None:
+        m = rec["match"]
+        mwhere = f"{where} recolor.match"
+        if not isinstance(m, dict):
+            raise McDeployError(f"{mwhere}: expected a mapping")
+        _unknown(m, MATCH_KEYS, mwhere)
+        hue = m.get("hue")
+        if not (isinstance(hue, list) and len(hue) == 2 and all(isinstance(v, (int, float)) and 0 <= v <= 360
+                                                                   for v in hue)):
+            raise McDeployError(f"{mwhere}: hue needs [from, to] in degrees 0-360 (from > to wraps past red)")
+        sat = m.get("min_saturation", 0)
+        if not isinstance(sat, (int, float)) or not 0 <= sat <= 1:
+            raise McDeployError(f"{mwhere}: min_saturation must be 0-1")
+        recipe.match = Match(float(hue[0]), float(hue[1]), float(sat))
     for name, spec in (rec.get("variants") or {}).items():
         vwhere = f"{where} recolor.variants.{name}"
         if not NAME_RE.match(str(name)):
@@ -121,6 +162,9 @@ def load_recipe(species: str) -> Recipe:
         gradient = sorted((float(k), _rgb(v, vwhere)) for k, v in stops.items())
         if any(not 0 <= k <= 255 for k, _ in gradient):
             raise McDeployError(f"{vwhere}: gradient brightness keys must be 0-255")
+        if recipe.match and ("iris" in spec or "pupil" in spec):
+            raise McDeployError(f"{vwhere}: iris/pupil do not apply with recolor.match (eyes outside the hue "
+                                f"window keep their colour)")
         recipe.variants.append(Variant(
             name=str(name), gradient=gradient,
             iris=_rgb(spec["iris"], vwhere) if "iris" in spec else None,
@@ -234,6 +278,13 @@ def import_model(raw: dict, recipe: Recipe) -> dict:
         else:
             anims.append(clone)
         by_name[new] = clone
+    # Looping animations a behavior plays as a one-off (idle_tricks) must end on their own: the pet Lua API can
+    # start an animation but not stop it.
+    for name in recipe.play_once:
+        if name not in by_name:
+            raise McDeployError(f"pet {recipe.species}: play_once animation {name!r} not in the model "
+                                f"(has {sorted(by_name)})")
+        by_name[name]["loop"] = "once"
     if recipe.hitbox:
         _set_hitbox(model, recipe)
     textures = model.get("textures", [])
@@ -295,9 +346,15 @@ def gradient_colour(stops, y: float) -> tuple[int, int, int]:
     return stops[-1][1]
 
 
-def recolour_pixel(rgb: tuple[int, int, int], variant: Variant) -> tuple[int, int, int] | None:
-    """New colour for one fur pixel, or None to keep it (eye highlight, iris, pupil, pink pads/blush)."""
+def recolour_pixel(rgb: tuple[int, int, int], variant: Variant,
+                   match: Match | None = None) -> tuple[int, int, int] | None:
+    """New colour for one fur pixel, or None to keep it (eye highlight, iris, pupil, pink pads/blush).
+    With `match`, exactly the pixels inside its hue window change."""
     r, g, b = rgb
+    if match is not None:
+        if rgb not in match:
+            return None
+        return gradient_colour(variant.gradient, 0.299 * r + 0.587 * g + 0.114 * b)
     _, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
     if rgb == (255, 255, 255):                       # eye highlight
         return None
@@ -318,7 +375,7 @@ def build_variant(base: dict, recipe: Recipe, variant: Variant) -> tuple[dict, o
         r, g, b, a = image.getpixel((x, y))
         if a == 0:
             continue
-        new = recolour_pixel((r, g, b), variant)
+        new = recolour_pixel((r, g, b), variant, recipe.match)
         if new is not None:
             image.putpixel((x, y), (*new, a))
     model = copy.deepcopy(base)

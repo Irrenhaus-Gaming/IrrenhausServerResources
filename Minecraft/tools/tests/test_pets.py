@@ -101,6 +101,17 @@ def test_import_fixes_names_hitbox_and_is_idempotent(repo):
     assert pets.dump_model(pets.import_model(base, recipe)) == pets.dump_model(base)
 
 
+def test_import_play_once_sets_loop_and_rejects_unknown_names(repo):
+    path = repo / "Minecraft" / "pets" / "test.yml"
+    path.write_text(RECIPE_YAML.replace("  hitbox:", "  play_once: [walk]\n  hitbox:"), encoding="utf-8")
+    base = pets.import_model(raw_model(), pets.load_recipe("test"))
+    loops = {a["name"]: a.get("loop") for a in base["animations"]}
+    assert loops["walk"] == "once" and loops["idle"] is None
+    path.write_text(RECIPE_YAML.replace("  hitbox:", "  play_once: [dance]\n  hitbox:"), encoding="utf-8")
+    with pytest.raises(McDeployError, match="play_once"):
+        pets.import_model(raw_model(), pets.load_recipe("test"))
+
+
 def test_recolour_changes_only_fur_of_listed_cubes(repo):
     recipe = pets.load_recipe("test")
     base = pets.import_model(raw_model(), recipe)
@@ -125,6 +136,36 @@ def test_recolour_sets_iris_and_pupil_when_given(repo):
     assert image.getpixel((1, 1))[:3] == (128, 0, 0)
     r, g, b = image.getpixel((0, 1))[:3]
     assert r > 0 and g == 0 and b == 0
+
+
+def test_recolour_match_changes_only_the_hue_window(repo):
+    path = repo / "Minecraft" / "pets" / "test.yml"
+    no_eyes = RECIPE_YAML.replace("      iris: '#ff0000'\n      pupil: '#800000'\n", "")
+    path.write_text(no_eyes.replace("  cubes: [body]\n",
+                                    "  cubes: [body]\n  match: {hue: [0, 40], min_saturation: 0.4}\n"),
+                    encoding="utf-8")
+    recipe = pets.load_recipe("test")
+    base = pets.import_model(raw_model(), recipe)
+    ginger = next(v for v in recipe.variants if v.name == "ginger")
+    _, image = pets.build_variant(base, recipe, ginger)
+    px = lambda x, y: image.getpixel((x, y))[:3]
+    assert px(0, 1) != IRIS and px(0, 1)[2] == 0           # saturated orange (hue 28): recoloured
+    assert px(0, 0) == FUR and px(3, 0) == PINK             # in the hue window but below min_saturation: kept
+    assert px(1, 0) == MASK                                 # outside the hue window: kept
+    assert px(2, 0) == HIGHLIGHT and px(1, 1) == PUPIL
+    assert px(4, 0) == HAT                                  # not in recolor.cubes
+
+
+def test_recipe_rejects_bad_match(repo):
+    path = repo / "Minecraft" / "pets" / "test.yml"
+    path.write_text(RECIPE_YAML.replace("  cubes: [body]\n", "  cubes: [body]\n  match: {hue: [0, 400]}\n"),
+                    encoding="utf-8")
+    with pytest.raises(McDeployError, match="hue"):
+        pets.load_recipe("test")
+    path.write_text(RECIPE_YAML.replace("  cubes: [body]\n", "  cubes: [body]\n  match: {hue: [0, 40]}\n"),
+                    encoding="utf-8")
+    with pytest.raises(McDeployError, match="iris/pupil"):
+        pets.load_recipe("test")
 
 
 def _write_pet(repo, extra_variants=True):
